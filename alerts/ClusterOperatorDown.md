@@ -4,7 +4,7 @@
 
 The alert `ClusterOperatorDown` is fired by
 [cluster-version-operator](https://github.com/openshift/cluster-version-operator)
-(CVO) when a `ClusterOperator` is not in the `Available` state for certain
+(CVO) when a `ClusterOperator` is not in the `Available` state for a certain
 period. An operand that is functional in the cluster is `Available`.
 
 ## Impact

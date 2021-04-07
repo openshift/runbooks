@@ -4,7 +4,7 @@
 
 This alert is fired when the total existing DB size exceeds 95% of the maximum
 DB quota. The consumed space is in Prometheus monitored by the metric
-`etcd_mvcc_db_total_size_in_bytes` and the DB quota size is defined by
+`etcd_mvcc_db_total_size_in_bytes`, and the DB quota size is defined by
 `etcd_server_quota_backend_bytes`.
 
 ## Impact
@@ -15,7 +15,7 @@ creation of pods.
 
 ## Diagnosis
 
-The following two approaches can be used for diagnosis.
+The following two approaches can be used for the diagnosis.
 
 ### CLI Checks
 
@@ -58,7 +58,7 @@ When the etcd DB size increases, we can defragment existing etcd DB to optimize
 DB consumption as described in [here][etcdDefragmentation]. Run the following
 command in all etcd pods.
 
-```console 
+```console
 $ etcdctl defrag
 ```
 

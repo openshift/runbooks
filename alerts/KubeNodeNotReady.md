@@ -29,8 +29,7 @@ $ oc get node $NODE -o yaml
 ```
 
 The output should describe why the node isn't ready (e.g.: timeouts reaching the
-API or kubelet)
-Check the machine for the node:
+API or kubelet) Check the machine for the node:
 
 ```console
 $ oc get -n openshift-machine-api machine $NODE -o yaml
@@ -47,8 +46,10 @@ events should detail why.
 
 ## Mitigation
 
-Once the problem was resolved that prevented the machine API from replacing the
+Once, the problem was resolved that prevented the machine API from replacing the
 node, the instance should be terminated and replaced by the machine API.
+However, this is only the case `MachineHealthChecks` are enabled for the nodes
+otherwise a manual restart is required.
 
 [KubeNode]: https://kubernetes.io/docs/concepts/architecture/nodes/#condition
 [KubeNodeNotReady]: https://github.com/openshift/cluster-monitoring-operator/blob/aefc8fc5fc61c943dc1ca24b8c151940ae5f8f1c/assets/control-plane/prometheus-rule.yaml#L482-L490

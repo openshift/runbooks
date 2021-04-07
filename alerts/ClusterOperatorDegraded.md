@@ -4,21 +4,21 @@
 
 The alert `ClusterOperatorDegraded` is fired by
 [cluster-version-operator](https://github.com/openshift/cluster-version-operator)(CVO)
-when a `ClusterOperator` is in `degraded` state for certain period of time. An
+when a `ClusterOperator` is in `degraded` state for a certain period. An
 operator reports `Degraded` when its current state does not match its desired
-state over a period resulting in a lower quality of service.The time may vary by
-component, but a `Degraded` state represents the persistent observation of a
-condition. A service may be `Available` even if it is degraded. For example,
-your service may desire 3 running pods, but 1 pod is in a crash-looping. The
-service is `Available` but `Degraded` because it may have a lower quality of
+state over a period resulting in a lower quality of service. The time may vary
+by component, but a `Degraded` state represents the persistent observation of a
+condition. A service state may be `Available` even when degraded. For example,
+your service may desire three running pods, but one pod is in a crash-looping.
+The service is `Available` but `Degraded` because it may have a lower quality of
 service. A component may be `Progressing` but not `Degraded` because the
 transition from one state to another does not persist over a long enough period
 to report `Degraded`. A service should not report `Degraded` during a normal
 upgrade. A service may report `Degraded` in response to a persistent
-infrastructure failure that requires administrator intervention. For example, if
-a control plane host is unhealthy and must be replaced. An operator should
-report `Degraded` if unexpected errors occur over a period, but the expectation
-is that all unexpected errors are handled as operators mature.
+infrastructure failure that requires administrator intervention. For example,
+when a control plane host is unhealthy and has to be replaced. An operator
+should report `Degraded` if unexpected errors occur over a period, but the
+expectation is that all unexpected errors are handled as operators mature.
 
 ## Impact
 

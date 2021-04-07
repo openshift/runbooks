@@ -44,19 +44,18 @@ $ oc get apiservice
 The `SERVICE` column notes here the aggregated API name. The availability status
 for every listed API should be `True`. A `False` means that requests for that
 API service, API server pods, or resources belonging to that apiGroup failed
-many times during the last minutes. For the case that the logs of the particular
-pods should be investigated.
+many times during the last minutes.
 
-To get the pods that serve the `openshift-apiserver/api` can be fetched with the
-following command:  
+Fetch the pods that serve the unavailable API. E.g.: for
+`openshift-apiserver/api` use the following command:  
 
 ```console
 $ oc get pods -n openshift-apiserver
 ```
 
-If their status is not `Running`, check the logs for more details. As these pods
-are controlled by a deployment, they can be restart in case they are not
-answering requests anymore.
+When their status is not `Running`, check the logs for more details. As these
+pods are controlled by a deployment, they can be restart when they are not
+answering to requests anymore.
 
 ### Check the authentication certificates of the aggregated API
 
@@ -66,7 +65,7 @@ Make sure the certificates are up to date and still valid. Use:
 $ oc get configmaps -n kube-system extension-apiserver-authentication
 ```
 
-you can save those certificates into a file and use the following command to
+You can save those certificates into a file and use the following command to
 check the end dates:
 
 ```console

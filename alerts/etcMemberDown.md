@@ -10,10 +10,11 @@ reboot.
 ## Impact
 
 In etcd a majority of (n/2)+1 has to agree on membership changes or key-value
-upgrade proposals. By this, any split-brain inconsistency can be avoided. In the
-case that only one member is down in a 3-member cluster, it still can make
-forward progress since the quorum is 2 and 2 members are still alive. However,
-when more members are down, the cluster becomes unrecoverable.
+upgrade proposals. With this approach, a split-brain inconsistency can be
+avoided. In the case that only one member is down in a 3-member cluster, it
+still can make forward progress. Due to the fact that the quorum is 2 and 2
+members are still alive. However, when more members are down, the cluster
+becomes unrecoverable.
 
 ## Diagnosis
 
@@ -30,13 +31,12 @@ Check if an upgrade is in progress.
 $ oc adm upgrade
 ```
 
-In case there is no upgrade going on but there is a change in the
-`machineconfig` for the master pool causing rolling reboot of each master node,
-this alert can be triggered as well. We can check if the
+In case there is no upgrade going on, but there is a change in the
+`machineconfig` for the master pool causing a rolling reboot of each master
+node, this alert can be triggered as well. We can check if the
 `machineconfiguration.openshift.io/state : Working` annotation is set for any of
-the master nodes if
-[machine-config-operator](https://github.com/openshift/machine-config-operator)(MCO)
-is working on it.
+the master nodes. This is the case when the [machine-config-operator
+(MCO)](https://github.com/openshift/machine-config-operator) is working on it.
 
 ```console
 $ oc get nodes -l node-role.kubernetes.io/master= -o template --template='{{range .items}}{{"===> node:> "}}{{.metadata.name}}{{"\n"}}{{range $k, $v := .metadata.annotations}}{{println $k ":" $v}}{{end}}{{"\n"}}{{end}}'

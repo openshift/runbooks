@@ -20,7 +20,12 @@ Study the recent trends of filesystem usage on a dashboard. Sometimes a periodic
 pattern of writing and cleaning up can trick the linear prediction into a false
 alert. Use the usual OS tools to investigate what directories are the worst
 and/or recent offenders. Is this some irregular condition, e.g. a process fails
-to clean up behind itself or is this organic growth?
+to clean up behind itself or is this organic growth? If monitoring is enabled,
+the following metric can be watched in PromQL.
+
+```console
+node_filesystem_free_bytes
+```
 
 Check the alert's `mountpoint` label.
 

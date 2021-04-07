@@ -2,12 +2,12 @@
 
 ## Meaning
 
-[This alert][KubePodNotReady] is fired in case there are pods which have not
-been in `Ready` state for a certain period. This can have different reasons as
-described [here][PodLifecycle]: In case of the pod is `Running` but not `Ready`,
-the `Readiness` probe is failing. An application-specific error may prevent the
-pod from being attached to a service. In case the pod remains in `Pending`, it
-can not be deployed to particular namespaces and nodes.
+[This alert][KubePodNotReady] is fired when some pods have not been in the
+`Ready` state for a certain period. This can have different reasons as described
+[here][PodLifecycle]: When the pod is `Running` but not `Ready`, the `Readiness`
+probe is failing. An application-specific error may prevent the pod from being
+attached to a service. When the pod remains in `Pending` it can not be deployed
+to particular namespaces and nodes.
 
 ## Impact
 
@@ -33,7 +33,7 @@ Start by checking the status of the pod:
 $ oc get pod -n $NAMESPACE $POD
 ```
 
-If the pod state is in `Running`, you can check its logs:
+When the pod state is in `Running`, you can check its logs:
 
 ```console
 $ oc logs -n $NAMESPACE $POD
@@ -41,7 +41,7 @@ $ oc logs -n $NAMESPACE $POD
 
 Be aware there may be multiple containers in the pod. A check of all their logs
 may be required. If the pod isn't running (for instance, if it's stuck in
-ContainerCreating), then try to find out why.
+`ContainerCreating`), then try to find out why.
 
 ## Mitigation
 
