@@ -80,8 +80,8 @@ contributor to the alerts:
 
 ![KubeAPIErrorBudgetBurn alert error types](img/kubeapierrorbudgetburn-error-types.png)
 
-Use the `slow-resource` query from the above recording rules to group the
-latencies by resource kinds:
+Use the `slow-resource` query from the above recording rules to identify the
+resource kinds that contribute to the SLO violation:
 
 ```sh
 sum by(resource) (rate(apiserver_request_duration_seconds_count{job="apiserver",verb=~"LIST|GET",subresource!~"proxy|log|exec",scope="resource"}[1d]))
@@ -95,6 +95,15 @@ the ones experiencing high latency:
 
 ![KubeAPIErrorBudgetBurn slow resource](img/kubeapierrorbudgetburn-slow-resource.png)
 
+If accessible, the following Grafana dashboards will can also provide further
+insights into request duration and API server and etcd performance:
+
+* API Request Duration by Verb
+* etcd Request Duration - 99th Percentile
+* etcd Object Count
+* Request Duration by Read vs Write - 99th Percentile
+* Long Running Requests by Resource
+
 ## Mitigation
 
 ### Restart the kubelet (after upgrade)
@@ -103,6 +112,10 @@ If these alerts are triggered following a cluster upgrade, try restarting the
 kubelets per description [here][5420801].
 
 ### Determine the source of the error or slow requests
+
+There isn't a straightforward way to identify the root causes, but in the past
+we were able to narrow down bugs by examining the failed resource counts in the
+audit logs.
 
 Gather the audit logs of the cluster:
 
