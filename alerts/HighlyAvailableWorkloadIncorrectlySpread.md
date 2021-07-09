@@ -11,8 +11,8 @@ need to be spread manually before any scheduling constraints are put in place.
 
 ## Impact
 
-The cluster isn't fully highly available since workloads with persistent
-storage might still have a single point of failure.
+The cluster isn't fully highly available since some workloads with persistent
+storage still have a single point of failure.
 
 ## Diagnosis
 
@@ -41,10 +41,16 @@ To mitigate this issue, you can follow the steps below, but first you should
 get the following information from the alert labels:
 * `workload`: workload name
 * `namespace`: namespace of the workload
-* `node`: node hosting multiple instances of the workload
 
-You should start by cordoning the node to prevent pods from being rescheduled
-on it:
+First, you need to get the name of the node hosting all the instances of your
+workload:
+
+```console
+$ NODE=$(oc -n "$NS" get pods -ojson | jq -r --arg WORKLOAD "$WORKLOAD" '.items[] | select(.metadata.name|test($WORKLOAD + ".*")) | .spec.nodeName' | head -n 1)
+```
+
+Now that you have the name of the node, you will have to cordon it to prevent
+pods from being rescheduled on this node:
 
 ```console
 $ oc adm cordon "$NODE"
