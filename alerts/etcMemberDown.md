@@ -2,7 +2,7 @@
 
 ## Meaning
 
-This alert is fired when one or more etcd member goes down and evaluates the
+This alert fires when one or more etcd member goes down and evaluates the
 number of etcd members that are currently down. Often, this alert was observed
 as part of a cluster upgrade when a master node is being upgraded and requires a
 reboot.
@@ -42,13 +42,33 @@ the master nodes. This is the case when the [machine-config-operator
 $ oc get nodes -l node-role.kubernetes.io/master= -o template --template='{{range .items}}{{"===> node:> "}}{{.metadata.name}}{{"\n"}}{{range $k, $v := .metadata.annotations}}{{println $k ":" $v}}{{end}}{{"\n"}}{{end}}'
 ```
 
-## Mitigation
+### General etcd health
 
-If an upgrade is in progress, the alert may automatically resolve in some time
-when the master node comes up again. If MCO is not working on the master node,
-check the AWS to verify if the master node instances are running or not. AWS
-instance retirement might need a manual reboot of the master node.
+To run `etcdctl` commands, we need to `rsh` into the `etcdctl` container of any
+etcd pod.
+
+```console
+$ oc rsh -c etcdctl -n openshift-etcd $(oc get po -l app=etcd -oname -n openshift-etcd | awk -F"/" 'NR==1{ print $2 }')
+```
+
+Validate that the `etcdctl` command is available:
+
+```console
+$ etcdctl version
+```
+
+Run the following command to get the health of etcd:
 
 ```console
 $ etcdctl endpoint health -w table
 ```
+
+## Mitigation
+
+If an upgrade is in progress, the alert may automatically resolve in some time
+when the master node comes up again. If MCO is not working on the master node,
+check the cloud provider to verify if the master node instances are running or not.
+
+In the case when you are running on AWS, the AWS instance retirement might need
+a manual reboot of the master node.
+
