@@ -2,8 +2,8 @@
 
 ## Meaning
 
-This alert is fired when the total existing DB size exceeds 95% of the maximum
-DB quota. The consumed space is in Prometheus monitored by the metric
+This alert fires when the total existing DB size exceeds 95% of the maximum
+DB quota. The consumed space is in Prometheus represented by the metric
 `etcd_mvcc_db_total_size_in_bytes`, and the DB quota size is defined by
 `etcd_server_quota_backend_bytes`.
 
@@ -38,9 +38,10 @@ $ etcdctl version
 $ etcdctl endpoint status -w table
 ```
 
-### PromQL Checks
+### PromQL queries
 
-Check the percentage consumption of etcd DB with the following query:
+Check the percentage consumption of etcd DB with the following query in the
+metrics console:
 
 ```console
 (etcd_mvcc_db_total_size_in_bytes / etcd_server_quota_backend_bytes) * 100
