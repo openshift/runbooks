@@ -12,7 +12,7 @@ frequent leader elections, slow reads and writes.
 
 ## Diagnosis
 
-This could be result of slow disk posibbly due to fragmented state in etcd or
+This could be result of slow disk possibly due to fragmented state in etcd or
 simply due to slow disk.
 
 ### Slow disk
