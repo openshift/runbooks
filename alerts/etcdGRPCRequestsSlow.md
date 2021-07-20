@@ -41,7 +41,7 @@ histogram_quantile(0.99, sum by (instance, le) (irate(etcd_disk_wal_fsync_durati
 
 In the OpenShift dashboard console under Observe section, select the etcd
 dashboard. There are both RPC rate as well as Disk Sync Duration dashboards
-which will assit with further issues.
+which will assist with further issues.
 
 
 ## Mitigation
