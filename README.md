@@ -22,7 +22,7 @@ in general, while all runbooks live in their respective subfolder.
 
 ## Onboarding
 If your operator has not shipped any runbooks so far, please create a subfolder
-following the repository layout and place and OWNERS file in it. The OWNERS file
+following the repository layout and place an OWNERS file in it. The OWNERS file
 should be the same as the one in the operator's main repository. Additionally
 add all runbooks in said folder, that you want to contribute.
 
