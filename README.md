@@ -31,6 +31,7 @@ should be the same as the one in the operator's main repository. Additionally
 add all runbooks to said folder that you want to contribute.
 
 ## Contributing
+
 We are welcoming *any* contributions! While Red Hat is going to keep adding more
 runbooks for new alerts as they surface, we would also love to extend existing
 runbooks with any real world experiences that cluster owners or operators have
