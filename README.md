@@ -14,6 +14,7 @@ Going forward, alerts in OpenShift will ship a link to the corresponding runbook
 in this repository, to make fixing problems even easier.
 
 ## Repository Layout
+
 Runbooks in this repository are grouped by the operator that is responsible for
 shipping the respective alert. This results in a structure as follows:
 
