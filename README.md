@@ -8,7 +8,7 @@ This repository is a consistently growing collection of runbooks for said
 alerts, that are intended to guide a cluster owner and/or operator through the
 steps of fixing problems on clusters, which are surfaced by alerts.
 
-Going forward alerts in OpenShift will ship a link to the corresponding runbook
+Going forward, alerts in OpenShift will ship a link to the corresponding runbook
 in this repository, to make fixing problems even easier.
 
 ## Repository Layout
