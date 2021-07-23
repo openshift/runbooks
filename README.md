@@ -24,7 +24,7 @@ in general, while all runbooks live in their respective subfolder.
 If your operator has not shipped any runbooks so far, please create a subfolder
 following the repository layout and place an OWNERS file in it. The OWNERS file
 should be the same as the one in the operator's main repository. Additionally
-add all runbooks in said folder, that you want to contribute.
+add all runbooks to said folder that you want to contribute.
 
 ## Contributing
 We are welcoming *any* contributions! While Red Hat is going to keep adding more
