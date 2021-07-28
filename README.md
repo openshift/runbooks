@@ -11,7 +11,8 @@ alerts, that are intended to guide a cluster owner and/or operator through the
 steps of fixing problems on clusters, which are surfaced by alerts.
 
 Going forward, alerts in OpenShift will ship a link to the corresponding runbook
-in this repository, to make fixing problems even easier.
+in this repository, to make fixing problems even easier. Link should be passed
+as `runbook_url` field in alert annotations ([example][runbook-link])
 
 ## Repository Layout
 
@@ -44,3 +45,5 @@ Steps to your contribution are outlined below:
 
 Our integrations and bots will walk you through any other required steps, like
 assigning someone to look at your PR, or inform you if tests are failing.
+
+[runbook-link]: https://github.com/openshift/cluster-monitoring-operator/blob/1959ea9461c47eee506a497b21f10b0e2c3701ac/assets/cluster-monitoring-operator/prometheus-rule.yaml#L31-L40
