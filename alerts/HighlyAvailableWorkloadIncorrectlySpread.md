@@ -60,7 +60,7 @@ Then you will need to get the list of pods that should be rescheduled for the
 given workload and node:
 
 ```console
-$ oc -n "$NS" get -o wide pods | grep "$WORKLOAD.*$NODE" | cut -f1 -d ' ' | head -n-1)
+$ POD=$(oc -n "$NS" get -o wide pods | grep "$WORKLOAD.*$NODE" | cut -f1 -d ' ' | head -n-1)
 ```
 
 If your storage system is bound to availability zones, you will also want to
