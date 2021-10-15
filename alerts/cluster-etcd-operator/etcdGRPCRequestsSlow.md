@@ -45,7 +45,7 @@ which will assist with further issues.
 
 ### Resource exhaustion
 
-It can happen that due to CPU resource exhaustion that etcd responds slower.
+It can happen that etcd responds slower due to CPU resource exhaustion.
 This was seen in some cases when one application was requesting too much CPU
 which led to this alert firing for multiple methods.
 
