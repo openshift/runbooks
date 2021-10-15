@@ -43,6 +43,35 @@ In the OpenShift dashboard console under Observe section, select the etcd
 dashboard. There are both RPC rate as well as Disk Sync Duration dashboards
 which will assist with further issues.
 
+### Resource exhaustion
+
+It can happen that etcd responds slower due to CPU resource exhaustion.
+This was seen in some cases when one application was requesting too much CPU
+which led to this alert firing for multiple methods.
+
+Often if this is the case, we also see
+`etcd_disk_wal_fsync_duration_seconds_bucket` slower as well.
+
+To confirm this is the cause of the slow requests either:
+
+1. In OpenShift console on primary page under "Cluster utilization" view the
+   requested CPU vs available.
+
+2. PromQL query is the following to see top consumers of CPU:
+
+```console
+      topk(25, sort_desc(
+        sum by (namespace) (
+          (
+            sum(avg_over_time(pod:container_cpu_usage:sum{container="",pod!=""}[5m])) BY (namespace, pod)
+            *
+            on(pod,namespace) group_left(node) (node_namespace_pod:kube_pod_info:)
+          )
+          *
+          on(node) group_left(role) (max by (node) (kube_node_role{role=~".+"}))
+        )
+      ))
+```
 
 ## Mitigation
 
