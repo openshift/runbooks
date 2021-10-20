@@ -55,6 +55,16 @@ Check the DB size in MB that can be reduced after defragmentation:
 
 ## Mitigation
 
+### Capacity planning
+
+If the `etcd_mvcc_db_total_size_in_bytes` shows that you are growing close to
+the `etcd_server_quota_backend_bytes`, etcd almost reached max capacity and it's
+start planning for new cluster.
+
+In the meantime before migration happens, you can use defrag to gain some time.
+
+### Defrag
+
 When the etcd DB size increases, we can defragment existing etcd DB to optimize
 DB consumption as described in [here][etcdDefragmentation]. Run the following
 command in all etcd pods.
