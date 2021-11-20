@@ -1,0 +1,9 @@
+component: "Cloud Compute"
+subcomponent: "Other Providers"
+approvers:
+  - enxebre
+  - frobware
+  - michaelgugino
+  - JoelSpeed
+  - elmiko
+  - alexander-demichev
