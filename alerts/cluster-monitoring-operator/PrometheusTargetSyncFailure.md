@@ -28,5 +28,5 @@ level=error ... msg="Creating target failed" ...
 ## Mitigation
 
 If the logs indicate a syntax or other configuration error, correct the
-corresponding `ServiceMonitor`, `PodMonitor`, or other configuration
+corresponding `ServiceMonitor`, `PodMonitor`, `Probe`, or other configuration
 resource. In most all cases, the operator should prevent this from happening.
