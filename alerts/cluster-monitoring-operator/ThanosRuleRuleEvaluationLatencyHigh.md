@@ -1,4 +1,4 @@
-# ThanosRuleEvaluationLatencyHigh
+# ThanosRuleRuleEvaluationLatencyHigh
 
 ## Meaning
 
