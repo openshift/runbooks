@@ -1,4 +1,4 @@
-# ThanosRuleEvaluationLatencyHigh
+# ThanosRuleRuleEvaluationLatencyHigh
 
 ## Meaning
 
@@ -26,8 +26,8 @@ oc -n openshift-monitoring logs -l 'app.kubernetes.io/name=thanos-query' \
 -c thanos-query
 ```
 
-This alert will trigger when the rule evaluation take more time than
-the scheduled interval. It can indicate that your query backend
+This alert will trigger when the rule evaluation takes more time than
+the configured interval. It can indicate that your query backend
 (i.e Thanos Querier) takes too much time to evaluate the query. If there is
 even a single rule that is taking too long (more than the interval for that
 group) to evaluate, this alert will fire. This might indicate other problems
@@ -35,7 +35,7 @@ like slow StoreAPIs or too complex query expression in rule.
 
 ## Mitigation
 
-- Most likely scenario is a misconfiguration causing the user workload
+- The most likely scenario is a misconfiguration causing the user workload
   monitoring stack to overload Thanos Ruler with duplicate or otherwise
   erroneous alerts
 
@@ -45,5 +45,5 @@ like slow StoreAPIs or too complex query expression in rule.
 - Verify if resource limits are set on the different monitoring components and
   whether they are throttled
 
-- Check if any connectivity issues to thanos storeAPI service from
-  thanos-querier pod logs
+- Check if any of the configured thanos-querier storeAPI endpoints
+  have connectivity issues
