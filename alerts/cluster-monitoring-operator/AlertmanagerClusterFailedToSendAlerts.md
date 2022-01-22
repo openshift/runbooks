@@ -2,28 +2,29 @@
 
 ## Meaning
 
-The alert `AlertmanagerClusterFailedToSendAlerts` is triggered when **all**
-Alertmanager instances in a cluster has consistently failed to send
+The alert `AlertmanagerClusterFailedToSendAlerts` is triggered when all
+Alertmanager instances in a cluster have consistently failed to send
 notifications to an integration.
 
 ## Impact
 
-A fraction of notifications to the integration are not delivered.
+Some notifications are not delivered to the integration.
 
 ## Diagnosis
 
-Check the logs of the `alertmanager-main` pods in the `openshift-monitoring`
-namespace:
-
+Review the logs of the `alertmanager-main` pods in the `openshift-monitoring`
+namespace by running:
 
 ```console
 $ oc -n openshift-monitoring logs -l 'alertmanager=main'
 ```
 
-Below is a non-exhaustive list of reasons for this alert to be fired.
-- Unreachable endpoint
-- Misconfigured address or credentials
+The following reasons might cause this alert to fire:
+
+- The endpoint is not reachable.
+- The endpoint's URL or credentials are misconfigured.
 
 ## Mitigation
 
-The resolution depends on the particular issue reported in the logs.
+How you resolve the problem causing the alert to fire depends on the particular
+issue reported in the logs.
