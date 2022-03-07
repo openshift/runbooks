@@ -25,13 +25,15 @@ Verify the CNO is running:
     oc -n openshift-network-operator get pods -l name=network-operator
 
 Verify the [CNO](https://github.com/openshift/cluster-network-operator/) is
-functioning without error by checking the operator Status.
-You can check the Status of the CNO directly using the following command:
+functioning without error by checking the operator Status:
+
+    oc get co network
+
+If the network is degraded, you can see the full error message by describing the
+object. Pay attention to any error message reported by Status Conditions of type
+Degraded:
 
     oc describe co network
-
-Pay attention to any error message reported by Status Conditions of type
-Degraded.
 
 Check the CNO logs for when it is reconciling the daemonset for ovnkube-master.
 
