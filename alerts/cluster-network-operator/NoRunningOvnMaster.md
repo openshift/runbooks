@@ -17,6 +17,14 @@ but new workloads will not be functional.
 Updates required for functioning Kubernetes services will not be performed.
 
 ## Diagnosis
+### Control plane issue
+
+This can occur multiple control plane nodes are powered off or are unable to
+connect each other via the network. Check that all control plane nodes are
+powered and that network connections between each machine are functional.
+
+    oc get node -l node-role.kubernetes.io/master=""
+
 ### Cluster network operator
 Cluster Network operator (CNO) manages the CRUD operations for OVN-Kubernetes
 daemonset.
