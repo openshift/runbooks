@@ -3,9 +3,9 @@
 ## Meaning
 
 This alert signifies issues with the NTP server on a node (mentioned in the alert).
-When the affected node is a master, this specifically becomes an issue
+When a node is affected, this becomes an issue
 as when the certs are rotated for the apiserver on that node, they fail
-validation due to the invalid time on that master.
+validation due to the invalid time.
 
 
 ## Impact
