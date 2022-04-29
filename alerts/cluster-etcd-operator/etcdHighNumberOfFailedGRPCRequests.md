@@ -30,7 +30,7 @@ To get logs of etcd containers either check the instance from the alert and
 check logs directly or run the following:
 
 ```sh
-oc logs -n openshift-etcd -lapp=etcd etcd
+oc logs -n openshift-etcd -lapp=etcd -c etcd
 ```
 
 ### Defrag method errors
