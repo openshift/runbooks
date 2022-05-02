@@ -77,7 +77,7 @@ To confirm this is the cause of the slow requests either:
 
 ### Fragmented state
 
-In the case of slow fisk or when the etcd DB size increases, we can defragment
+In the case of slow disk or when the etcd DB size increases, we can defragment
 existing etcd DB to optimize DB consumption as described in
 [here][etcdDefragmentation]. Run the following command in all etcd pods.
 
