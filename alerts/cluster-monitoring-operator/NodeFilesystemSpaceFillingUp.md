@@ -21,10 +21,22 @@ pattern of writing and cleaning up can trick the linear prediction into a false
 alert. Use the usual OS tools to investigate what directories are the worst
 and/or recent offenders. Is this some irregular condition, e.g. a process fails
 to clean up behind itself or is this organic growth? If monitoring is enabled,
-the following metric can be watched in PromQL.
+the following prometheus queries can be used to diagnose: 
+
 
 ```console
-node_filesystem_free_bytes
+//Query a particular node returning all mountpoints
+node_filesystem_free_bytes{instance="$NODE_NAME"}
+
+//Query a particular node and mountpoint
+node_filesystem_free_bytes{instance="$NODE_NAME", mountpoint="$MOUNTPOINT"}
+
+//Query the rate of growth over 24hrs for a particular node and mountpoint
+rate(node_filesystem_free_bytes{instance="$NODE_NAME", mountpoint="$MOUNTPOINT"} [24h])
+
+//Use irate over a shorter time frame to dectect periodic patterns of writing and cleaning up
+irate(node_filesystem_free_bytes{instance="$NODE_NAME", mountpoint="$MOUNTPOINT"} [4h])
+
 ```
 
 Check the alert's `mountpoint` label.
