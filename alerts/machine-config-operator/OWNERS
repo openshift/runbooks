@@ -1,0 +1,14 @@
+approvers:
+  - cgwalters
+  - kikisdeliveryservice
+  - sinnykumari
+  - yuqi-zhang
+reviewers:
+  - cgwalters
+  - kikisdeliveryservice
+  - sinnykumari
+  - yuqi-zhang
+  - cheesesashimi
+  - jkyros
+
+component: "Machine Config Operator"
