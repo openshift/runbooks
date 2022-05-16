@@ -48,7 +48,7 @@ To run `etcdctl` commands, we need to `rsh` into the `etcdctl` container of any
 etcd pod.
 
 ```console
-$ oc rsh -c etcdctl -n openshift-etcd $(oc get po -l app=etcd -oname -n openshift-etcd | awk -F"/" 'NR==1{ print $2 }')
+$ oc rsh -c etcdctl -n openshift-etcd $(oc get pod -l app=etcd -oname -n openshift-etcd | awk -F"/" 'NR==1{ print $2 }')
 ```
 
 Validate that the `etcdctl` command is available:
