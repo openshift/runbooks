@@ -3,7 +3,7 @@
 ## Meaning
 
 This alert fires when at least 50% of etcd gRPC requests failed in the past 10
-minutes.
+minutes and sends a warning at 10%.
 
 ## Impact
 
@@ -12,11 +12,10 @@ If it's not part of the alert, the following query will display method and etcd
 instance that has failing requests:
 
 ```sh
-100 * sum without(grpc_type, grpc_code)
-(rate(grpc_server_handled_total{grpc_code=~"Unknown|FailedPrecondition|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded",job="etcd"}[5m]))
-/ sum without(grpc_type, grpc_code)
-(rate(grpc_server_handled_total{job="etcd"}[5m])) > 5 and on()
-(sum(cluster_infrastructure_provider{type!~"ipi|BareMetal"} == bool 1))
+(sum(rate(grpc_server_handled_total{job="etcd", grpc_code=~"Unknown|FailedPrecondition|ResourceExhausted|Internal|Unavailable|DataLoss|DeadlineExceeded"}[5m])) without (grpc_type, grpc_code)
+     /
+(sum(rate(grpc_server_handled_total{job="etcd"}[5m])) without (grpc_type, grpc_code1
+    > 2 and on ()(sum(cluster_infrastructure_provider{type!~"ipi|BareMetal"} == bool 1)))) * 100 > 10
 ```
 
 ## Diagnosis
