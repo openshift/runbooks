@@ -32,7 +32,6 @@ fs.file-nr = 7104       0       1597016
 Reduce the number of files opened simultaneously by either adjusting application
 configuration or by moving some applications to other nodes.
 
-
 To notify customer to mitigate the issue, send the following SL
 
-https://github.com/openshift/managed-notifications/blob/master/osd/NodeFileDescriptorLimit_worker.json 
+https://github.com/openshift/managed-notifications/blob/master/osd/NodeFileDescriptorLimit_worker.json
