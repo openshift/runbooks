@@ -166,9 +166,9 @@ E.g. to determine who generate the `apirequestcount` resource slow requests and
 what these requests are doing:
 
 ```sh
-oc dev_tool audit -f ${kube_apiserver_audit_log_dir} -otop --by=user resource="apirequestcounts"
+oc dev_tool audit -f ${kube_apiserver_audit_log_dir} -otop --by=user --resource="apirequestcounts"
 
-oc dev_tool audit -f ${kube_apiserver_audit_log_dir} -otop --by=verb resource="apirequestcounts" --user=${top-user-from-last-command}
+oc dev_tool audit -f ${kube_apiserver_audit_log_dir} -otop --by=verb --resource="apirequestcounts" --user=${top-user-from-last-command}
 ```
 
 The `audit` subcommand also supports the `--failed-only` option which can be
