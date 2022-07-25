@@ -1,4 +1,4 @@
-# etcdBackendQuotaLowSpace
+# etcdDatabaseQuotaLowSpace
 
 ## Meaning
 
