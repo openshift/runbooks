@@ -33,7 +33,7 @@ Count the number of nodes to compare.
 
 ## Mitigation
 
-We do not support adding additional cluster networks for ovn-kuberntes.
+We do not support adding additional cluster networks for ovn-kubernetes.
 
 User will have to create a new cluster for more worker nodes.
 
