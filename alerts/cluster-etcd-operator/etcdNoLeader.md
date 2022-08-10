@@ -38,7 +38,7 @@ namespace/project and in the `etcd` container.
 
 ### Disaster and recovery
 
-Follow the steps described in the [disaster and recovery docs](docs).
+Follow the steps described in the [disaster and recovery docs][docs].
 
 
-[docs]:(https://docs.openshift.com/container-platform/4.7/backup_and_restore/disaster_recovery/about-disaster-recovery.html).
+[docs]: https://docs.openshift.com/container-platform/4.7/backup_and_restore/disaster_recovery/about-disaster-recovery.html
