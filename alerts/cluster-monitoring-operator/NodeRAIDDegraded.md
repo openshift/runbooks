@@ -26,7 +26,6 @@ $ cat /proc/mdstat
 
 ## Mitigation
 
-See the Red Hat Enterprise Linux [documentation][2].
+See the Red Hat Enterprise Linux [documentation][1].
 
-[1]: https://github.com/openshift/runbooks/blob/master/alerts/cluster-monitoring-operator/NodeFilesystemFilesFillingUp.md
-[2]: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_storage_devices/managing-raid_managing-storage-devices
+[1]: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_storage_devices/managing-raid_managing-storage-devices

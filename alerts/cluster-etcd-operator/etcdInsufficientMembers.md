@@ -77,6 +77,6 @@ a manual reboot of the master node.
 
 As a last resort if none of the above fix the issue and the alert is still
 firing, for etcd specific issues follow the steps described in the [disaster and
-recovery docs](docs).
+recovery docs][docs].
 
-[docs]:(https://docs.openshift.com/container-platform/4.7/backup_and_restore/disaster_recovery/about-disaster-recovery.html).
+[docs]: https://docs.openshift.com/container-platform/4.7/backup_and_restore/disaster_recovery/about-disaster-recovery.html
