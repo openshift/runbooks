@@ -80,5 +80,5 @@ error discovered in the diagnosis.
 Investigate the issue using the steps outlined in diagnosis and contact the
 incident response team in your organisation if fixing the issue is not apparent.
 
-[NoRunningOvnMaster]: https://github.com/openshift/cluster-network-operator/blob/master/bindata/network/ovn-kubernetes/alert-rules-control-plane.yaml
+[NoRunningOvnMaster]: https://github.com/openshift/cluster-network-operator/blob/master/bindata/network/ovn-kubernetes/self-hosted/alert-rules-control-plane.yaml
 [PodRunning]: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase

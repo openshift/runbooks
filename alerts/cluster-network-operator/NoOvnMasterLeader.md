@@ -21,7 +21,7 @@ OVN-Kubernetes control plane is not functional.
 Check to ensure the following alerts are not firing and resolved before
 continuing as they may cause this alert to fire:
 
-- [NoRunningOvnMaster](./NoRunningOvnMaster)
+- [NoRunningOvnMaster](./NoRunningOvnMaster.md)
 
 ### OVN-kubernetes master pods
 
@@ -43,13 +43,13 @@ Check if there is a leader for the ovn-kubernetes cluster:
 Check the logs for any of the running ovnkube-master to see if there is
 leader election happened and if there is an error occurred.
 
-    oc logs ovnkube-master-xxxxx --all-containers | grep elect
+    oc logs -n openshift-ovn-kubernetes ovnkube-master-xxxxx --all-containers | grep elect
 
 ## Mitigation
 
 ### If the control plane nodes are not running
 
-Follow the steps described in the [disaster and recovery docs](dr_doc)
+Follow the steps described in the [disaster and recovery documentation][dr_doc].
 
 ### If the cluster network operator is reporting error
 
@@ -65,11 +65,11 @@ failed.
 ### If all the ovnkube-master pods are not running
 
 Check the status of the ovnkube-master pods, and follow the
-[Pod lifecycle](pod_lifecycle) to see what is blocking the pods to be running.
+[Pod lifecycle][Pod lifecycle] to see what is blocking the pods to be running.
 
 ### If all the ovnkube-master pods are running
 
-Follow the steps above [OVN-kubernetes master pods]
+Follow the steps above: [OVN-Kubernetes master pods](#ovn-kubernetes-master-pods)
 
-[dr_doc]:(https://docs.openshift.com/container-platform/4.9/backup_and_restore/control_plane_backup_and_restore/disaster_recovery/about-disaster-recovery.html)
-[pod_lifecycle]:(https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
+[Pod lifecycle]: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
+[dr_doc]: https://docs.openshift.com/container-platform/latest/backup_and_restore/control_plane_backup_and_restore/disaster_recovery/about-disaster-recovery.html
