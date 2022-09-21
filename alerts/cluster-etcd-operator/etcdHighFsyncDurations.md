@@ -32,7 +32,8 @@ than 10ms. Query in metrics UI:
 histogram_quantile(0.99, sum by (instance, le) (irate(etcd_disk_wal_fsync_duration_seconds_bucket{job="etcd"}[5m])))
 ```
 
-You can find more performance troubleshooting tips in [OpenShift etcd Performance Metrics](https://github.com/openshift/cluster-etcd-operator/blob/master/docs/performance-metrics.md).
+You can find more performance troubleshooting tips in
+[OpenShift etcd Performance Metrics](https://github.com/openshift/cluster-etcd-operator/blob/master/docs/performance-metrics.md).
 
 #### Console dashboards
 
