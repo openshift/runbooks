@@ -7,11 +7,11 @@ This alert fires when the 99th percentile of etcd gRPC requests are too slow.
 ## Impact
 
 When requests are too slow, they can lead to various scenarios like leader
-election failure, slow reads and writes.
+election failure, slow reads and writes and general cluster instability.
 
 ## Diagnosis
 
-This could be result of slow disk (due to fragmented state) or CPU contention.
+This could be result of slow disk, network or CPU starvation/contention.
 
 ### Slow disk
 
@@ -37,6 +37,18 @@ than 10ms. Query in metrics UI:
 ```console
 histogram_quantile(0.99, sum by (instance, le) (irate(etcd_disk_wal_fsync_duration_seconds_bucket{job="etcd"}[5m])))
 ```
+
+When txn calls are slow, another culprit can be the network roundtrip between
+ the nodes. You can observe this with:
+
+```console
+histogram_quantile(0.99, sum by (instance, le) (irate(etcd_network_peer_round_trip_time_seconds_bucket{job="etcd"}[5m])))
+```
+
+
+You can find more performance troubleshooting tips in
+ [OpenShift etcd Performance Metrics](https://github.com/openshift/cluster-etcd-operator/blob/master/docs/performance-metrics.md).
+
 #### Console dashboards
 
 In the OpenShift dashboard console under Observe section, select the etcd
@@ -73,24 +85,47 @@ To confirm this is the cause of the slow requests either:
       ))
 ```
 
+### Rogue Workloads
+
+In some cases, we've seen non-OpenShift workload put a lot of stress on the
+API server that eventually cascades into etcd. One specific instance was
+listing all pods across namespaces exhausting CPU and memory on API server
+and subsequently on etcd.
+
+Please consult the audit log and see whether some service accounts make
+suspicious calls, both in terms of generality (listings, many/all namespaces)
+and frequency (eg listing all pods every 10s).
+
+
 ## Mitigation
 
-### Fragmented state
+Depending on what resource was determined to be exhausted,
+you can try the following:
 
-In the case of slow disk or when the etcd DB size increases, we can defragment
-existing etcd DB to optimize DB consumption as described in
-[here][etcdDefragmentation]. Run the following command in all etcd pods.
+### CPU
 
-```console
-$ etcdctl defrag
-```
+Find the offending process that uses too much CPU, try to limit or
+shutdown the process. If feasible on clouds,
+adding more or faster CPUs may help to reduce the latency.
 
-As validation, check the endpoint status of etcd members to know the reduced
-size of etcd DB. Use for this purpose the same diagnostic approaches as listed
-above. More space should be available now.
 
-Further info on etcd best practices can be found in the [OpenShift docs
-here][etcdPractices].
+### Disk
 
-[etcdDefragmentation]: https://etcd.io/docs/v3.4.0/op-guide/maintenance/
-[etcdPractices]: https://docs.openshift.com/container-platform/4.7/scalability_and_performance/recommended-host-practices.html#recommended-etcd-practices_
+Find the offending process that causes the disk performance to degrade,
+this can also be a noisy neighbour process on the control plane node
+(eg fluentd with logging, OVN) or etcd itself. If the culprit is determined
+to etcd, try to reduce the load coming from the apiserver.
+Most commonly this also happens when a cluster is scaled up with
+many more nodes, so reducing the cluster scale again can help.
+
+If feasible on clouds, upgrading your storage or instance type
+can significantly increase your sequential IOPS and available bandwidth.
+
+
+### Network
+
+Ensure nothing is exhausting the network bandwidth as this causes package
+loss and increases the latency. As with the previous two sections,
+try to isolate the offending process and mitigate from there.
+If etcd is the offender, try to reduce load/increase the available resources.
+
