@@ -3,20 +3,25 @@
 ## Meaning
 
 The alert `AlertmanagerFailedToSendAlerts` is triggered when any of the
-Alertmanager instances of the cluster monitoring stack has consistently
+Alertmanager instances in the cluster monitoring stack has repeatedly
 failed to send notifications to an integration.
 
 ## Impact
 
-Some of the notifcations are not delivered.
+Some alert notifications are not delivered.
 
 ## Diagnosis
 
-Check the logs of the `alertmanager-main` pod in `openshift-monitoring` namespace
-in the alert description. E.g. If the Alert description says
+Review the logs for the pod in the namespace indicated in the alert message.
+
+For example, the following sample alert message refers to the
+`alertmanager-main-1` pod in the `openshift-monitoring` namespace:
 
 > Alertmanager openshift-monitoring/alertmanager-main-1 failed to send 75%
 > of notifications to webhook.
+
+You can review the logs for the `alertmanager-main-1` pod in the
+`openshift-monitoring` namespace by running the following command:
 
 ```console
 $ oc -n openshift-monitoring logs alertmanager-main-1
