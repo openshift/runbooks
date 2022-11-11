@@ -2,19 +2,20 @@
 
 ## Meaning
 
-This alert is similar to the [NodeFilesystemSpaceFillingUp][1] alert, but rather
+The `NodeFilesystemAlmostOutOfFiles` alert is similar to the
+[NodeFilesystemSpaceFillingUp][1] alert, but rather
 than being based on a prediction that a filesystem will run out of inodes in a
-certain amount of time, it uses simple static thresholds. The alert will fire as
-at a `warning` level at 5% of available inodes left, and at a `critical` level
-with 3% of available inodes left.
+certain amount of time, it uses simple static thresholds. The alert triggers
+at a `warning` level when 5% of available inodes remain, and triggers at a
+`critical` level when 3% of available inodes remain.
 
 ## Impact
 
-A node's filesystem becoming full can have a far reaching impact, as it may
-cause any or all of the applications scheduled to that node to experience
-anything from performance degradation to full inoperability. Depending on the
-node and filesystem involved, this could pose a critical threat to the stability
-of the cluster.
+When a node's filesystem becomes full, it has a widespread impact. This issue
+can cause any or all of the applications scheduled to that node to experience
+anything from degraded performance to becoming fully inoperable. Depending on
+the node and filesystem involved, this issue could pose a critical threat to
+the stability of the cluster.
 
 ## Diagnosis
 
