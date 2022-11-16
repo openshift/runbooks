@@ -2,19 +2,20 @@
 
 ## Meaning
 
-The alert `ClusterOperatorDown` is fired by
+The alert `ClusterOperatorDown` is triggered by
 [cluster-version-operator](https://github.com/openshift/cluster-version-operator)
 (CVO) when a `ClusterOperator` is not in the `Available` state for a certain
-period. An operand that is functional in the cluster is `Available`.
+period of time. An operand is `Available` when it is functional in the cluster.
 
 ## Impact
 
-There is an outage that needs to be checked at the earliest.
+This alert indicates that an outage has occurred in your cluster. Investigate
+the issue as soon as possible.
 
 ## Diagnosis
 
-The alert would convey exactly which operator the alert is for. The message will
-contain the name. For example:
+The alert message provides the name of the Operator that triggered the alert,
+as shown in the following example:
 
 ```text
  - alertname = ClusterOperatorDown
@@ -23,37 +24,39 @@ contain the name. For example:
 ...
 ```
 
-First, log in to the cluster. Multiple operators could be down at the same time.
-Check the status of all operators to know whether more are not `Available`:
+To troubleshoot the issue causing the alert to trigger, use any or all of
+the following methods after logging into the cluster:
 
-```console
-$ oc get clusteroperator
-```
+* Review the status of all Operators to discover if multiple Operators are
+down:
 
-Typically, the status will give some hint about its state. Investigate further
-for the operator that is not `Available` by using the following command:
+    ```console
+    $ oc get clusteroperator
+    ```
 
-```console
-$ oc get clusteroperator $CLUSTEROPERATOR -ojson | jq .status.conditions
-```
+* Review information about the current status of the Operator:
 
-Further on, if you would like to go through the associated resources for that
-particular operator, you can use the command:
+    ```console
+    $ oc get clusteroperator $CLUSTEROPERATOR -ojson | jq .status.conditions
+    ```
 
-```console
-$ oc get clusteroperator $CLUSTEROPERATOR -ojson | jq .status.relatedObjects
-```
+* Review the associated resources for the Operator:
 
-Collect logs and artifacts for a given operator. As an example, you can collect
-the logs of a specific operator and store them in a local directory named `out`
-by using the following command:
+    ```console
+    $ oc get clusteroperator $CLUSTEROPERATOR -ojson | jq .status.relatedObjects
+    ```
 
-```console
-$ oc adm inspect clusteroperator/$CLUSTEROPERATOR --dest-dir=out
-```
+* Review the logs and other artifacts for the Operator. For example, you can
+collect the logs of a specific Operator and store them in a local directory
+named `out`:
+
+    ```console
+    $ oc adm inspect clusteroperator/$CLUSTEROPERATOR --dest-dir=out
+    ```
 
 ## Mitigation
 
-The resolution steps would vary and depend on the particular operator that is in
-consideration. If there is an upgrade going on, then this issue may resolve
-itself after some time. Otherwise, try to find an error in the logs.
+How you resolve the issue causing the issue varies depending on the Operator.
+If the alert is triggered during an upgrade, the issue might resolve after some
+time has passed. Otherwise, troubleshoot the error by reviewing information
+about the Operator in the logs and fix the configuration based on your findings.
