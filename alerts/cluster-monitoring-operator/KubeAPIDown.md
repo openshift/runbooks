@@ -7,29 +7,32 @@ been reachable by the monitoring system for more than 15 minutes.
 
 ## Impact
 
-This is a critical alert. The Kubernetes API is not responding. The
-cluster may partially or fully non-functional.
+This is a critical alert. It indicates that the Kubernetes API is not
+responding, and the cluster might be partially or fully non-functional.
 
 ## Diagnosis
 
-Check the status of the API server targets in the Prometheus UI.
+1. Verify the status of the API server targets in Prometheus in the OpenShift
+web console.
 
-Then, confirm whether the API is also unresponsive for you:
+1. Confirm whether the API is also unresponsive:
 
-```console
-$ oc cluster-info
-```
+    ```console
+    $ oc cluster-info
+    ```
 
-If you can still reach the API server, there may be a network issue between the
-Prometheus instances and the API server pods. Check the status of the API server
-pods:
+1. If you can still reach the API server, a network issue might exist between
+the Prometheus instances and the API server pods. Review the status of the API
+server pods:
 
-```console
-$ oc -n openshift-kube-apiserver get pods
-$ oc -n openshift-kube-apiserver logs -l 'app=openshift-kube-apiserver'
-```
+    ```console
+    $ oc -n openshift-kube-apiserver get pods
+    $ oc -n openshift-kube-apiserver logs -l 'app=openshift-kube-apiserver'
+    ```
 ## Mitigation
 
-If you can still reach the API server intermittently, you may be able treat this
-like any other failing deployment. If not, it's possible you may have to refer
-to the disaster recovery documentation for your version of OpenShift.
+If you can still reach the API server intermittently, you might be able to
+troubleshoot this issue as you would for any other failing deployment.
+
+If the API server is not reachable at all, refer to the disaster recovery
+documentation for your version of OpenShift.
