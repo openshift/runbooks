@@ -2,35 +2,40 @@
 
 ## Meaning
 
-The alert `ClusterOperatorDegraded` is fired by
-[cluster-version-operator](https://github.com/openshift/cluster-version-operator)(CVO)
-when a `ClusterOperator` is in `degraded` state for a certain period. An
-operator reports `Degraded` when its current state does not match its desired
-state over a period resulting in a lower quality of service. The time may vary
-by component, but a `Degraded` state represents the persistent observation of a
-condition. A service state may be `Available` even when degraded. For example,
-your service may desire three running pods, but one pod is in a crash-looping.
-The service is `Available` but `Degraded` because it may have a lower quality of
-service. A component may be `Progressing` but not `Degraded` because the
-transition from one state to another does not persist over a long enough period
-to report `Degraded`. A service should not report `Degraded` during a normal
-upgrade. A service may report `Degraded` in response to a persistent
-infrastructure failure that requires administrator intervention. For example,
-when a control plane host is unhealthy and has to be replaced. An operator
-should report `Degraded` if unexpected errors occur over a period, but the
-expectation is that all unexpected errors are handled as operators mature.
+The alert `ClusterOperatorDegraded` is triggered by the
+[cluster-version-operator](https://github.com/openshift/cluster-version-operator)
+(CVO) when a `ClusterOperator` is in the `degraded` state for a certain period.
 
+An Operator reports a `Degraded` state when its current state does not
+match the requested state over a period of time, which results in a lower
+quality of service. The period of time varies by component, but a `Degraded`
+state represents the persistent observation of a condition. A service state
+might also be in an `Available` state even when degraded.
+
+For example, a service might request three running pods, but one pod is in a
+crash-loop state. In this case, the service is reported as `Available` but
+`Degraded` because it might have a lower quality of service.
+
+A component might also be reported as `Progressing` but not `Degraded` because
+the change from one state to another does not persist over a long enough
+time period to report a `Degraded` state.
+
+A service does not report a `Degraded` state during a normal upgrade. A service
+might report `Degraded` in response to a persistent infrastructure failure that
+requires administrator intervention--for example, when a control plane host is
+unhealthy and has to be replaced. An Operator reports `Degraded` state
+if unexpected errors occur over a period of time.
 ## Impact
 
-An operator has encountered an error that is preventing it or its operand from
-working properly. The operand may still be available, but its intent may not be
-fulfilled. If this is true, it means that the operand is at risk of an outage or
-improper configuration.
+This alert indicates that an Operator has encountered an error preventing it
+or its operand from working properly. The operand might still be available,
+but its intent might not be fulfilled, and therefore an outage might occur.
 
 ## Diagnosis
 
-The alert would convey exactly which operator the alert was fired for. The
-operator name will be displayed under the `name` label. For example:
+The alert message indicates the Operator for which the alert triggered. The
+Operator name is displayed under the `name` label, as shown in the following
+example:
 
 ```text
  - alertname = ClusterOperatorDegraded
@@ -39,38 +44,40 @@ operator name will be displayed under the `name` label. For example:
 ...
 ```
 
-First, log in to the cluster. Multiple operators could be degraded at the same
-time. Check the status of all operators to know whether there are more
-`Degraded`:
+To troubleshoot the issue causing the alert to trigger, use any or all of
+the following methods after logging into the cluster:
 
-```console
-$ oc get clusteroperator
-```
+* Review the status of all Operators to discover if multiple Operators are
+in a `Degraded` state:
 
-Typically, the status will give some hint about the operator state.
+    ```console
+    $ oc get clusteroperator
+    ```
 
-```console
-$ oc get clusteroperator $CLUSTEROPERATOR -ojson | jq .status.conditions
-```
+* Review information about the current status of the Operator:
 
-Further on, if you would like to go through the associated resources for that
-particular operator, you can use the command:
+    ```console
+    $ oc get clusteroperator $CLUSTEROPERATOR -ojson | jq .status.conditions
+    ```
 
-```console
-$ oc get clusteroperator $CLUSTEROPERATOR -ojson | jq .status.relatedObjects
-```
+* Review the associated resources for the Operator:
 
-Collect logs and artifacts for a given operator. As an example, you can collect
-the logs of a specific operator and store them in a local directory named `out`
-by using the following command:
+    ```console
+    $ oc get clusteroperator $CLUSTEROPERATOR -ojson | jq .status.relatedObjects
+    ```
 
-```console
-$ oc adm inspect clusteroperator/$CLUSTEROPERATOR --dest-dir=out
-```
+* Review the logs and other artifacts for the Operator. For example, you can
+collect the logs of a specific Operator and store them in a local directory
+named `out`:
+
+    ```console
+    $ oc adm inspect clusteroperator/$CLUSTEROPERATOR --dest-dir=out
+    ```
 
 ## Mitigation
 
-The resolution steps would vary and depend on the particular `ClusterOperator`
-that is in consideration. If there is an upgrade going on, then the `Degraded`
-state may recover itself in some time. If a `ClusterOperator` is misconfigured,
-then try to find the error in the collected logs and fix the configuration.
+How you resolve the issue causing the `Degraded` state of the Operator varies
+depending on the Operator. If the alert is triggered during an upgrade, the
+`Degraded` state might recover after some time has passed. If an Operator is
+misconfigured, troubleshoot the error by reviewing information about
+the Operator in the logs and fix the configuration based on your findings.
