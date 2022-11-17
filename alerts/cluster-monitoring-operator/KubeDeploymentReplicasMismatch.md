@@ -2,18 +2,18 @@
 
 ## Meaning
 
-This alert is fired when a discrepancy between the desired number of replicas to
-the actual number of running instances for deployment was observed for a certain
-period.
+Th `KubeDeploymentReplicasMismatch` alert triggers when, over a certain time
+period, a discrepancy occurs between the desired number of pod replicas for
+deployment and the actual number of running instances.
 
 ## Impact
 
-The impact very much differs depending on the discrepancy.
+The impact differs depending on the size of the discrepancy.
 
 ## Diagnosis
 
-The alert should note where the discrepancy occurred under the `deployment`
-label:
+The alert message under the `deployment` label describes where the discrepancy
+occurred:
 
 ```console
  - alertname = KubeDeploymentReplicasMismatch
@@ -24,51 +24,54 @@ label:
 ...
 ```
 
-Start by checking the status of the deployment:
+Review the current deployment details by examining the items available in
+the alert.
 
-```console
-$ oc get deploy -n $NAMESPACE $DEPLOYMENT
-```
+* Start by reviewing the status of the deployment:
 
-Review the current deployment using the details available in the alert. Review
-the following in the target namespace to ascertain the reason behind this. The
+    ```console
+    $ oc get deploy -n $NAMESPACE $DEPLOYMENT
+    ```
+
+* Run the following command in the target namespace to review the
 events:
 
-```console
-$ oc get events -n $NAMESPACE
-```
+    ```console
+    $ oc get events -n $NAMESPACE
+    ```
 
-Further, check the states of the Pods that the deployment manages:
+* Review the status of the pods that the deployment manages:
 
-```console
-$ oc get pods -n $NAMESPACE --selector=app=$DEPLOYMENT
-```
+    ```console
+    $ oc get pods -n $NAMESPACE --selector=app=$DEPLOYMENT
+    ```
 
-Possibilities include (but are not limited to) a pod stuck in
-`ContainerCreating` or `CrashLoopBackoff`. The events may list this case
-information about possible failed actions of a pod. Application and startup
-failures should be visible with:
+    Possible problems include a pod stuck in a `ContainerCreating` or
+    `CrashLoopBackoff` state.
 
-```console
-$ oc describe pod $POD
-```
+* The events might also list information about possible failed actions of a
+pod. You can view application and start-up failures by running:
 
-If Pods are stuck in `Pending`, it means that insufficient resources prevent the
-pod from being scheduled. Check the health of the nodes.
+    ```console
+    $ oc describe pod $POD
+    ```
 
-```console
-$ oc get nodes
-```
+* For pods stuck in a `Pending` state, insufficient resources are
+preventing the pod from being scheduled. Check the health of the nodes:
 
-It is further possible that the CPU and Memory of the host are exhausted.
+    ```console
+    $ oc get nodes
+    ```
 
-```console
-$ oc adm top nodes
-```
+* Verify whether or not the host has sufficient CPU and memory resources:
+
+    ```console
+    $ oc adm top nodes
+    ```
 
 ## Mitigation
 
-Resolve the problems discovered during the diagnosis according to the
-documentation. It is safe to delete the pods since they are managed by the
-deployment. However, it may also be required to add more nodes in case of
-insufficient resources.
+After you diagnose the issue, refer to the OpenShift documentation to learn how
+to resolve the problems. You can safely delete the pods because they are
+managed by the deployment. However, you might also need to add more nodes if
+your diagnostic steps showed that the host had insufficient resources.
