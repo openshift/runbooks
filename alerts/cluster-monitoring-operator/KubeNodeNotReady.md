@@ -2,18 +2,20 @@
 
 ## Meaning
 
-[This alert][KubeNodeNotReady] is fired when a Kubernetes node is not in `Ready`
-state for a certain period. In this case, the node is not able to host any new
-pods as described [here][KubeNode].
+The `KubeNodeNotReady` alert triggers when a node is not in a `Ready` state
+over a certain period of time. If this alert triggers, the node cannot host any
+new pods, as described [here][KubeNode].
 
 ## Impact
 
-The performance of the cluster deployments is affected, depending on the overall
-workload and the type of the node.
+The issue that triggers this alert degrades the performance of the cluster
+deployments. The severity of the degradation depends on the overall workload
+and the type of node.
 
 ## Diagnosis
 
-The notification details should list the node that's not ready. For Example:
+The alert notification message includes the affected node, as shown in the
+following example:
 
 ```txt
  - alertname = KubeNodeNotReady
@@ -22,34 +24,37 @@ The notification details should list the node that's not ready. For Example:
 ...
 ```
 
-Login to the cluster. Check the status of that node:
+* Log in to the cluster. Review the status of the node indicated in the alert
+message:
 
-```console
-$ oc get node $NODE -o yaml
-```
+    ```console
+    $ oc get node $NODE -o yaml
+    ```
 
-The output should describe why the node isn't ready (e.g.: timeouts reaching the
-API or kubelet) Check the machine for the node:
+    The output of this command describes why the node is not ready. For example
+    network issues could be causing timeouts when trying to reach the API or
+    kubelet.
 
-```console
-$ oc get -n openshift-machine-api machine $NODE -o yaml
-```
+* Check the machine for the node:
 
-and the events for the machine API:
+    ```console
+    $ oc get -n openshift-machine-api machine $NODE -o yaml
+    ```
 
-```console
-$ oc get -n openshift-machine-api events
-```
+* Check the events for the machine API:
 
-If the machine API is not able to replace the node, the machine status and
-events should detail why.
+    ```console
+    $ oc get -n openshift-machine-api events
+    ```
+
+    If the machine API is not able to replace the node, the machine status and
+    events list will provide the details.
 
 ## Mitigation
 
-Once, the problem was resolved that prevented the machine API from replacing the
-node, the instance should be terminated and replaced by the machine API.
-However, this is only the case `MachineHealthChecks` are enabled for the nodes
-otherwise a manual restart is required.
+After you resolve the problem that prevented the machine API from replacing the
+node, the instance is terminated and replaced by the machine API, but only if
+`MachineHealthChecks` are enabled for the nodes. Otherwise, a manual restart is
+required.
 
 [KubeNode]: https://kubernetes.io/docs/concepts/architecture/nodes/#condition
-[KubeNodeNotReady]: https://github.com/openshift/cluster-monitoring-operator/blob/aefc8fc5fc61c943dc1ca24b8c151940ae5f8f1c/assets/control-plane/prometheus-rule.yaml#L482-L490
