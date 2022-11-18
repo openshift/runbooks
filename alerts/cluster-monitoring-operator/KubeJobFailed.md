@@ -2,19 +2,19 @@
 
 ## Meaning
 
-[This alert][KubeJobFailed] is triggered for the case that the number of job
-execution attempts exceeds the `backoffLimit`. A job can therefore create one or
-many pods for its tasks.
+The `KubeJobFailed` alert triggers when the number of job execution attempts
+exceeds the value defined in `backoffLimit`. If this issue occurs, a job can
+create one or many pods for its tasks.
 
 ## Impact
 
-A task has not finished correctly. Depending on the task, this has a different
-impact.
+A task has not finished correctly. Depending on the task, the severity of the
+impact differs.
 
 ## Diagnosis
 
-The alert should contain the job name and the namespace where that job failed.
-Follow the particular mitigation steps according to that. For example:
+The alert message contains the job name and the namespace in which that job
+failed. The following message provides an example:
 
 ```text
  - alertname = KubeJobFailed
@@ -25,24 +25,25 @@ Follow the particular mitigation steps according to that. For example:
  - message = Job openshift-logging/elasticsearch-delete-app-1600855200 failed to complete.
 ```
 
+This information is required for you to follow the mitigation steps.
+
 ## Mitigation
 
-Find the pods that belong to that job:
+* Find the pods that belong to the failed job shown in the alert message:
 
-```console
-$ oc get pod -n $NAMESPACE -l job-name=$JOBNAME
-```
+    ```console
+    $ oc get pod -n $NAMESPACE -l job-name=$JOBNAME
+    ```
 
-If you see an `Error` pod with a subsequent `Completed` pod of
-the same base name, the error was transient, and the `Error` pod can safely be deleted.
+    If you see an `Error` pod together with a subsequent `Completed` pod of the
+    same base name, the error was transient, and you can safely delete the
+    `Error` pod.
 
-Have a look at the jobs themselves:
+* Review the status of the jobs:
 
-```console
-$ oc get jobs -n $NAMESPACE
-```
+    ```console
+    $ oc get jobs -n $NAMESPACE
+    ```
 
-If there is a healthy job for every failed one, it is safe to delete the failed
-jobs. The alert should resolve itself after a few minutes.
-
-[KubeJobFailed]: https://github.com/openshift/cluster-monitoring-operator/blob/aefc8fc5fc61c943dc1ca24b8c151940ae5f8f1c/assets/control-plane/prometheus-rule.yaml#L186-L195
+    If a healthy job exists for every failed job, you can safely delete the
+    failed jobs, and the alert will resolve itself after a few minutes.
