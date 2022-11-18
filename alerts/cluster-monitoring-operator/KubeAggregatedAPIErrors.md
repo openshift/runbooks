@@ -2,18 +2,18 @@
 
 ## Meaning
 
-[This alert][KubeAggregatedAPIErrors] is triggered when multiple calls to the
-aggregated API of OpenShift fail over a certain period.
+The `KubeAggregatedAPIErrors` alert is triggered when multiple calls to the
+aggregated OpenShift API fail over a certain period of time.
 
 ## Impact
 
-Errors on the aggregated API can result in the unavailability of some OpenShift
+Aggregated API errors can result in the unavailability of some OpenShift
 services.
 
 ## Diagnosis
 
-The alert should contain information about the affected API and the scope of the
-impact.
+The alert message contains information about the affected API and the scope of
+the impact, as shown in the following sample:
 
 ```text
  - alertname = KubeAggregatedAPIErrors
@@ -25,55 +25,61 @@ impact.
 
 ## Mitigation
 
-### Check the APIs status checks are on True
+Troubleshoot and fix the issue or issues causing the aggregated API errors by
+checking the availability status for each API and by verifying the
+authentication certificates for the aggregated API.
 
-Currently, there are at least four aggregated APIs in an OpenShift Cluster. The
-API on the `openshift-apiserver` namespace, the prometheus-adapter on the
-namespace `openshift-monitoring`, the package-server service in the
-`openshift-operator-lifecycle-manager` namespace, and the API on the
-`openshift-oauth-apiserver` namespace. However, it makes sense to check the
-availability of all APIs.
+### Check the availability status for each API
 
-To get a list of `APIServices` and their backing aggregated APIs, use the
-following command:
+At least four aggregated APIs exist in an OpenShift cluster:
 
-```console
-$ oc get apiservice
-```
+* the API for the `openshift-apiserver` namespace
+* the API for the `prometheus-adapter` in the namespace `openshift-monitoring`
+* the API for the the `package-server` service in the
+`openshift-operator-lifecycle-manager` namespace
+* the API for the `openshift-oauth-apiserver` namespace
 
-The `SERVICE` column notes here the aggregated API name. The availability status
-for every listed API should be `True`. A `False` means that requests for that
-API service, API server pods, or resources belonging to that apiGroup failed
-many times during the last minutes.
+1. Check the availability of all APIs. To get a list of `APIServices` and their
+backing aggregated APIs, use the following command:
 
-Fetch the pods that serve the unavailable API. E.g.: for
+    ```console
+    $ oc get apiservice
+    ```
+
+    The `SERVICE` column in the returned data shows the aggregated API name.
+    Normally, the availability status for every listed API will be shown as
+    `True`. If the status is `False`, it means that requests for that API
+    service, API server pods, or resources belonging to that `apiGroup` have
+    failed many times in the past few minutes.
+
+2. Fetch the pods that serve the unavailable API. For example, for
 `openshift-apiserver/api` use the following command:
 
-```console
-$ oc get pods -n openshift-apiserver
-```
+    ```console
+    $ oc get pods -n openshift-apiserver
+    ```
 
-When their status is not `Running`, check the logs for more details. As these
-pods are controlled by a deployment, they can be restart when they are not
-answering to requests anymore.
+    If the status is not shown as `Running`, review the logs for more details.
+    Because these pods are controlled by a deployment, they can be restarted
+    when they do not respond to requests.
 
-### Check the authentication certificates of the aggregated API
+### Verify the authentication certificates for the aggregated API
 
-Make sure the certificates are up to date and still valid. Use:
+1. Verify that the certificates have not expired and are still valid:
 
-```console
-$ oc get configmaps -n kube-system extension-apiserver-authentication
-```
+    ```console
+    $ oc get configmaps -n kube-system extension-apiserver-authentication
+    ```
 
-You can save those certificates into a file and use the following command to
-check the end dates:
+    If required, you can save these certificates to a file and use the following
+    command to check the expiration dates for each certificate file:
 
-```console
-$ openssl x509 -noout -enddate -in {myfile_with_certs.crt}
-```
+    ```console
+    $ openssl x509 -noout -enddate -in {myfile_with_certs.crt}
+    ```
 
-Those certificates are used by the aggregated APIs to validate requests. For the
-case, they are expired check [here][cert] how to add a new one.
+    The aggregated APIs use these certificates to validate requests. If
+    they are expired, see [the OpenShift documentation][cert] for information
+    about how to add a new certificate.
 
 [cert]: https://docs.openshift.com/container-platform/latest/security/certificates/api-server.html
-[KubeAggregatedAPIErrors]: https://github.com/openshift/cluster-monitoring-operator/blob/1824f9c9a39f54734298dd10e5d20d42c8247995/assets/control-plane/prometheus-rule.yaml#L399-L408
