@@ -2,22 +2,25 @@
 
 ## Meaning
 
-[This alert][KubePodNotReady] is fired when some pods have not been in the
-`Ready` state for a certain period. This can have different reasons as described
-[here][PodLifecycle]: When the pod is `Running` but not `Ready`, the `Readiness`
-probe is failing. An application-specific error may prevent the pod from being
-attached to a service. When the pod remains in `Pending` it can not be deployed
-to particular namespaces and nodes.
+The `KubePodNotReady` alert triggers when a pod has not been in a
+`Ready` state for a certain time period. This issue can occur for different
+reasons, as described [in the Kubernetes documentation][PodLifecycle]. When a
+pod has a status of `Running` but is not in a `Ready` state, the `Readiness`
+probe is failing. For example, an application-specific error might be
+preventing the pod from being attached to a service. When a pod remains in
+`Pending` state, it cannot be deployed to particular namespaces and nodes.
 
 ## Impact
 
-This pod is not functional and doesn't receive any traffic. Depending on how
-many functional replicas are still available, the impact differs.
+The affected pod is not functional and does not receive any traffic. Depending
+on how many functional replicas are still available, the severity of the impact
+differs.
 
 ## Diagnosis
 
-The notification details should list the pod that's not ready (and the pod's
-namespace). E.g.:
+The alert notification message lists the pod that is not ready and the
+namespace in which the pod is located, as shown in the following example alert
+message:
 
 ```text
  - alertname = KubePodNotReady
@@ -27,25 +30,26 @@ namespace). E.g.:
 ...
 ```
 
-Start by checking the status of the pod:
+To diagnose the cause of the issue, start by reviewing the status of the
+affected pod:
 
 ```console
 $ oc get pod -n $NAMESPACE $POD
 ```
 
-When the pod state is in `Running`, you can check its logs:
+If the pod is in a `Running` state, review the logs for the pod:
 
 ```console
 $ oc logs -n $NAMESPACE $POD
 ```
 
-Be aware there may be multiple containers in the pod. A check of all their logs
-may be required. If the pod isn't running (for instance, if it's stuck in
-`ContainerCreating`), then try to find out why.
+Be aware that there might be multiple containers in the pod. If so, review the
+logs for all of these containers. If the pod is not in a `Running` state--for
+instance, if it is stuck in a `ContainerCreating` state--try to find out why.
 
 ## Mitigation
 
-Try to find the issue in the logs before deleting it.
+The steps you take to fix the issue will depend on the cause that you found when
+you examined the logs.
 
-[KubePodNotReady]: https://github.com/openshift/cluster-monitoring-operator/blob/aefc8fc5fc61c943dc1ca24b8c151940ae5f8f1c/assets/control-plane/prometheus-rule.yaml#L26-L41
 [PodLifecycle]: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
