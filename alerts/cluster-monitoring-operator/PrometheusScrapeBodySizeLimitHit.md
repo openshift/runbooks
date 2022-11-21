@@ -2,39 +2,41 @@
 
 ## Meaning
 
-The alert `PrometheusScrapeBodySizeLimitHit` is triggered when at least one of
-Prometheus' scrape targets replies with a response body larger than the
-configured `body_size_limit`.
-By default, there is no limit on the body size of the scraped targets.
-When set, this limit prevents Prometheus from consuming excessive amounts of memory
-when scraped targets return a response that is deemed too large.
+The `PrometheusScrapeBodySizeLimitHit` alert triggers when at least one
+Prometheus scrape target replies with a response body larger than the
+value configured in the `enforcedBodySizeLimit` field in the
+`cluster-monitoring-config` config map in the `openshift-monitoring` namespace.
+
+By default, no limit exists on the body size of scraped targets. When a value
+is defined for `enforcedBodySizeLimit`, this limit prevents Prometheus from
+consuming large amounts of memory if scraped targets return a response of a
+size that exceeds the defined limit.
 
 ## Impact
 
-Metrics coming from targets responding with a body exceeding the configured
-size limit aren't ingested by Prometheus. The targets will be considered as being
-down and they will have their `up` metric set to 0 which may also trigger the
-`TargetDown` alert.
+Metrics coming from targets responding with a body size that exceeds the
+configured size limit are not ingested by Prometheus. The targets are
+considered to be down, and they will have their `up` metric set to `0`, which
+might also trigger the `TargetDown` alert.
 
 ## Diagnosis
 
-We can find the value of the configured body size limit in the configmap `cluster-monitoring-config`
-in the namespace `openshift-monitoring`.
+You can view the value set for the body size limit in the
+`cluster-monitoring-config` config map in the `openshift-monitoring` namespace.
+View this value by entering the following command:
 
-To check the value in configmap, use this command:
 ```bash
 oc get cm -n openshift-monitoring cluster-monitoring-config -o yaml | grep enforcedBodySizeLimit
 ```
 
-To find out which targets are exceeding the body size limit, we can refer
-to the Openshift Web UI, go to the Observe > Targets page, and check which
-targets are down.
+To discover the targets that are exceeding the configured body size limit, open
+the OpenShift web console, go to the **Observe** --> **Targets** page, and check
+to see which targets are down.
 
-If we need more information than the UI provides, such as discovered labels
-and scrape pool, we can query the Prometheus API endpoint `/api/v1/targets`.
-
-For every target, we have some useful information for debugging, as
-shown in the example below:
+To get more information than is available in the web console, such as details
+about discovered labels and the scrape pool, query the Prometheus API endpoint
+`/api/v1/targets`. Querying this endpoint will return useful debugging
+information for every target, as shown in the following example:
 
 ```json
 {
@@ -78,74 +80,80 @@ shown in the example below:
 }
 ```
 
-In the field `data.activeTargets` search for those that have `health` field
-different than `up` and check for the `lastError` field for confirmation:
+In the `data.activeTargets` field, search for targets in which the value of the
+`health` field is not `up`, and check the `lastError` field for confirmation:
 
-1. Get the name of the secret containing the token of service account `prometheus-k8s`.
-We use the following command and check for the name  `prometheus-k8s-token-[a-z]+`
-in the line `Tokens`. In the example below, the secret name is `prometheus-k8s-token-nwtrf`.
+1. Get the name of the secret containing the token of the `prometheus-k8s`
+   service account by running the following command to check for the name
+   `prometheus-k8s-token-[a-z]+` in the line `Tokens`. The following example
+   uses the secret name `prometheus-k8s-token-nwtrf`:
 
-```bash
-$ oc describe sa prometheus-k8s -n openshift-monitoring
-Name:                prometheus-k8s
-Namespace:           openshift-monitoring
-Labels:              app.kubernetes.io/component=prometheus
-                     app.kubernetes.io/instance=k8s
-                     app.kubernetes.io/name=prometheus
-                     app.kubernetes.io/part-of=openshift-monitoring
-                     app.kubernetes.io/version=2.35.0
-Annotations:         serviceaccounts.openshift.io/oauth-redirectreference.prometheus-k8s:
-                       {"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"prometheus-k8s"}}
-Image pull secrets:  prometheus-k8s-dockercfg-6wl6b
-Mountable secrets:   prometheus-k8s-dockercfg-6wl6b
-Tokens:              prometheus-k8s-token-nwtrf
-Events:              <none>
-```
-2. a. If there is no token available, we can create a token using this command
-below and skip step 2.b.
-```bash
-token=$(oc sa new-token prometheus-k8s -n openshift-monitoring)
-```
+    ```bash
+    $ oc describe sa prometheus-k8s -n openshift-monitoring
+    Name:                prometheus-k8s
+    Namespace:           openshift-monitoring
+    Labels:              app.kubernetes.io/component=prometheus
+                        app.kubernetes.io/instance=k8s
+                        app.kubernetes.io/name=prometheus
+                        app.kubernetes.io/part-of=openshift-monitoring
+                        app.kubernetes.io/version=2.35.0
+    Annotations:         serviceaccounts.openshift.io/oauth-redirectreference.prometheus-k8s:
+                          {"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"prometheus-k8s"}}
+    Image pull secrets:  prometheus-k8s-dockercfg-6wl6b
+    Mountable secrets:   prometheus-k8s-dockercfg-6wl6b
+    Tokens:              prometheus-k8s-token-nwtrf
+    Events:              <none>
+    ```
+2. If no token exists, create a token by entering the following command and
+   skip the next step:
 
+    ```bash
+    token=$(oc sa new-token prometheus-k8s -n openshift-monitoring)
+    ```
 
-2. b. If the token exists, decode the token from the secret.
+3. If a token exists, decode the token from the secret:
 
-```bash
-token=$(oc get secret $secret_name_here -n openshift-monitoring -o jsonpath={.data.token} | base64 -d)
-```
+    ```bash
+    token=$(oc get secret $secret_name_here -n openshift-monitoring -o jsonpath={.data.token} | base64 -d)
+    ```
 
-3. Get the route URL of the Prometheus API endpoint.
+4. Get the route URL of the Prometheus API endpoint:
 
-```bash
-host=$(oc get route -n openshift-monitoring prometheus-k8s -o jsonpath={.spec.host})
-```
+    ```bash
+    host=$(oc get route -n openshift-monitoring prometheus-k8s -o jsonpath={.spec.host})
+    ```
 
-4. List all the scraped targets with health status different than "up".
+5. List all of the scraped targets with a health status different from `up`:
 
-```bash
-curl -H "Authorization: Bearer $token" -k https://${host}/api/v1/targets | jq '.data.activeTargets[]|select(.health!="up")'
-```
+    ```bash
+    curl -H "Authorization: Bearer $token" -k https://${host}/api/v1/targets | jq '.data.activeTargets[]|select(.health!="up")'
+    ```
 
-5. Check the failling target's response body size. We simulate a scrape of its
-`scrapeUrl` using the command below and check for the body size.
+6. Review the response body size of the failing target. Enter the following
+   command to simulate a scrape of the target's `scrapeUrl` and view the
+   response body size:
 
-```bash
-oc exec -it prometheus-k8s-0 -n openshift-monitoring  -- curl -k --key /etc/prometheus/secrets/metrics-client-certs/tls.key --cert /etc/prometheus/secrets/metrics-client-certs/tls.crt --cacert /etc/prometheus/configmaps/serving-certs-ca-bundle/service-ca.crt $scrape_url | wc --bytes
-```
+    ```bash
+    oc exec -it prometheus-k8s-0 -n openshift-monitoring  -- curl -k --key /etc/prometheus/secrets/metrics-client-certs/tls.key --cert /etc/prometheus/secrets/metrics-client-certs/tls.crt --cacert /etc/prometheus/configmaps/serving-certs-ca-bundle/service-ca.crt $scrape_url | wc --bytes
+    ```
 
 ## Mitigation
 
-According to the result of the investigation, the cause can be either the limit is
-too small or there is a bug in the target causing it to report too many metrics.
+Your analysis of the issue might reveal that the alert was triggered by one of
+two causes:
+
+* The value set for `enforcedBodySizeLimit` is too small.
+* A bug exists in the target causing it to report too many metrics.
 
 ### Increasing the Body Size Limit
 
-We can increase the body size limit by editing the configmap
-`cluster-monitoring-config` in the namespace `openshift-monitoring`. The field
-`prometheusK8s.enforcedBodySizeLimit` defines this limit, accepting [the same size
- format as Prometheus uses](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#size).
+You can increase the body size limit by editing the `cluster-monitoring-config`
+config map in the `openshift-monitoring` namespace.
 
- The example below sets the body size limit to 20MB.
+The `prometheusK8s.enforcedBodySizeLimit` field defines this limit. Values for
+this field use the [Prometheus size format](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#size).
+
+The following example sets the body size limit to 20MB:
 
  ```yaml
 apiVersion: v1
@@ -161,5 +169,5 @@ metadata:
 
 ### Bug in the Scraped Target
 
-If you believe that the response of the scraped target is too large,
-you can contact Red Hat Customer Experience & Engagement.
+If you think that the response of the scraped target is too large, you can
+contact Red Hat Customer Experience & Engagement.
