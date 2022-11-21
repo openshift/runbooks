@@ -2,19 +2,22 @@
 
 ## Meaning
 
-The [Thanos Ruler][1] is deployed when user workload monitoring is enabled. It
-allows alerting rules deployed as part of user workload monitoring to query both
-the the Prometheus instance responsible for cluster components as well the user
-workload Prometheus instance. This alert is triggered when the Thanos Ruler
-queue is found to be dropping alerting events.
+The `ThanosRuleQueueIsDroppingAlerts` alert triggers when the Thanos Ruler queue
+is found to be dropping alerting events.
+
+The Thanos Ruler component is deployed only when user-defined monitoring is
+enabled. The component enables alerting rules to be deployed as part of
+user-defined monitoring. These rules can query the Prometheus instance
+responsible for core cluster components and also the Prometheus instance used
+for user-defined monitoring.
 
 ## Impact
 
-Alerts for user workloads may not be delivered.
+Alerts for user workloads might not be delivered.
 
 ## Diagnosis
 
-Check the logs for the Thanos Rules pods:
+Review the logs for the Thanos Ruler pods:
 
 ```console
 $ oc -n openshift-user-workload-monitoring logs -l 'thanos-ruler=user-workload'
@@ -23,16 +26,16 @@ level=warn ... msg="Alert notification queue full, dropping alerts" numDropped=1
 level=warn ... msg="Alert batch larger than queue capacity, dropping alerts" numDropped=100
 ```
 
-If this alert has triggered, you likely have an extremely large number of alerts
-flowing from the user workload monitoring stack. Log into the OpenShift web
-console and check the active alerts.
+If this alert triggers, it is likely that the user-defined monitoring stack is
+firing an extremely large number of alerts. Log into the OpenShift web console
+and review the active alerts.
 
 ## Mitigation
 
 The default queue capacity for Thanos Ruler is quite high at 10,000 items,
-meaning the most likely scenario is a misconfiguration causing the user workload
-monitoring stack to overload Thanos Ruler with duplicate or otherwise erroneous
-alerts. Check the active alerts in the OpenShift web console, and correct any
-misconfigurations or consider grouping alerts.
+which means that the most likely cause of this issue is a misconfiguration that
+causes the user-defined monitoring stack to overload Thanos Ruler with
+duplicate or otherwise erroneous alerts. Review all active alerts in the
+OpenShift web console and correct any misconfigurations. You can also consider
+grouping alerts to mitigate this issue.
 
-[1]: https://thanos.io/v0.22/components/rule.md
