@@ -2,61 +2,71 @@
 
 ## Meaning
 
-This alert is based on an extrapolation of the space used in a file system. It
-fires if both the current usage is above a certain threshold _and_ the
-extrapolation predicts to run out of space in a certain time. This is a
-warning-level alert if that time is less than 24h. It's a critical alert if that
-time is less than 4h.
+The `NodeFilesystemSpaceFillingUp` alert triggers when two conditions are met:  
+
+* The current file system usage exceeds a certain threshold.
+* An extrapolation algorithm predicts that the file system will run out of
+  space within a certain amount of time. If the time period is less than 24
+  hours, this is a `Warning` alert. If the time is less than 4
+  hours, this is a `Critical` alert.
 
 ## Impact
 
-A filesystem running full is very bad for any process in need to write to the
-filesystem. But even before a filesystem runs full, performance is usually
-degrading.
+As a file system starts to get low on space, system performance usually
+degrades gradually.
+
+If a file system fills up and runs out of space, processes that need to write
+to the file system can no longer do so, which can result in lost data and
+system instability.
 
 ## Diagnosis
 
-Study the recent trends of filesystem usage on a dashboard. Sometimes a periodic
-pattern of writing and cleaning up can trick the linear prediction into a false
-alert. Use the usual OS tools to investigate what directories are the worst
-and/or recent offenders. Is this some irregular condition, e.g. a process fails
-to clean up behind itself or is this organic growth? If monitoring is enabled,
-the following metric can be watched in PromQL.
+* Study recent trends of file system usage on a dashboard. Sometimes, a periodic
+pattern of writing and cleaning up in the file system can cause the linear
+prediction algorithm to trigger a false alert.
+
+* Use the Linux operating system tools and utilities to investigate what
+directories are using the most space in the file system. Is the issue an
+irregular condition, such as a process failing to clean up behind itself and
+using a large amount of space? Or does the issue seem to be related to
+organic growth?
+
+To assist in your diagnosis, watch the following metric in PromQL:
 
 ```console
 node_filesystem_free_bytes
 ```
 
-Check the alert's `mountpoint` label.
+Then, check the `mountpoint` label for the alert.
 
 ## Mitigation
 
-For the case that the `mountpoint` label is `/`, `/sysroot` or `/var`; then
-removing unused images solves that issue:
+If the `mountpoint` label is `/`, `/sysroot` or `/var`, remove unused images to
+resolve the issue:
 
-Debug the node by accessing the node filesystem:
+1. Debug the node by accessing the node file system:
 
-```console
-$ NODE_NAME=<instance label from alert>
-$ oc -n default debug node/$NODE_NAME
-$ chroot /host
-```
+    ```console
+    $ NODE_NAME=<instance label from alert>
+    $ oc -n default debug node/$NODE_NAME
+    $ chroot /host
+    ```
 
-Remove dangling images:
+1. Remove dangling images:
 
-```console
-$ podman images -q -f dangling=true | xargs --no-run-if-empty podman rmi
-```
+    ```console
+    $ podman images -q -f dangling=true | xargs --no-run-if-empty podman rmi
+    ```
 
-Remove unused images:
+1. Remove unused images:
 
-```console
-$ podman images | grep -v -e registry.redhat.io -e "quay.io/openshift" -e registry.access.redhat.com -e docker-registry.usersys.redhat.com -e docker-registry.ops.rhcloud.com -e rhmap | xargs --no-run-if-empty podman rmi 2>/dev/null
-```
+    ```console
+    $ podman images | grep -v -e registry.redhat.io -e "quay.io/openshift" -e registry.access.redhat.com -e docker-registry.usersys.redhat.com -e docker-registry.ops.rhcloud.com -e rhmap | xargs --no-run-if-empty podman rmi 2>/dev/null
+    ```
 
-Exit debug:
+1. Exit debug:
 
-```console
-$ exit
-$ exit
-```
+    ```console
+    $ exit
+    $ exit
+    ```
