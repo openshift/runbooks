@@ -22,7 +22,7 @@ launching a new VMI or shutting down an existing VMI.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A
+   $ export NAMESPACE="$(oc get kubevirt -A \
      -o custom-columns="":.metadata.namespace)"
    ```
 

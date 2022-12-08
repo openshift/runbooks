@@ -17,7 +17,8 @@ However, currently running virtual machine workloads are not likely to be affect
 1. Set the `NAMESPACE` environment variable as follows:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A \
+     -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Check the status of the `virt-api` pods:
