@@ -16,13 +16,15 @@ becomes a single point of failure.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A \
+     -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Check the number of available `virt-api` pods:
 
    ```bash
-   $ oc get deployment -n $NAMESPACE virt-api -o jsonpath='{.status.readyReplicas}'
+   $ oc get deployment -n $NAMESPACE virt-api \
+     -o jsonpath='{.status.readyReplicas}'
    ```
 
 3. Check the status of the `virt-api` deployment for error conditions:

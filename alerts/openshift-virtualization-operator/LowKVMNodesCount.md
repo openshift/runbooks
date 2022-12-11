@@ -16,7 +16,8 @@ Virtual machines cannot be scheduled or run if no nodes have KVM resources.
 - Identify the nodes with KVM resources:
 
   ```bash
-  $ oc get nodes -o jsonpath='{.items[*].status.allocatable}' | grep devices.kubevirt.io/kvm
+  $ oc get nodes -o jsonpath='{.items[*].status.allocatable}' | \
+    grep devices.kubevirt.io/kvm
   ```
 
 ## Mitigation

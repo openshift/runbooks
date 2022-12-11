@@ -16,8 +16,8 @@ machine components. As a result, the changes might fail to take effect.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get deployment -A | grep \
-     cluster-network-addons-operator | awk '{print $1}')"
+   $ export NAMESPACE="$(oc get deployment -A | \
+     grep cluster-network-addons-operator | awk '{print $1}')"
    ```
 
 2. Check the status of the `cluster-network-addons-operator` pod:

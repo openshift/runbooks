@@ -20,7 +20,7 @@ Validator might not be updated or reset if they fail.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get deployment -A | grep ssp-operator |
+   $ export NAMESPACE="$(oc get deployment -A | grep ssp-operator | \
      awk '{print $1}')"
    ```
 

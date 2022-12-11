@@ -14,7 +14,8 @@ Usage of CPU resources is not optimal and the node might be overloaded.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A \
+     -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Check the component's CPU request limit:

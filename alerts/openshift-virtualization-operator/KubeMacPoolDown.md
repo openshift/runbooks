@@ -16,14 +16,14 @@ If `KubeMacPool` is down, `VirtualMachine` objects cannot be created.
 
    ```bash
    $ export KMP_NAMESPACE="$(oc get pod -A --no-headers -l \
-      control-plane=mac-controller-manager | awk '{print $1}')"
+     control-plane=mac-controller-manager | awk '{print $1}')"
    ```
 
 2. Set the `KMP_NAME` environment variable:
 
    ```bash
    $ export KMP_NAME="$(oc get pod -A --no-headers -l \
-      control-plane=mac-controller-manager | awk '{print $2}')"
+     control-plane=mac-controller-manager | awk '{print $2}')"
    ```
 
 3. Obtain the `KubeMacPool-manager` pod details:

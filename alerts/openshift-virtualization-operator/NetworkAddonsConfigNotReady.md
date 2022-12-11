@@ -19,8 +19,8 @@ Network functionality is affected.
 deployment or daemon set that is not ready:
 
    ```bash
-   $ oc get networkaddonsconfig -o \
-     custom-columns="":.status.conditions[*].message
+   $ oc get networkaddonsconfig \
+     -o custom-columns="":.status.conditions[*].message
    ```
 
    Example output:
