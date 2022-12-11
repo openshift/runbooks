@@ -26,7 +26,8 @@ must diagnose and resolve the issue.
 
    ```bash
    $ oc get pods -n <namespace> -o json | jq -r '.items[] | \
-     select(.metadata.ownerReferences[] | select(.name=="<dv_name>")).metadata.name'
+     select(.metadata.ownerReferences[] | \
+     select(.name=="<dv_name>")).metadata.name'
    ```
 
 3. Obtain the details of the pods:

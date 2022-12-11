@@ -49,7 +49,8 @@ VMs might fail to start because no source PVC is available for cloning.
 `DataImportCron` specification for a default storage class:
 
    ```bash
-   $ oc get dataimportcron <dataimportcron> -o yaml | grep -B 5 storageClassName
+   $ oc get dataimportcron <dataimportcron> -o yaml | \
+     grep -B 5 storageClassName
    ```
 
    Example output:
@@ -81,7 +82,7 @@ object:
 
    ```bash
    $ export CDI_NAMESPACE="$(oc get deployment -A | \
-    grep cdi-operator | awk '{print $1}')"
+     grep cdi-operator | awk '{print $1}')"
    ```
 
 7. Check the `cdi-deployment` log for error messages:
