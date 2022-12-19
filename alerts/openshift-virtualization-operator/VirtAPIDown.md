@@ -7,7 +7,7 @@ This alert fires when all the API Server pods are down.
 
 ## Impact
 
-KubeVirt objects cannot send API calls.
+OpenShift Virtualization objects cannot send API calls.
 
 ## Diagnosis
 

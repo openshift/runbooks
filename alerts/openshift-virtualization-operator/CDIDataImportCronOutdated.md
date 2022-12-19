@@ -95,7 +95,7 @@ object:
 
 1. Set a default storage class, either on the cluster or in the `DataImportCron`
 specification, to poll and import golden images. The updated Containerized Data
-Importer (CDI) should resolve the issue within a few seconds.
+Importer (CDI) will resolve the issue within a few seconds.
 2. If the issue does not resolve itself, delete the data volumes associated
 with the affected `DataImportCron` objects. The CDI will recreate the data
 volumes with the default storage class.

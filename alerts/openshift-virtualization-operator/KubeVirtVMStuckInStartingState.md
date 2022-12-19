@@ -11,8 +11,8 @@ misconfigured priority class or a missing network device.
 
 ## Impact
 
-There is no immediate impact. However, if this alert persists, you should try
-to resolve the issue.
+There is no immediate impact. However, if this alert persists, you must
+investigate the root cause and resolve the issue.
 
 ## Diagnosis
 

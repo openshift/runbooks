@@ -22,8 +22,8 @@ network disruptions or insufficient node resources.
 
 ## Impact
 
-There is no immediate impact. However, if this alert persists, you should try
-to resolve the issue.
+There is no immediate impact. However, if this alert persists, you must
+investigate the root cause and resolve the issue.
 
 ## Diagnosis
 
