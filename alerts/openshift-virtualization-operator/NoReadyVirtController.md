@@ -58,7 +58,7 @@ status conditions such as crashing pods or failure to pull images:
    $ oc logs -n $NAMESPACE <virt-controller>
    ```
 
-7. Check the nodes for problems, suchs as a `NotReady` state:
+7. Check the nodes for problems, such as a `NotReady` state:
 
    ```bash
    $ oc get nodes
@@ -66,9 +66,9 @@ status conditions such as crashing pods or failure to pull images:
 
 ## Mitigation
 
-Based on the information obtained during Diagnosis, try to find and resolve
-the cause of the issue.
+Based on the information obtained during the diagnosis procedure, try to find
+the root cause and resolve the issue.
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
-attaching the artifacts gathered during the Diagnosis procedure.
+attaching the artifacts gathered during the diagnosis procedure.

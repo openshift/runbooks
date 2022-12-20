@@ -3,7 +3,7 @@
 
 ## Meaning
 
-This alert fires when the containerized data importer (CDI) is in
+This alert fires when the Containerized Data Importer (CDI) is in
 a degraded state:
 
 - Not progressing
@@ -49,4 +49,4 @@ Try to identify the root cause and resolve the issue.
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
-attaching the artifacts gathered during the Diagnosis procedure.
+attaching the artifacts gathered during the diagnosis procedure.

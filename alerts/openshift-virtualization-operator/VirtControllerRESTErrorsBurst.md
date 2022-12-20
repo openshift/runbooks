@@ -3,7 +3,8 @@
 
 ## Meaning
 
-More than 80% of REST calls in `virt-controller` pods failed in the last 5 minutes.
+More than 80% of REST calls in `virt-controller` pods failed in the last 5
+minutes.
 
 The `virt-controller` has likely fully lost the connection to the API server.
 
@@ -13,8 +14,8 @@ This error is frequently caused by one of the following problems:
 the case, check the metrics of the API server, and view its response times and
 overall calls.
 
-- The `virt-controller` pod cannot reach the API server. This is commonly caused
-by DNS issues on the node and networking connectivity issues.
+- The `virt-controller` pod cannot reach the API server. This is commonly
+caused by DNS issues on the node and networking connectivity issues.
 
 ## Impact
 
@@ -54,4 +55,4 @@ pod to force a restart:
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
-attaching the artifacts gathered during the Diagnosis procedure.
+attaching the artifacts gathered during the diagnosis procedure.

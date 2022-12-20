@@ -25,7 +25,7 @@ of controllers, might not be not available.
 
 The `virt-operator` is not directly responsible for virtual machines in
 the cluster. Therefore, its temporary unavailability does not significantly
-affect custom workloads.
+affect workloads.
 
 ## Diagnosis
 
@@ -56,8 +56,8 @@ affect custom workloads.
 
 ## Mitigation
 
-Based on the information obtained during Diagnosis, try to find and resolve
-the cause of the issue.
+Based on the information obtained during the diagnosis procedure, try to
+identify the root cause and resolve the issue.
 
 If you cannot resolve the issue, log in to the [Customer Portal](https://access.redhat.com)
 and open a support case, attaching the artifacts gathered during the Diagnosis

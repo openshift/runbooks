@@ -13,7 +13,7 @@ templates and the Template Validator.
 ## Impact
 
 Dependent components might not be deployed. Changes in the components might
-not be reconciled. As a result, the common templates and/or the Template
+not be reconciled. As a result, the common templates or the Template
 Validator might not be updated or reset if they fail.
 
 ## Diagnosis
@@ -61,4 +61,4 @@ Try to identify the root cause and resolve the issue.
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
-attaching the artifacts gathered during the Diagnosis procedure.
+attaching the artifacts gathered during the diagnosis procedure.
