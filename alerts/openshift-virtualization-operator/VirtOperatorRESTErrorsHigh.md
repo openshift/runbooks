@@ -21,8 +21,8 @@ by DNS issues on the node and networking connectivity issues.
 Cluster-level actions, such as upgrading and controller reconciliation, might
 be delayed.
 
-However, customer workloads, such as virtual machines (VMs) and VM instances
-(VMIs), are not likely to be affected.
+However, workloads such as virtual machines (VMs) and VM instances
+(VMIs) are not likely to be affected.
 
 ## Diagnosis
 
@@ -63,4 +63,4 @@ to force a restart:
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
-attaching the artifacts gathered during the Diagnosis procedure.
+attaching the artifacts gathered during the diagnosis procedure.

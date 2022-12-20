@@ -13,8 +13,8 @@ such as node drain and updates.
 
 ## Diagnosis
 
-1. Check the VMI configuration to determine whether the value of `evictionStrategy`
-is `LiveMigrate` of the VMI:
+1. Check the VMI configuration to determine whether the value of
+`evictionStrategy` is `LiveMigrate`:
 
    ```bash
    $ oc get vmis -o yaml

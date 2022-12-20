@@ -41,7 +41,7 @@ affected, but reporting their current status might be delayed.
 the API server:
 
    ```bash
-   $ oc logs -n  $NAMESPACE <virt-handler>
+   $ oc logs -n $NAMESPACE <virt-handler>
    ```
 
 ## Mitigation
@@ -50,9 +50,9 @@ the API server:
 to force a restart:
 
   ```bash
-  $ oc delete -n <install-namespace> <virt-handler>
+  $ oc delete -n $NAMESPACE <virt-handler>
   ```
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
-attaching the artifacts gathered during the Diagnosis procedure.
+attaching the artifacts gathered during the diagnosis procedure.

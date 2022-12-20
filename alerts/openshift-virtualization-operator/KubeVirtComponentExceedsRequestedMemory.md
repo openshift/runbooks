@@ -21,7 +21,7 @@ Usage of memory resources is not optimal and the node might be overloaded.
 2. Check the component's memory request limit:
 
    ```bash
-   $ oc -n $NAMESPACE get deployment <component> -o yaml |
+   $ oc -n $NAMESPACE get deployment <component> -o yaml | \
      grep requests: -A 2
    ```
 

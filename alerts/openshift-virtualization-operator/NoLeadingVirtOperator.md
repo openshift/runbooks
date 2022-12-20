@@ -78,9 +78,9 @@ and reconciliation of controllers, might not be available.
 
 ## Mitigation
 
-Based on the information obtained during Diagnosis, try to find and resolve
-the cause of the issue.
+Based on the information obtained during the diagnosis procedure, try to find
+the root cause and resolve the issue.
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
-attaching the artifacts gathered during the Diagnosis procedure.
+attaching the artifacts gathered during the diagnosis procedure.

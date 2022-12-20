@@ -14,6 +14,9 @@ uninstalling the HCO and the HCO is still running.
 
 ## Mitigation
 
+The mitigation depends on whether you are installing or uninstalling
+the HCO:
+
 - Complete the installation by creating a `HyperConverged` CR with its
 default values:
 
@@ -27,8 +30,6 @@ default values:
   spec: {}
   EOF
   ```
-
-  _or_
 
 - Uninstall the HCO. If the uninstall process continues to run, you must
 resolve that issue in order to cancel the alert.
