@@ -1,5 +1,4 @@
 # CDIOperatorDown
-<!-- Edited by davozeni, 10 Nov 2022 -->
 
 ## Meaning
 

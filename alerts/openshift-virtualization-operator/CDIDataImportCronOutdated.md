@@ -1,5 +1,4 @@
 # CDIDataImportCronOutdated
-<!-- Edited by apinnick, Dec. 2022-->
 
 ## Meaning
 

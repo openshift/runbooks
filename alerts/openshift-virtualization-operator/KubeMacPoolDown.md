@@ -1,5 +1,4 @@
 # KubeMacPoolDown
-<!-- Edited by apinnick, Oct. 2022-->
 
 ## Meaning
 

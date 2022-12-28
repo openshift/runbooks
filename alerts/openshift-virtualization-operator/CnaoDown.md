@@ -1,5 +1,4 @@
 # CnaoDown
-<!-- Edited by Jiří Herrmann, 3 Nov 2022 -->
 
 ## Meaning
 

@@ -1,7 +1,7 @@
 # KubevirtHyperconvergedClusterOperatorInstallationNotCompletedAlert
-<!-- Edited: apinnick@redhat.com, Aug 2022 -->
 
 ## Meaning
+
 This alert fires when the HyperConverged Cluster Operator (HCO) runs for
 more than an hour without a `HyperConverged` custom resource (CR).
 
