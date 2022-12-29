@@ -1,5 +1,3 @@
-<!-- Edited by Jiří Herrmann, 10 Nov 2022 -->
-
 # LowVirtControllersCount
 
 ## Meaning

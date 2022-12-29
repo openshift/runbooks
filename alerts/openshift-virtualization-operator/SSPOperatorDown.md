@@ -1,5 +1,4 @@
 # SSPOperatorDown
-<!-- Edited by apinnick, Nov. 2022-->
 
 ## Meaning
 

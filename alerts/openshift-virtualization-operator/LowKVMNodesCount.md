@@ -1,5 +1,4 @@
 # LowKVMNodesCount
-<!--edited by apinnick Nov 2022-->
 
 ## Meaning
 

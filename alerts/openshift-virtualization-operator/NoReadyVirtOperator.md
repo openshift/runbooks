@@ -1,5 +1,4 @@
 # NoReadyVirtOperator
-<!-- Edited by Jiří Herrmann, 7 Nov 2022 -->
 
 ## Meaning
 

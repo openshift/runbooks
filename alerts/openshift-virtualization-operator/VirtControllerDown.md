@@ -1,11 +1,11 @@
 # VirtControllerDown
 
-<!-- Edited by Jiří Herrmann, 22 Nov 2022 -->
-
 ## Meaning
+
 No running `virt-controller` pod has been detected for 5 minutes.
 
 ## Impact
+
 Any actions related to virtual machine (VM) lifecycle management fail.
 This notably includes launching a new virtual machine instance (VMI)
 or shutting down an existing VMI.

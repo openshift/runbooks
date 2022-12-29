@@ -1,5 +1,4 @@
 # NoReadyVirtController
-<!-- Edited by Jiří Herrmann, 9 Nov 2022 -->
 
 ## Meaning
 
