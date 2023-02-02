@@ -16,6 +16,10 @@ It does not fire when the number of expected pods is 0.
 the application protected by the pod disruption budget has a sufficient amount
 of pods, but is at risk of getting disrupted.
 
+Standard workloads should have at least one pod more than is desired to support
+[API-initiated eviction][APIEviction]. Workloads that are at the minimum
+disruption allowed level violate this and could block node drain.
+This is important for node maintenance and cluster upgrades.
 
 ## Diagnosis
 
@@ -63,3 +67,4 @@ the issue.
 [PodDisruptionBudgetAtLimit]: https://github.com/openshift/cluster-kube-controller-manager-operator/blob/20179ecfa3b8c5e766a21c98107f45b84196b914/manifests/0000_90_kube-controller-manager-operator_05_alerts.yaml#L24-L32
 [PodDisruptions]: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 [SpecifyingPDB]: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+[APIEviction]: https://kubernetes.io/docs/concepts/scheduling-eviction/api-eviction/

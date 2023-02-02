@@ -18,6 +18,11 @@ suboptimal number of pods.
 This can have various impact depending on the type and importance of such
 application.
 
+Standard workloads should have at least one pod more than is desired to support
+[API-initiated eviction][APIEviction]. Workloads that are below the minimum
+disruption allowed level violate this and could block node drain.
+This is important for node maintenance and cluster upgrades.
+
 
 ## Diagnosis
 
@@ -64,3 +69,4 @@ the issue.
 [PodDisruptionBudgetLimit]: https://github.com/openshift/cluster-kube-controller-manager-operator/blob/20179ecfa3b8c5e766a21c98107f45b84196b914/manifests/0000_90_kube-controller-manager-operator_05_alerts.yaml#L33-L41
 [PodDisruptions]: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 [SpecifyingPDB]: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+[APIEviction]: https://kubernetes.io/docs/concepts/scheduling-eviction/api-eviction/
