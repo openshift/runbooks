@@ -71,10 +71,11 @@ Investigate the causes that can trigger this alert.
 3. Lastly, check to make sure that the connectivity between ovnkube-master leader
    and OVN northbound database leader is healthy.
 
-   To determine what node the ovnkube-master leader is on, run
+   To determine what node the ovnkube-master leader is on, check the value of
+   `holderIdentity`:
 
    ```shell
-   oc get cm -n openshift-ovn-kubernetes ovn-kubernetes-master -o json | jq '.metadata.annotations'
+   oc get lease -n ovn-kubernetes ovn-kubernetes-master -o yaml
    ```
 
    Then get the logs of the ovnkube-master container on the ovnkube-master pod on

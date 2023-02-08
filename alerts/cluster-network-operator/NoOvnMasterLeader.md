@@ -7,8 +7,8 @@ leader for more than 10 minute.
 
 ## Impact
 
-When ovnkube-master is unable to elect a leader (via kubernetes leader
-election API), networking control plane is degraded.
+When ovnkube-master is unable to elect a leader (via kubernetes lease
+API), networking control plane is degraded.
 Networking configuration updates applied to the cluster will not be
 implemented while there is no OVN Kubernetes leader.
 Existing workloads should continue to have connectivity.
@@ -32,14 +32,16 @@ Check if all the ovn-kube masters are running:
 
 Check if there is a leader for the ovn-kubernetes cluster:
 
-    oc get cm -n openshift-ovn-kubernetes ovn-kubernetes-master -o json | \
-    jq .metadata.annotations
+    oc get lease -n openshift-ovn-kubernetes
 
-    control-plane.alpha.kubernetes.io/leader: '{"holderIdentity":"ip-10-0-
-    131-116.ec2.internal","leaseDurationSeconds":60,"acquireTime":
-    "2022-03-07T11:18:21Z","renewTime":"2022-03-07T11:25:32Z",
-    "leaderTransitions":5}'
+    acquireTime: "2023-01-30T18:19:17.620449Z"
+    holderIdentity: ovn-control-plane
+    leaseDurationSeconds: 60
+    leaseTransitions: 0
+    renewTime: "2023-02-08T10:38:51.940040Z"
 
+`holderIdentity` shown above, contains the node name where the leader pod
+resides.
 Check the logs for any of the running ovnkube-master to see if there is
 leader election happened and if there is an error occurred.
 
