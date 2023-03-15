@@ -17,6 +17,11 @@ to the cluster will not be applied.
 Existing workloads should continue to have connectivity, but the OVN-Kubernetes
 control plane and/or the OVN southbound database may not be functional.
 
+## Fix alerts before continuing
+
+Resolve any alerts that may cause this alert to fire:
+[Alert hierarchy](./hierarchy/alerts-hierarchy.svg)
+
 ## Diagnosis
 
 Investigate the causes that can trigger this alert.

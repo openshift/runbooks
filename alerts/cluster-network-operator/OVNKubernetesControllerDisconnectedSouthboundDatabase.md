@@ -16,10 +16,8 @@ update will not be applied.
 
 ### Fix alerts before continuing
 
-Check to ensure the following alerts are not firing and resolved before
-continuing as they may cause this alert to fire:
-
-- [NoRunningOvnMaster](./NoRunningOvnMaster.md)
+Resolve any alerts that may cause this alert to fire:
+[Alert hierarchy](./hierarchy/alerts-hierarchy.svg)
 
 ### OVN-kubernetes master pods
 
