@@ -1,0 +1,29 @@
+digraph G{
+rankdir=LR;
+    NorthboundStale -> {OVNKubernetesNorthboundDatabaseLeaderError}
+    OVNKubernetesNorthboundDatabaseLeaderError -> {OVNKubernetesNorthboundDatabaseMultipleLeadersError, OVNKubernetesNorthboundDatabaseClusterMemberError}
+    OVNKubernetesNorthboundDatabaseMultipleLeadersError -> OVNKubernetesNorthboundDatabaseClusterIDError
+    OVNKubernetesNorthboundDatabaseClusterMemberError -> {OVNKubernetesNorthboundDatabaseOutboundConnectionMissing, OVNKubernetesNorthboundDatabaseInboundConnectionMissing}
+    OVNKubernetesNorthboundDatabaseOutboundConnectionMissing -> OVNKubernetesNorthboundDatabaseOutboundConnectionError
+    OVNKubernetesNorthboundDatabaseInboundConnectionMissing -> OVNKubernetesNorthboundDatabaseInboundConnectionError
+
+    SouthboundStale -> {OVNKubernetesSouthboundDatabaseLeaderError}
+    OVNKubernetesSouthboundDatabaseLeaderError -> {OVNKubernetesSouthboundDatabaseMultipleLeadersError, OVNKubernetesSouthboundDatabaseClusterMemberError}
+    OVNKubernetesSouthboundDatabaseMultipleLeadersError -> OVNKubernetesSouthboundDatabaseClusterIDError
+    OVNKubernetesSouthboundDatabaseClusterMemberError -> {OVNKubernetesSouthboundDatabaseOutboundConnectionMissing, OVNKubernetesSouthboundDatabaseInboundConnectionMissing}
+    OVNKubernetesSouthboundDatabaseOutboundConnectionMissing -> OVNKubernetesSouthboundDatabaseOutboundConnectionError
+    OVNKubernetesSouthboundDatabaseInboundConnectionMissing -> OVNKubernetesSouthboundDatabaseInboundConnectionError
+
+
+    NoOvnMasterLeader -> NoRunningOvnMaster
+    V4SubnetAllocationThresholdExceeded
+    V6SubnetAllocationThresholdExceeded
+    NoOvnMasterLeader
+    OVNKubernetesNorthdInactive
+    OVNKubernetesNodePodAddError
+    OVNKubernetesNodePodDeleteError
+    NodeWithoutOVNKubeNodePodRunning -> OVNKubernetesControllerDisconnectedSouthboundDatabase
+    OVNKubernetesNodeOVSOverflowUserspace
+    OVNKubernetesNodeOVSOverflowKernel
+    OVNKubernetesResourceRetryFailure
+}
