@@ -1,4 +1,4 @@
-# SSPOperatorDown
+# SSPDown
 
 ## Meaning
 
