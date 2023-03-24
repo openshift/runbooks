@@ -12,6 +12,11 @@ connectivity but any additional workloads will not be provisioned on the node.
 Any network policy changes will not be implemented on existing workloads on the
 node.
 
+### Fix alerts before continuing
+
+Resolve any alerts that may cause this alert to fire:
+[Alert hierarchy](./hierarchy/alerts-hierarchy.svg)
+
 ## Diagnosis
 
 Check the nodes which should have the ovnkube-node running.

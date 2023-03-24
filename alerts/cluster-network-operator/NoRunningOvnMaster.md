@@ -16,6 +16,11 @@ to be partially functional,
 but new workloads will not be functional.
 Updates required for functioning Kubernetes services will not be performed.
 
+### Fix alerts before continuing
+
+Resolve any alerts that may cause this alert to fire:
+[Alert hierarchy](./hierarchy/alerts-hierarchy.svg)
+
 ## Diagnosis
 ### Control plane issue
 

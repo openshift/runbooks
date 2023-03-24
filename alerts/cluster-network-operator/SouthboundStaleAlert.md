@@ -16,6 +16,11 @@ Networking control plane is degraded.
 Networking Configuration updates applied to the cluster will not be applied.
 Existing workloads should continue to have connectivity.
 
+### Fix alerts before continuing
+
+Resolve any alerts that may cause this alert to fire:
+[Alert hierarchy](./hierarchy/alerts-hierarchy.svg)
+
 ## Diagnosis
 
 There are a few scenarios that can cause this alert to trigger.

@@ -21,7 +21,7 @@ OVN-Kubernetes control plane is not functional.
 Check to ensure the following alerts are not firing and resolved before
 continuing as they may cause this alert to fire:
 
-- [NoRunningOvnMaster](./NoRunningOvnMaster.md)
+[Alert hierarchy](./hierarchy/alerts-hierarchy.svg)
 
 ### OVN-kubernetes master pods
 
