@@ -67,7 +67,10 @@ control plane nodes:
 
 If _READY_ count from the daemonset `ovnkube-master` is not equal to
 _DESIRED_ then understand which container is failing in the OVN-Kubernetes
-master pod by describing one of the failing pods with `oc describe pod ...`.
+master pod by describing one of the failing returned by:
+
+    oc get pod -n openshift-ovn-kubernetes -l  app=ovnkube-master
+    
 After understanding which container is not starting successfully, gather the
 runtime logs from that container.
 You may need to use `--previous` command with `oc logs` command to get the
