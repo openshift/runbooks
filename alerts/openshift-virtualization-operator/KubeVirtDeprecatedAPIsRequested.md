@@ -11,13 +11,16 @@ fail when the API is removed in a future release.
 
 ## Diagnosis
 
-- Check the `description` and `summary` alert annotations to identify the
-deprecated API:
+- Check the __Description__ and __Summary__ sections of the alert to identify the
+deprecated API as in the following example:
 
-  ```text
-                description: "Detected requests to the deprecated virtualmachines.kubevirt.io/v1alpha3 API."
-                summary: "2 requests were detected in the last 10 minutes."
-  ```
+  __Description__
+
+  `Detected requests to the deprecated virtualmachines.kubevirt.io/v1alpha3 API.`
+
+  __Summary__
+
+  `2 requests were detected in the last 10 minutes.`
 
 ## Mitigation
 
