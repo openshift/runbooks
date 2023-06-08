@@ -47,8 +47,9 @@ enabled in the BIOS to run virtual machines (VMs).
   }
   ```
 
-  - Nodes with `"kvm": null` or `"kvm": 0` do not support virtualization extensions.
-  - Nodes with `"kvm": "1k"` do support virtualization extensions
+  Nodes with `"kvm": null` or `"kvm": 0` do not support virtualization extensions.
+
+  Nodes with `"kvm": "1k"` do support virtualization extensions
 
 ## Mitigation
 

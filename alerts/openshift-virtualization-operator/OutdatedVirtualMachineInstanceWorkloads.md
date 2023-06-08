@@ -41,7 +41,7 @@ stanza:
    ```yaml
    apiVersion: kubevirt.io/v1
    kind: VirtualMachineInstance
-   ...
+   # ...
      status:
        conditions:
        - lastProbeTime: null
