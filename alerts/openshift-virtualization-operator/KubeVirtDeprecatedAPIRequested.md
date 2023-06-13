@@ -2,7 +2,7 @@
 
 ## Meaning
 
-This alert fires when a deprecated KubeVirt API is used.
+This alert fires when a deprecated `KubeVirt` API is used.
 
 ## Impact
 
