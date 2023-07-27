@@ -1,4 +1,4 @@
-# KubevirtHcoSingleStackIPv6
+# SingleStackIPv6Unsupported
 
 ## Meaning
 
