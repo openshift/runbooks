@@ -29,7 +29,7 @@ systemctl status chronyd
 1. If the `chronyd` service is failing or stopped, start it:
 
     ```shell
-    systemctl start chonyd
+    systemctl start chronyd
     ```
     If the chronyd service is ready, restart it
 
