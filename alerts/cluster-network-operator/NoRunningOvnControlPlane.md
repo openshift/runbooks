@@ -1,11 +1,11 @@
-# NoRunningOvnMaster
+# NoRunningOvnControlPlane
 
 ## Meaning
 
-This [alert][NoRunningOvnMaster] is triggered when there are no
-OVN-Kubernetes master control plane pods
+This [alert][NoRunningOvnControlPlane] is triggered when there are no
+OVN-Kubernetes control plane pods
 [Running][PodRunning]
-This is a critical-level alert if no OVN-Kubernetes master control plane pods
+This is a critical-level alert if no OVN-Kubernetes control plane pods
 are not running for `10m`.
 
 ## Impact
@@ -48,26 +48,19 @@ Degraded:
 
     oc describe co network
 
-Check the CNO logs for when it is reconciling the daemonset for ovnkube-master.
 
-    oc logs deployment/network-operator -n openshift-network-operator
+### OVN-Kubernetes control-plane pod
+Verify the ovnkube-control-plane pods are running
 
-A successful reconcile for this daemonset looks like this in the CNO logs:
+    oc get pod -n openshift-ovn-kubernetes -l app=ovnkube-control-plane
 
-    I0228 14:48:30.941130       1 log.go:184] reconciling (apps/v1, Kind=DaemonSet)
-                                openshift-ovn-kubernetes/ovnkube-master
-    I0228 14:48:30.960944       1 log.go:184] update was successful
+Verify the nodes the control-plane pods are running on are up
 
-### OVN-Kubernetes master pod
-Verify the _DESIRED_ number of daemonsets is equal to the number of Kubernetes
-control plane nodes:
-
-    oc get ds -n openshift-ovn-kubernetes ovnkube-master
     oc get nodes -l node-role.kubernetes.io/master="" -o name | wc -l
 
-If _READY_ count from the daemonset `ovnkube-master` is not equal to
-_DESIRED_ then understand which container is failing in the OVN-Kubernetes
-master pod by describing one of the failing pods with `oc describe pod ...`.
+If one of the `ovnkube-control-plane` is not running
+then understand which container is failing in the OVN-Kubernetes
+control plane pods by describing one of the failing pods with `oc describe pod ...`.
 After understanding which container is not starting successfully, gather the
 runtime logs from that container.
 You may need to use `--previous` command with `oc logs` command to get the
@@ -75,7 +68,7 @@ logs of the previous execution run of a container.
 
 Pay close attention to any log output starting with "E" for Error:
 
-    oc -n openshift-ovn-kubernetes logs $OVNKUBE-MASTER-POD-NAME
+    oc -n openshift-ovn-kubernetes logs $OVNKUBE-CONTROL-PLANE-POD-NAME
     --all-containers=true | grep "^E"
 
 ## Mitigation
@@ -85,5 +78,5 @@ error discovered in the diagnosis.
 Investigate the issue using the steps outlined in diagnosis and contact the
 incident response team in your organisation if fixing the issue is not apparent.
 
-[NoRunningOvnMaster]: https://github.com/openshift/cluster-network-operator/blob/master/bindata/network/ovn-kubernetes/self-hosted/alert-rules-control-plane.yaml
+[NoRunningOvnControlPlane]: https://github.com/openshift/cluster-network-operator/blob/master/bindata/network/ovn-kubernetes/self-hosted/multi-zone-interconnect/alert-rules-control-plane.yaml
 [PodRunning]: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase

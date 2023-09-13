@@ -15,7 +15,7 @@ rankdir=LR;
     OVNKubernetesSouthboundDatabaseInboundConnectionMissing -> OVNKubernetesSouthboundDatabaseInboundConnectionError
 
 
-    NoOvnMasterLeader -> NoRunningOvnMaster
+    NoOvnClusterManagerLeader -> NoRunningOvnControlPlane
     V4SubnetAllocationThresholdExceeded
     V6SubnetAllocationThresholdExceeded
     NoOvnMasterLeader
