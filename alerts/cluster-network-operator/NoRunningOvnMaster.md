@@ -8,6 +8,9 @@ OVN-Kubernetes master control plane pods
 This is a critical-level alert if no OVN-Kubernetes master control plane pods
 are not running for `10m`.
 
+> NOTE: This alert only applies and its only fired in OCP 4.13 or previous
+> releases.
+
 ## Impact
 Networking control plane is not functional. Networking configuration updates
 will not be applied to the cluster.

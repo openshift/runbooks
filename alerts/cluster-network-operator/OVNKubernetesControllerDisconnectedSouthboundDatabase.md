@@ -21,6 +21,9 @@ Resolve any alerts that may cause this alert to fire:
 
 ### OVN-kubernetes master pods
 
+> NOTE: This section only applies to OCP 4.13 or earlier releases where the OVN
+> southbound database runs in the OVN-kubernetes master pods.
+
 Find ovnkube-master pods.
 
 ```shell
@@ -86,6 +89,18 @@ Using tcpdump on the affected node verify the traffic flow to southbound databas
 ```shell
 oc debug node/<node> -- tcpdump -i <primary_interface> tcp and port 9642
 ```
+
+> NOTE: The previous check only applies for OCP 4.13 or earlier releases where
+> the OVN southbound database runs in the OVN-kubernetes master pods.
+
+Check the logs of the sbdb container.
+
+```shell
+oc logs -n openshift-ovn-kubernetes ${pod} -c sbdb
+```
+
+> NOTE: The previous check only applies for OCP 4.14 or later releases where
+> southbound database runs in OVN-kubernetes node pods.
 
 ## Mitigation
 

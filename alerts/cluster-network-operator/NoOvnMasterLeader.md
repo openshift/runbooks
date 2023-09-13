@@ -5,6 +5,9 @@
 This alert is triggered when ovn-kubernetes cluster does not have a
 leader for more than 10 minute.
 
+> NOTE: This alert only applies and its only fired in OCP 4.13 or previous
+> releases.
+
 ## Impact
 
 When ovnkube-master is unable to elect a leader (via kubernetes lease
