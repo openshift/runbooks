@@ -5,8 +5,9 @@ reviewers:
 - slashpai
 - sthaha
 - PhilipGough
-- JoaoBraveCoding
 - bburt-rh
+- rexagod
+- machine424
 
 approvers:
 - bparees
@@ -16,8 +17,9 @@ approvers:
 - slashpai
 - sthaha
 - PhilipGough
-- JoaoBraveCoding
 - bburt-rh
+- rexagod
+- machine424
 
 emeritus_approvers:
 - brancz
@@ -32,3 +34,4 @@ emeritus_approvers:
 - fpetkovski
 - arajkumar
 - prashbnair
+- JoaoBraveCoding
