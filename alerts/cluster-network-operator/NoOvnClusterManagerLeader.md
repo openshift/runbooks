@@ -57,7 +57,7 @@ Follow the condition reported in the operator to fix the operator managed servic
 ### If one of the ovnkube-control-plane pods is not running
 
 The ovnkube-cluster-manager container in the ovn kubernetes control-plane pod
-should run the leader election if the old leader is down, you may need to 
+should run the leader election if the old leader is down, you may need to
 check the other running ovnkube-control-plane pods' logs for more
 information about why the election failed.
 
@@ -73,3 +73,9 @@ Follow the steps above: [OVN-Kubernetes master pods](#ovn-kubernetes-control-pla
 [NoOvnClusterManagerLeader]: https://github.com/openshift/cluster-network-operator/blob/master/bindata/network/ovn-kubernetes/self-hosted/multi-zone-interconnect/alert-rules-control-plane.yaml
 [Pod lifecycle]: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
 [dr_doc]: https://docs.openshift.com/container-platform/latest/backup_and_restore/control_plane_backup_and_restore/disaster_recovery/about-disaster-recovery.html
+
+### Legacy information (pre 4.14/ovn ic)
+There is no cluster manager pre 4.14.
+The alert that would fire here would be NoOvnMasterLeader.
+Impact and mitigation will be the same as detailed above.
+

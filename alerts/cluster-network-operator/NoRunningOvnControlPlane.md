@@ -80,3 +80,19 @@ incident response team in your organisation if fixing the issue is not apparent.
 
 [NoRunningOvnControlPlane]: https://github.com/openshift/cluster-network-operator/blob/master/bindata/network/ovn-kubernetes/self-hosted/multi-zone-interconnect/alert-rules-control-plane.yaml
 [PodRunning]: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase
+
+### Legacy information (pre 4.14/ovn ic)
+
+The alert firing here would be NoRunningOvnMaster, and the trigger
+would be if there were no running master pods.
+
+The impact would be the same as detailed above.
+
+On clusters running 4.13 or below, you can verify that the
+desired number of daemonsets is equal to the number of k8s
+control plane nodes
+    oc get ds -n openshift-ovn-kubernetes ovnkube-master
+    oc get nodes -l node-role.kubernetes.io/master="" -o name | wc -l
+If _READY_ count from the daemonset `ovnkube-master` is not equal to
+_DESIRED_ then understand which container is failing in the OVN-Kubernetes
+master pod by describing one of the failing pods with `oc describe pod ...`.
