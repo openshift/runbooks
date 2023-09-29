@@ -25,10 +25,10 @@ Login to the cluster. Check health of master nodes if any of them is in
 $ oc get nodes -l node-role.kubernetes.io/master=
 ```
 
-Check if an upgrade is in progress.
+Check if the cluster is undergoing an upgrade or not as per [SOP](https://github.com/openshift/ops-sop/blob/master/v4/howto/managed-upgrade.md#checking-the-upgrade-operator).
 
 ```console
-$ oc adm upgrade
+$ oc get upgrade -n openshift-managed-upgrade-operator
 ```
 
 In case there is no upgrade going on, but there is a change in the
