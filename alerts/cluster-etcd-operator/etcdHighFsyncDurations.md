@@ -61,4 +61,4 @@ Further info on etcd best practices can be found in the [OpenShift docs
 here][etcdPractices].
 
 [etcdDefragmentation]: https://etcd.io/docs/v3.4.0/op-guide/maintenance/
-[etcdPractices]: https://docs.openshift.com/container-platform/4.7/scalability_and_performance/recommended-host-practices.html#recommended-etcd-practices_
+[etcdPractices]: https://docs.openshift.com/container-platform/4.13/scalability_and_performance/recommended-performance-scale-practices/recommended-etcd-practices.html
