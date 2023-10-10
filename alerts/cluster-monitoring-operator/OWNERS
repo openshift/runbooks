@@ -3,21 +3,20 @@ reviewers:
 - jan--f
 - raptorsun
 - slashpai
-- sthaha
-- PhilipGough
 - bburt-rh
+- danielmellado
+- marioferh
 - rexagod
 - machine424
 
 approvers:
-- bparees
 - simonpasquier
 - jan--f
 - raptorsun
 - slashpai
-- sthaha
-- PhilipGough
 - bburt-rh
+- danielmellado
+- marioferh
 - rexagod
 - machine424
 
@@ -35,3 +34,5 @@ emeritus_approvers:
 - arajkumar
 - prashbnair
 - JoaoBraveCoding
+- sthaha
+- PhilipGough
