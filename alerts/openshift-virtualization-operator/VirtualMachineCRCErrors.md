@@ -13,35 +13,38 @@ severe performance degradation.
 
 ## Diagnosis
 
-1. Get the volume name from a virtual machine:
+1. Navigate to **Observe** -> **Metrics** in the web console.
 
-   ```bash
-   $ oc get vm <vm_name> -o jsonpath='{.spec.template.spec.volumes}'
+2. Obtain a list of VirtualMachines with incorrectly configured storage classes
+   by running the following PromQL query:
+   ```text
+   kubevirt_ssp_vm_rbd_volume{rxbounce_enabled="false", volume_mode="Block"} == 1
    ```
 
-2. Get the storage class name from the volume:
+   The output displays a list of VirtualMachines that use a storage
+   class without `rxbounce_enabled`.
 
-   ```bash
-   $ oc get pvc <volume> -o jsonpath='{.spec.storageClassName}'
+   Example output:
+   ```text
+   kubevirt_ssp_vm_rbd_volume{name="testvmi-gwgdqp22k7", namespace="test_ns", pv_name="testvmi-gwgdqp22k7", rxbounce_enabled="false", volume_mode="Block"} 1
    ```
 
-3. Get the storage class configuration:
+3. Obtain the storage class name by running the following command:
 
    ```bash
-   $ oc get sc <storage_class> -o yaml
+   $ oc get pv ${PV_NAME} -o=jsonpath='{.spec.storageClassName}'
    ```
-
-4. Check the storage class configuration for the `krbd:rxbounce` map option.
 
 ## Mitigation
 
-Add the `krbd:rxbounce` map option to the storage class configuration:
+Add the `krbd:rxbounce` map option to the storage class configuration to use
+a bounce buffer when receiving data:
 
-```bash
+```yaml
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: example-storage-class
+  name: vm-sc
 parameters:
   # ...
   mounter: rbd
@@ -52,7 +55,8 @@ provisioner: openshift-storage.rbd.csi.ceph.com
 
 The `krbd:rxbounce` option creates a bounce buffer to receive data. The default
 behavior is for the destination buffer to receive data directly. A bounce buffer
-is required if the destination buffer is unstable.
+is required if the stability of the
+destination buffer cannot be guaranteed.
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
