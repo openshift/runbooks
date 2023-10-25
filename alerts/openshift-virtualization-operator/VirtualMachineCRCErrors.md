@@ -15,13 +15,13 @@ severe performance degradation.
 
 1. Navigate to **Observe** -> **Metrics** in the web console.
 
-2. Obtain a list of VirtualMachines with incorrectly configured storage classes
+2. Obtain a list of virtual machines with incorrectly configured storage classes
    by running the following PromQL query:
    ```text
    kubevirt_ssp_vm_rbd_volume{rxbounce_enabled="false", volume_mode="Block"} == 1
    ```
 
-   The output displays a list of VirtualMachines that use a storage
+   The output displays a list of virtual machines that use a storage
    class without `rxbounce_enabled`.
 
    Example output:
@@ -32,7 +32,7 @@ severe performance degradation.
 3. Obtain the storage class name by running the following command:
 
    ```bash
-   $ oc get pv ${PV_NAME} -o=jsonpath='{.spec.storageClassName}'
+   $ oc get pv <pv_name> -o=jsonpath='{.spec.storageClassName}'
    ```
 
 ## Mitigation
@@ -55,8 +55,7 @@ provisioner: openshift-storage.rbd.csi.ceph.com
 
 The `krbd:rxbounce` option creates a bounce buffer to receive data. The default
 behavior is for the destination buffer to receive data directly. A bounce buffer
-is required if the stability of the
-destination buffer cannot be guaranteed.
+is required if the stability of the destination buffer cannot be guaranteed.
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
