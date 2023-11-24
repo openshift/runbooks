@@ -2,11 +2,12 @@
 
 ## Meaning
 
-Storage cluster is critically full and needs immediate data deletion or cluster
-expansion. The alert will be fired when storage cluster utilization has crossed
- 80%
+Storage cluster utilization has crossed 85% and will become read-only now.
 
 ## Impact
+
+Storage cluster is read-only now and needs immediate data deletion or
+ cluster expansion.
 
 Storage cluster will become read-only at 85%.
 
@@ -19,6 +20,8 @@ The command "ceph health" provides also information about cluster storage
 capacity.
 
 ## Mitigation
+
+Free up some space or expand the storage cluster immediately.
 
 Two options:
 

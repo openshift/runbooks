@@ -1,10 +1,9 @@
-# CephClusterCriticallyFull
+# CephClusterNearFull
 
 ## Meaning
 
-Storage cluster is critically full and needs immediate data deletion or cluster
-expansion. The alert will be fired when storage cluster utilization has crossed
- 80%
+Storage cluster utilization has crossed 75% and will become read-only at 85%.
+Free up some space or expand the storage cluster.
 
 ## Impact
 
