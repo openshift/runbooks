@@ -35,5 +35,5 @@ these operations are unlikely to succeed. You must diagnose and resolve the issu
 Delete the data volume, resolve the issue, and create a new data volume.
 
 If you cannot resolve the issue, log in to the
-link:https://access.redhat.com[Customer Portal] and open a support case,
+[Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the Diagnosis procedure.
