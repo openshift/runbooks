@@ -44,5 +44,5 @@ If nothing found, verify the
 If the ODF operator does not present any problem,
 see [general diagnosis document](helpers/diagnosis.md)
 
-If no issues found, [gather_logs](helpers/gather_logs.md) to provide more
+If no issues found, [gather_logs](helpers/gatherLogs.md) to provide more
 information to support teams.

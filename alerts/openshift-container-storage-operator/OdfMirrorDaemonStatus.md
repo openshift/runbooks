@@ -24,5 +24,5 @@ The RBD mirror pod in the Openshift storage namespace is in error state.
 Review [RBD mirrorpod](helpers/podDebug.md) to find out more information about
 the problem.
 
-[gather_logs](helpers/gather_logs.md) to provide more information to support
+[gather_logs](helpers/gatherLogs.md) to provide more information to support
 teams.

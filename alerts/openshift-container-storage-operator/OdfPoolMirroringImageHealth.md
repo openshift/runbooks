@@ -25,5 +25,5 @@ Verify images status using the [Ceph CLI](helpers/cephCLI.md):
 Review [RBD mirrorpod](helpers/podDebug.md) to find out more information about
 the problem.
 
-[gather_logs](helpers/gather_logs.md) to provide more information to support
+[gather_logs](helpers/gatherLogs.md) to provide more information to support
 teams.
