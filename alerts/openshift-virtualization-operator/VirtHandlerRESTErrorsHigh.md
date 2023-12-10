@@ -30,27 +30,33 @@ affected, but reporting their current status might be delayed.
      -o custom-columns="":.metadata.namespace)"
    ```
 
-2. Check the status of the `virt-handler` pod:
+2. List the available `virt-handler` pods to identify the failing
+   `virt-handler` pod:
 
    ```bash
    $ oc get pods -n $NAMESPACE -l=kubevirt.io=virt-handler
    ```
 
-3. Check the `virt-handler` logs for error messages when connecting to
-the API server:
+3. Check the failing `virt-handler` pod log for API server
+   connectivity errors:
 
    ```bash
    $ oc logs -n $NAMESPACE <virt-handler>
    ```
 
+   Example error message:
+
+   ```json
+   {"component":"virt-handler","level":"error","msg":"Can't patch node my-node","pos":"heartbeat.go:96","reason":"the server has received too many API requests and has asked us to try again later","timestamp":"2023-11-06T11:11:41.099883Z","uid":"132c50c2-8d82-4e49-8857-dc737adcd6cc"}
+   ```
+
 ## Mitigation
 
-- If the `virt-handler` cannot connect to the API server, delete the pod
-to force a restart:
+Delete the pod to force a restart:
 
-  ```bash
-  $ oc delete -n $NAMESPACE <virt-handler>
-  ```
+```bash
+$ oc delete -n $NAMESPACE <virt-handler>
+```
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
