@@ -39,5 +39,5 @@ components.
 #### Troubleshoot Ceph
 
 [Troubleshoot_ceph_err](helpers/troubleshootCeph.md) and
-[gather_logs](helpers/gather_logs.md) to provide more information to support
+[gather_logs](helpers/gatherLogs.md) to provide more information to support
 teams.
