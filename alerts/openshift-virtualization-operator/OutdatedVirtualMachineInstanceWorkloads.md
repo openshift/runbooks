@@ -27,7 +27,7 @@ the `virt-launcher` pod update.
 stanza:
 
    ```bash
-   $ oc get kubevirt kubevirt --all-namespaces -o yaml
+   $ oc get kubevirt --all-namespaces -o yaml
    ```
 
 3. Check each outdated VMI to determine whether it is live-migratable:
