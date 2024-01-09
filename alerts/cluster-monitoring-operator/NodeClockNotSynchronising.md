@@ -21,6 +21,7 @@ check the `chronyd` service:
 
 ```shell
 oc -n default debug node/<affected_node_name>
+chroot /host
 systemctl status chronyd
 ```
 
