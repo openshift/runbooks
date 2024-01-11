@@ -3,7 +3,7 @@
 ## Meaning
 
 There are different versions of Ceph Mon components running.. Typically this
-alert triggers during an upgrade that is taking a long time.
+alert is triggered during an upgrade that is taking a long time.
 
 ## Impact
 
@@ -44,7 +44,7 @@ explanation about the problem updating the OSD daemon with different version.
 ```
 
 If nothing found, verify the
-[ODF operator state](helpers/chekOperator.md)
+[ODF operator state](helpers/checkOperator.md)
 
 If the ODF operator does not present any problem,
 see [general diagnosis document](helpers/diagnosis.md)
