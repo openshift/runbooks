@@ -57,6 +57,9 @@ The `krbd:rxbounce` option creates a bounce buffer to receive data. The default
 behavior is for the destination buffer to receive data directly. A bounce buffer
 is required if the stability of the destination buffer cannot be guaranteed.
 
+See [Optimizing ODF PersistentVolumes for Windows VMs](https://access.redhat.com/articles/6978371)
+for details.
+
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.
