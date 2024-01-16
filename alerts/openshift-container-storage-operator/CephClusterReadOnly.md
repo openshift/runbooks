@@ -1,4 +1,4 @@
-# CephClusterCriticallyFull
+# CephClusterReadOnly
 
 ## Meaning
 
