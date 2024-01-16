@@ -2,7 +2,7 @@
 
 ## Meaning
 
-Ceph storage OSD is flapping, indicating that a daemon has restarted 5 times \
+Ceph storage OSD is flapping, indicating that a daemon has restarted 10 times \
 in the last 5 minutes.
 
 ## Impact
