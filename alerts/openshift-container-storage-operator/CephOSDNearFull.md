@@ -64,28 +64,24 @@ running.
 
 ## Mitigation
 
-### Notify Customer: Make changes to solve the alert
+### 1. Delete Data
 
-#### 1. Delete Data
-
-OCS CEPH CLUSTER IS NOT IN READONLY MODE. The following instructions only apply
+The following instructions only apply
 to OCS clusters that are near or full but NOT in readonly mode. Readonly mode
 would prevent any changes including deleting data (i.e. PVC/PV deletions).
 
-The customer may delete data, and the cluster will resolve the alert through
+Delete some data, and the cluster will resolve the alert through
 self-healing processes.
 
-#### 2. Current size < 1 TB, Expand to 4 TB
+### 2. Current size < 1 TB, Expand to 4 TB
 
-The customer may increase capacity via the addon, and the cluster will resolve
+The user may increase capacity via the addon, and the cluster will resolve
 the alert through self-healing processes.
 
-#### 3. Current size = 4TB
+### 3. Current size = 4TB
 
 Please contact Dedicated Support.
 
 Document Ceph Cluster health check:
+[gather_logs](helpers/gatherLogs.md)
 
-```bash
-oc adm must-gather --image=registry.redhat.io/ocs4/ocs-must-gather-rhel8:v4.6
-```
