@@ -15,7 +15,8 @@ Number of ready replicas for Rook Ceph RGW deployments is less than the desired 
 
 ## Diagnosis
 
-### TODO
+Need to check whether the given RGW endpoints are accessible or not.
+Make sure that the Ceph RGW deployments have required number of replicas.
 
 ## Mitigation
 

@@ -85,3 +85,6 @@ Please contact Dedicated Support.
 Document Ceph Cluster health check:
 [gather_logs](helpers/gatherLogs.md)
 
+```bash
+oc adm must-gather --image=<must-gather-image-name>
+```
