@@ -27,7 +27,7 @@ Check the number of Ceph Monitors:
 Check the number of failure zones available:
 
 ```bash
-    oc get nodes -o jsonpath='{.items[*].metadata.labels.topology\.kubernetes\.io/zone}' | tr ' ' '\n' | sort -u | wc -l
+    oc get storagecluster -o jsonpath='{.items[*].status.failureDomainValues}' -n openshift-storage | tr ',' '\n' | sort -u | wc -l
 ```
 
 It the number of available failure zones is greater or equal to 5, and there
