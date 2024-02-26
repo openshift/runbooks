@@ -25,22 +25,12 @@ If this is the case take the steps mentioned in mitigation.
 
 ## Mitigation
 
-We need to either increase the allocated CPU or run multiple active MDS. The
-blow command describes how to set the number of allocated CPU for MDS server.
+We need to increase the allocated CPU. The below command describes
+how to set the number of allocated CPU for MDS server.
 
 ```bash
 oc patch -n openshift-storage storagecluster ocs-storagecluster \
     --type merge \
     --patch '{"spec": {"resources": {"mds": {"limits": {"cpu": "8"},
     "requests": {"cpu": "8"}}}}}'
-```
-
-In order to run multiple active MDS servers, use below command
-
-```bash
-oc patch -n openshift-storage cephfilesystem ocs-storagecluster-cephfilesystem\
-    --type merge \
-    --patch '{"spec": {"metadataServer": {"activeCount": 2}}}'
-
-Make sure we have enough CPU provisioned for MDS depending on the load.
 ```
