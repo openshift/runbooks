@@ -13,7 +13,7 @@ MDS is by default is allocated 2 or 3 CPUS.
 It is okay as long as metadata operations are not too many.
 When the metadata operation load increases enough to trigger this alert,
 it means the default CPU allocation is unable to cope with load and we need to
-increase the CPU allocation or run multiple active metadata servers.
+increase the CPU allocation.
 
 ## Diagnosis
 
