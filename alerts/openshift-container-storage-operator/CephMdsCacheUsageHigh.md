@@ -27,8 +27,7 @@ Read more about ceph MDS cache configuration [here](https://docs.ceph.com/en/lat
 
 ## Mitigation
 
-Make sure we have enough memory provisioned for MDS cache. Default is 4GB, but recomended
-is minimum 8GB.
+Make sure we have enough memory provisioned for MDS cache.
 
 Memory resources for the MDS pods should be updated in the ocs-storageCluster in
 order to increase the `mds_cache_memory_limit`. For example, run the following command
