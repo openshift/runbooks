@@ -32,9 +32,11 @@ oc adm upgrade
 ```
 
 You can also check if an upgrade is in progress by viewing resources in the openshift-managed-upgrade-operator namespace.
+
 ```console
 oc get upgrade -n openshift-managed-upgrade-operator
 ```
+
 In case there is no upgrade going on, but there is a change in the
 `machineconfig` for the master pool causing a rolling reboot of each master
 node, this alert can be triggered as well. We can check if the
