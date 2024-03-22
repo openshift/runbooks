@@ -22,15 +22,19 @@ Login to the cluster. Check health of master nodes if any of them is in
 `NotReady` state or not.
 
 ```console
-$ oc get nodes -l node-role.kubernetes.io/master=
+oc get nodes -l node-role.kubernetes.io/master=
 ```
 
 Check if an upgrade is in progress.
 
 ```console
-$ oc adm upgrade
+oc adm upgrade
 ```
 
+You can also check if an upgrade is in progress by viewing resources in the openshift-managed-upgrade-operator namespace.
+```console
+oc get upgrade -n openshift-managed-upgrade-operator
+```
 In case there is no upgrade going on, but there is a change in the
 `machineconfig` for the master pool causing a rolling reboot of each master
 node, this alert can be triggered as well. We can check if the
@@ -39,7 +43,7 @@ the master nodes. This is the case when the [machine-config-operator
 (MCO)](https://github.com/openshift/machine-config-operator) is working on it.
 
 ```console
-$ oc get nodes -l node-role.kubernetes.io/master= -o template --template='{{range .items}}{{"===> node:> "}}{{.metadata.name}}{{"\n"}}{{range $k, $v := .metadata.annotations}}{{println $k ":" $v}}{{end}}{{"\n"}}{{end}}'
+oc get nodes -l node-role.kubernetes.io/master= -o template --template='{{range .items}}{{"===> node:> "}}{{.metadata.name}}{{"\n"}}{{range $k, $v := .metadata.annotations}}{{println $k ":" $v}}{{end}}{{"\n"}}{{end}}'
 ```
 
 ### General etcd health
@@ -48,19 +52,19 @@ To run `etcdctl` commands, we need to `rsh` into the `etcdctl` container of any
 etcd pod.
 
 ```console
-$ oc rsh -c etcdctl -n openshift-etcd $(oc get pod -l app=etcd -oname -n openshift-etcd | awk -F"/" 'NR==1{ print $2 }')
+oc rsh -c etcdctl -n openshift-etcd $(oc get pod -l app=etcd -oname -n openshift-etcd | awk -F"/" 'NR==1{ print $2 }')
 ```
 
 Validate that the `etcdctl` command is available:
 
 ```console
-$ etcdctl version
+etcdctl version
 ```
 
 Run the following command to get the health of etcd:
 
 ```console
-$ etcdctl endpoint health -w table
+etcdctl endpoint health -w table
 ```
 
 ## Mitigation
