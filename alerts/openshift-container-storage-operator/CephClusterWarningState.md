@@ -2,7 +2,7 @@
 
 ## Meaning
 
-Storage cluster is in warning state for more than 10m.
+Storage cluster is in warning state for more than 15m.
 
 The Storage cluster has been in a warning state for an unacceptable amount of
 time. While the storage operations will continue to function in this state, it
