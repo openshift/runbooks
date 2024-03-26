@@ -23,8 +23,8 @@ about pool status in the cluster:
 
 ## Mitigation
 
-Pool quotas can be adjusted [Ceph CLI](helpers/cephCLI.md) up or down
- (or removed) with:
+Pool quotas can be adjusted up or down (or removed) with
+[Ceph CLI](helpers/cephCLI.md)
 
 ```bash
     ceph osd pool set-quota <pool> max_bytes <bytes>
