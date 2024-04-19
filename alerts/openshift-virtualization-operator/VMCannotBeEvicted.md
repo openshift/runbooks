@@ -49,5 +49,7 @@ issue:
 
 ## Mitigation
 
-Set the `evictionStrategy` of the VMI to `shutdown` or resolve the issue that
+Set the `evictionStrategy` of the VMI to `None` or resolve the issue that
 prevents the VMI from migrating.
+The `None` startegy shuts down VMs in case of node drains and pod
+evictions.
