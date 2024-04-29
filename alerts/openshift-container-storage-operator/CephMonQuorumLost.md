@@ -4,7 +4,7 @@
 
 The number of monitors in the storage cluster are not enough.
 Multiple mons work together to provide redundancy by each keeping a copy
-of the metadata. Cluster is deployed with 3 mons, and require 2 or more mons
+of the metadata. Cluster is deployed with 3 or 5 mons, and require 2 or more mons
 to be up and running for quorum and for the storage operations to run.
 
 This alert indicates that there is only 1 monitor pod running or even none.
