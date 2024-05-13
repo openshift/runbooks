@@ -22,11 +22,11 @@ default values:
 
   ```bash
   $ cat <<EOF | oc apply -f -
-  apiVersion: operators.coreos.com/v1
-  kind: OperatorGroup
+  apiVersion: hco.kubevirt.io/v1beta1
+  kind: HyperConverged
   metadata:
-    name: hco-operatorgroup
-    namespace: kubevirt-hyperconverged
+    name: kubevirt-hyperconverged
+    namespace: openshift-cnv
   spec: {}
   EOF
   ```
