@@ -75,7 +75,7 @@ If the master node is unhealthy you can try stop/starting the instance
 in AWS.  Log into the AWS account of the cluster and find the instance of
 the affected master node by searching the running ec2 instances by the node
 name.  Click the instance and at the top right select "Instance state", and
-"Stop instance."  After the instance stops you can repeat the process and 
+"Stop instance."  After the instance stops you can repeat the process and
 choose "Start instance."
 
 ![Stop/Start Instance Button](img/ec2-stop-start.png)
