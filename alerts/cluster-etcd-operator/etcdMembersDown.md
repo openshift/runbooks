@@ -22,13 +22,13 @@ Login to the cluster. Check health of master nodes if any of them is in
 `NotReady` state or not.
 
 ```console
-$ oc get nodes -l node-role.kubernetes.io/master=
+oc get nodes -l node-role.kubernetes.io/master=
 ```
 
 Check if an upgrade is in progress.
 
 ```console
-$ oc adm upgrade
+oc adm upgrade
 ```
 
 In case there is no upgrade going on, but there is a change in the
@@ -39,7 +39,7 @@ the master nodes. This is the case when the [machine-config-operator
 (MCO)](https://github.com/openshift/machine-config-operator) is working on it.
 
 ```console
-$ oc get nodes -l node-role.kubernetes.io/master= -o template --template='{{range .items}}{{"===> node:> "}}{{.metadata.name}}{{"\n"}}{{range $k, $v := .metadata.annotations}}{{println $k ":" $v}}{{end}}{{"\n"}}{{end}}'
+oc get nodes -l node-role.kubernetes.io/master= -o template --template='{{range .items}}{{"===> node:> "}}{{.metadata.name}}{{"\n"}}{{range $k, $v := .metadata.annotations}}{{println $k ":" $v}}{{end}}{{"\n"}}{{end}}'
 ```
 
 ### General etcd health
@@ -48,19 +48,19 @@ To run `etcdctl` commands, we need to `rsh` into the `etcdctl` container of any
 etcd pod.
 
 ```console
-$ oc rsh -c etcdctl -n openshift-etcd $(oc get pod -l app=etcd -oname -n openshift-etcd | awk -F"/" 'NR==1{ print $2 }')
+oc rsh -c etcdctl -n openshift-etcd $(oc get pod -l app=etcd -oname -n openshift-etcd | awk -F"/" 'NR==1{ print $2 }')
 ```
 
 Validate that the `etcdctl` command is available:
 
 ```console
-$ etcdctl version
+etcdctl version
 ```
 
 Run the following command to get the health of etcd:
 
 ```console
-$ etcdctl endpoint health -w table
+etcdctl endpoint health -w table
 ```
 
 ## Mitigation
@@ -69,6 +69,8 @@ If an upgrade is in progress, the alert may automatically resolve in some time
 when the master node comes up again. If MCO is not working on the master node,
 check the cloud provider to verify if the master node instances are running or not.
 
-In the case when you are running on AWS, the AWS instance retirement might need
-a manual reboot of the master node.
+### Restarting Instance in AWS
 
+In the case the master node is unhealthy you may try stop/starting the node in AWS.  Log into the AWS account of the cluster and find the instance of the affected master node by searching the running ec2 instances by the node name.  Click the instance and at the top right select "Instance state", and "Stop instance."  After the instance stops you can repeat the process and choose "Start instance."
+
+![Stop/Start Instance Button](img/ec2-stop-start.png)
