@@ -22,7 +22,7 @@ workload monitoring is `openshift-user-workload-monitoring`.
     ```console
     $ NAMESPACE='<value of namespace label from alert>'
 
-    $ oc -n $NAMESPACE logs -l 'app=prometheus'
+    $ oc -n $NAMESPACE logs -l 'app.kubernetes.io/name=prometheus'
     level=error ... msg="Creating target failed" ...
     ```
 
