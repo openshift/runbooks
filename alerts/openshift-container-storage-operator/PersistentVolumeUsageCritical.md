@@ -4,7 +4,8 @@
 
 A PVC is nearing its full capacity and may lead to data loss if not attended to
 timely. The alert will be fired when Persistent Volume Claim usage has exceeded
-more than 85% of its capacity.
+the final threshold limit of its capacity.
+Please see the alert documentation text for an exact threshold limit.
 
 ## Impact
 

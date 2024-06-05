@@ -2,8 +2,9 @@
 
 ## Meaning
 
-Persistent Volume Claim (PVC) usage has exceeded 75% of its capacity,
+Persistent Volume Claim (PVC) usage is alarmingly very high,
 indicating an imminent risk of reaching full capacity.
+Please see the alert documentation text for an exact threshold limit.
 
 ## Impact
 
@@ -16,8 +17,9 @@ leading to data loss if not addressed promptly.
 ## Diagnosis
 
 The alert triggers when a Persistent Volume Claim (PVC) approaches or surpasses
-75% of its capacity. It indicates the need to expand the PVC size to accommodate
-more data or to remove unnecessary data to free up space.
+very high capacity limit. It indicates the need to expand the PVC size to
+accommodate more data or to remove unnecessary data to free up space.
+Please see the alert documentation text for an exact threshold limit.
 
 **Prerequisites:** [Prerequisites](helpers/diagnosis.md)
 
