@@ -2,8 +2,8 @@
 
 ## Meaning
 
-This alert fires when a container hosting a virtual machine (VM) has less
-than 20 MB free memory.
+This alert fires when a container hosting a virtual machine (VM) has less than
+20 MB free memory.
 
 ## Impact
 
@@ -27,21 +27,21 @@ if the container's memory limit is exceeded.
 
 ## Mitigation
 
-- Increase the memory limit in the `VirtualMachine` specification as in
-the following example:
+- Increase the memory limit in the `VirtualMachine` specification as in the
+following example:
 
-  ```yaml
-  spec:
-    running: false
-    template:
-      metadata:
-        labels:
-          kubevirt.io/vm: vm-name
-      spec:
-        domain:
-          resources:
-            limits:
-              memory: 200Mi
-            requests:
-              memory: 128Mi
-  ```
+   ```yaml
+   spec:
+     running: false
+     template:
+       metadata:
+         labels:
+           kubevirt.io/vm: vm-name
+       spec:
+         domain:
+           resources:
+             limits:
+               memory: 200Mi
+             requests:
+               memory: 128Mi
+   ```
