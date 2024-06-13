@@ -15,8 +15,7 @@ behave as expected.
 1. Export the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get deployment -A | grep ssp-operator | \
-     awk '{print $1}')"
+   $ export NAMESPACE="$(oc get deployment -A | grep ssp-operator | awk '{print $1}')"
    ```
 
 2. Check the `virt-template-validator` logs for errors that might indicate the
@@ -38,7 +37,6 @@ cause:
 ## Mitigation
 
 Try to identify the root cause and resolve the issue.
-
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.
