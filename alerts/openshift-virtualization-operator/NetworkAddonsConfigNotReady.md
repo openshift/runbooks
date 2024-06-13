@@ -5,8 +5,8 @@
 This alert fires when the `NetworkAddonsConfig` custom resource (CR) of the
 Cluster Network Addons Operator (CNAO) is not ready.
 
-CNAO deploys additional networking components on the cluster. This alert indicates
-that one of the deployed components is not ready.
+CNAO deploys additional networking components on the cluster. This alert
+indicates that one of the deployed components is not ready.
 
 ## Impact
 
@@ -18,8 +18,7 @@ Network functionality is affected.
 deployment or daemon set that is not ready:
 
    ```bash
-   $ oc get networkaddonsconfig \
-     -o custom-columns="":.status.conditions[*].message
+   $ oc get networkaddonsconfig -o custom-columns="":.status.conditions[*].message
    ```
 
    Example output:
