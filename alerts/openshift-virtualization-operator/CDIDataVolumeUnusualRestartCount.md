@@ -8,7 +8,8 @@ This alert fires when a `DataVolume` object restarts more than three times.
 
 Data volumes are responsible for importing and creating a virtual machine disk
 on a persistent volume claim. If a data volume restarts more than three times,
-these operations are unlikely to succeed. You must diagnose and resolve the issue.
+these operations are unlikely to succeed. You must diagnose and resolve the
+issue.
 
 ## Diagnosis
 
@@ -36,4 +37,4 @@ Delete the data volume, resolve the issue, and create a new data volume.
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
-attaching the artifacts gathered during the Diagnosis procedure.
+attaching the artifacts gathered during the diagnosis procedure.

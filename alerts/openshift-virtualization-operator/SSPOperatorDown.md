@@ -1,4 +1,4 @@
-# SSPDown
+# SSPOperatorDown
 
 ## Meaning
 
@@ -46,3 +46,7 @@ Try to identify the root cause and resolve the issue.
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.
+
+**Note:** Starting from 4.14, this runbook will no longer be supported. For a
+supported runbook, please see [SSPDown
+Runbook](http://kubevirt.io/monitoring/runbooks/SSPDown.html).

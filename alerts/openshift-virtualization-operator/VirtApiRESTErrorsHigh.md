@@ -2,22 +2,23 @@
 
 ## Meaning
 
-More than 5% of REST calls have failed in the `virt-api` pods in the last 60 minutes.
+More than 5% of REST calls have failed in the `virt-api` pods in the last 60
+minutes.
 
 ## Impact
 
 A high rate of failed REST calls to `virt-api` might lead to slow response and
 execution of API calls.
 
-However, currently running virtual machine workloads are not likely to be affected.
+However, currently running virtual machine workloads are not likely to be
+affected.
 
 ## Diagnosis
 
 1. Set the `NAMESPACE` environment variable as follows:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A \
-     -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Check the status of the `virt-api` pods:
@@ -29,7 +30,7 @@ However, currently running virtual machine workloads are not likely to be affect
 3. Check the `virt-api` logs:
 
    ```bash
-   $ oc logs -n  $NAMESPACE <virt-api>
+   $ oc logs -n $NAMESPACE <virt-api>
    ```
 
 4. Obtain the details of the `virt-api` pods:

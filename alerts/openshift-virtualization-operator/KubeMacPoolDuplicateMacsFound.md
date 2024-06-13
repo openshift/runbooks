@@ -24,15 +24,13 @@ Duplicate MAC addresses on the same LAN might cause network issues.
 logs:
 
    ```bash
-   $ oc logs -n <namespace> <kubemacpool_mac_controller> | \
-     grep "already allocated"
+   $ oc logs -n <namespace> <kubemacpool_mac_controller> | grep "already allocated"
    ```
 
    Example output:
 
    ```text
-   mac address 02:00:ff:ff:ff:ff already allocated to
-   vm/kubemacpool-test/testvm, br1,
+   mac address 02:00:ff:ff:ff:ff already allocated to vm/kubemacpool-test/testvm, br1,
    conflict with: vm/kubemacpool-test/testvm2, br1
    ```
 

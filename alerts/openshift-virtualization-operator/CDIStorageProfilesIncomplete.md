@@ -23,8 +23,7 @@ The CDI cannot create a VM disk on the PVC.
 
 ## Mitigation
 
-- Add the missing storage profile information as in the following
-  example:
+- Add the missing storage profile information:
 
   ```bash
   $ oc patch storageprofile local --type=merge -p '{"spec": \

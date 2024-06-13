@@ -11,8 +11,9 @@ fail when the API is removed in a future release.
 
 ## Diagnosis
 
-- Check the __Description__ and __Summary__ sections of the alert to identify the
-deprecated API as in the following example:
+- Check the __Description__ and __Summary__ sections of the alert to identify
+the
+  deprecated API as in the following example:
 
   __Description__
 
@@ -24,6 +25,5 @@ deprecated API as in the following example:
 
 ## Mitigation
 
-Use fully supported APIs. The alert resolves itself after 10 minutes if the deprecated
-API is not used.
-
+Use fully supported APIs. The alert resolves itself after 10 minutes if the
+deprecated API is not used.

@@ -2,12 +2,18 @@
 
 ## Meaning
 
-This alert fires when you install OpenShift Virtualization on a single stack
-IPv6 cluster.
+This alert fires when user tries to install OpenShift Virtualization on a single
+stack IPv6 cluster.
+
+OpenShift Virtualization is not yet supported on an OpenShift cluster configured
+with single stack IPv6. It's progress is being tracked on [this
+issue](https://issues.redhat.com/browse/CNV-28924).
 
 ## Impact
 
-You cannot create virtual machines.
+OpenShift Virtualization Operator can't be installed on a single stack IPv6
+cluster, and hence creation virtual machines on top of such a cluster is not
+possible.
 
 ## Diagnosis
 
@@ -31,5 +37,6 @@ You cannot create virtual machines.
 
 ## Mitigation
 
-Install OpenShift Virtualization on a single stack IPv4 cluster or on a
-dual stack IPv4/IPv6 cluster.
+It is recommended to use single stack IPv4 or a dual stack IPv4/IPv6 networking
+to use OpenShift Virtualization .Refer the
+[documentation](https://docs.openshift.com/container-platform/latest/networking/ovn_kubernetes_network_provider/converting-to-dual-stack.html).

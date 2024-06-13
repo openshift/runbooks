@@ -2,18 +2,18 @@
 
 ## Meaning
 
-This alert fires when the eviction strategy of a virtual machine (VM) is set
-to `LiveMigration` but the VM is not migratable.
+This alert fires when the eviction strategy of a virtual machine (VM) is set to
+`LiveMigration` but the VM is not migratable.
 
 ## Impact
 
-Non-migratable VMs prevent node eviction. This condition affects operations
-such as node drain and updates.
+Non-migratable VMs prevent node eviction. This condition affects operations such
+as node drain and updates.
 
 ## Diagnosis
 
 1. Check the VMI configuration to determine whether the value of
-`evictionStrategy` is `LiveMigrate`:
+`evictionStrategy` is `LiveMigrate` of the VMI:
 
    ```bash
    $ oc get vmis -o yaml
@@ -40,8 +40,7 @@ issue:
      conditions:
      - lastProbeTime: null
        lastTransitionTime: null
-       message: cannot migrate VMI which does not use masquerade to connect
-       to the pod network
+       message: cannot migrate VMI which does not use masquerade to connect to the pod network
        reason: InterfaceNotLiveMigratable
        status: "False"
        type: LiveMigratable
@@ -49,6 +48,5 @@ issue:
 
 ## Mitigation
 
-If possible, resolve the issue preventing the VM from migrating.
-Configure the VM to shut down during node drains or pod eviction by setting
-`evictionStrategy: None` in the VM manifest.
+Set the `evictionStrategy` of the VMI to `shutdown` or resolve the issue that
+prevents the VMI from migrating.

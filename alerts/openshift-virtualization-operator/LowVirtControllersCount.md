@@ -14,7 +14,8 @@ critical for cluster-wide virtualization functionality.
 ## Impact
 
 The responsiveness of OpenShift Virtualization might become negatively
-affected. For example, certain requests might be missed.
+affected. For example,
+certain requests might be missed.
 
 In addition, if another `virt-launcher` instance terminates unexpectedly,
 OpenShift Virtualization might become completely unresponsive.
@@ -24,8 +25,7 @@ OpenShift Virtualization might become completely unresponsive.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A \
-     -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Verify that running `virt-controller` pods are available:

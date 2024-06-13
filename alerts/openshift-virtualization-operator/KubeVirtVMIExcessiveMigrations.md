@@ -6,8 +6,8 @@ This alert fires when a virtual machine instance (VMI) live migrates more than
 12 times over a period of 24 hours.
 
 This migration rate is abnormally high, even during an upgrade. This alert might
-indicate a problem in the cluster infrastructure, such as network disruptions
-or insufficient resources.
+indicate a problem in the cluster infrastructure, such as network disruptions or
+insufficient resources.
 
 ## Impact
 
@@ -19,8 +19,7 @@ performance because memory page faults occur during the transition.
 1. Verify that the worker node has sufficient resources:
 
    ```bash
-   $ oc get nodes -l node-role.kubernetes.io/worker= -o json | \
-     jq .items[].status.allocatable
+   $ oc get nodes -l node-role.kubernetes.io/worker= -o json | jq .items[].status.allocatable
    ```
 
    Example output:
@@ -43,8 +42,7 @@ performance because memory page faults occur during the transition.
 2. Check the status of the worker node:
 
    ```bash
-   $ oc get nodes -l node-role.kubernetes.io/worker= -o json | \
-     jq .items[].status.conditions
+   $ oc get nodes -l node-role.kubernetes.io/worker= -o json | jq .items[].status.conditions
    ```
 
    Example output:

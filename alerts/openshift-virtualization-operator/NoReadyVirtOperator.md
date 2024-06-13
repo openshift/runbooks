@@ -19,20 +19,19 @@ The default deployment is two `virt-operator` pods.
 ## Impact
 
 This alert indicates a cluster-level failure. Critical cluster management
-functionalities, such as certification rotation, upgrade, and reconciliation
-of controllers, might not be not available.
+functionalities, such as certification rotation, upgrade, and reconciliation of
+controllers, might not be not available.
 
-The `virt-operator` is not directly responsible for virtual machines in
-the cluster. Therefore, its temporary unavailability does not significantly
-affect workloads.
+The `virt-operator` is not directly responsible for virtual machines in the
+cluster. Therefore, its temporary unavailability does not significantly affect
+custom workloads.
 
 ## Diagnosis
 
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A \
-     -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Obtain the name of the `virt-operator` deployment:
@@ -58,6 +57,6 @@ affect workloads.
 Based on the information obtained during the diagnosis procedure, try to
 identify the root cause and resolve the issue.
 
-If you cannot resolve the issue, log in to the [Customer Portal](https://access.redhat.com)
-and open a support case, attaching the artifacts gathered during the Diagnosis
-procedure.
+If you cannot resolve the issue, log in to the
+[Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.

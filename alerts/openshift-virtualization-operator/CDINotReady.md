@@ -2,26 +2,24 @@
 
 ## Meaning
 
-This alert fires when the Containerized Data Importer (CDI) is in
-a degraded state:
+This alert fires when the Containerized Data Importer (CDI) is in a degraded
+state:
 
 - Not progressing
 - Not available to use
 
 ## Impact
 
-CDI is not usable, so users cannot build virtual machine disks on
-persistent volume claims (PVCs) using CDI's data volumes.
-CDI components are not ready and they stopped progressing towards
-a ready state.
+CDI is not usable, so users cannot build virtual machine disks on persistent
+volume claims (PVCs) using CDI's data volumes. CDI components are not ready, and
+they stopped progressing towards a ready state.
 
 ## Diagnosis
 
 1. Set the `CDI_NAMESPACE` environment variable:
 
    ```bash
-   $ export CDI_NAMESPACE="$(oc get deployment -A | \
-     grep cdi-operator | awk '{print $1}')"
+   $ export CDI_NAMESPACE="$(oc get deployment -A | grep cdi-operator | awk '{print $1}')"
    ```
 
 2. Check the CDI deployment for components that are not ready:

@@ -13,8 +13,7 @@ OpenShift Virtualization objects cannot send API calls.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A \
-     -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Check the status of the `virt-api` pods:
@@ -45,7 +44,6 @@ image pull failures:
 ## Mitigation
 
 Try to identify the root cause and resolve the issue.
-
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.
