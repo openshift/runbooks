@@ -2,8 +2,8 @@
 
 ## Meaning
 
-This alert fires when only one `virt-operator` pod in a `Ready` state has
-been running for the last 60 minutes.
+This alert fires when only one `virt-operator` pod in a `Ready` state has been
+running for the last 60 minutes.
 
 The `virt-operator` is the first Operator to start in a cluster. Its primary
 responsibilities include the following:
@@ -16,21 +16,20 @@ management
 
 ## Impact
 
-The `virt-operator` cannot provide high availability (HA) for the deployment.
-HA requires two or more `virt-operator` pods in a `Ready` state. The default
+The `virt-operator` cannot provide high availability (HA) for the deployment. HA
+requires two or more `virt-operator` pods in a `Ready` state. The default
 deployment is two pods.
 
-The `virt-operator` is not directly responsible for virtual machines (VMs)
-in the cluster. Therefore, its decreased availability does not significantly
-affect VM workloads.
+The `virt-operator` is not directly responsible for virtual machines (VMs) in
+the cluster. Therefore, its decreased availability does not significantly affect
+VM workloads.
 
 ## Diagnosis
 
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A \
-     -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Check the states of the `virt-operator` pods:
@@ -56,6 +55,6 @@ affect VM workloads.
 Based on the information obtained during the diagnosis procedure, try to
 identify the root cause and resolve the issue.
 
-If you cannot resolve the issue, log in to the [Customer Portal](https://access.redhat.com)
-and open a support case, attaching the artifacts gathered during the Diagnosis
-procedure.
+If you cannot resolve the issue, log in to the
+[Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.
