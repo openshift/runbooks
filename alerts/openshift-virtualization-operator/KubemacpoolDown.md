@@ -2,8 +2,8 @@
 
 ## Meaning
 
-`KubeMacPool` is down. `KubeMacPool` is responsible for allocating MAC
-addresses and preventing MAC address conflicts.
+`KubeMacPool` is down. `KubeMacPool` is responsible for allocating MAC addresses
+and preventing MAC address conflicts.
 
 ## Impact
 
@@ -15,14 +15,14 @@ If `KubeMacPool` is down, `VirtualMachine` objects cannot be created.
 
    ```bash
    $ export KMP_NAMESPACE="$(oc get pod -A --no-headers -l \
-     control-plane=mac-controller-manager | awk '{print $1}')"
+      control-plane=mac-controller-manager | awk '{print $1}')"
    ```
 
 2. Set the `KMP_NAME` environment variable:
 
    ```bash
    $ export KMP_NAME="$(oc get pod -A --no-headers -l \
-     control-plane=mac-controller-manager | awk '{print $2}')"
+      control-plane=mac-controller-manager | awk '{print $2}')"
    ```
 
 3. Obtain the `KubeMacPool-manager` pod details:
