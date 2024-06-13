@@ -2,14 +2,16 @@
 
 ## Meaning
 
-This alert fires when more than 80% of the REST calls in the `virt-operator`
-pods failed in the last 5 minutes. This usually indicates that the `virt-operator`
-pods cannot connect to the API server.
+For the last 10 minutes or longer, over 80% of the REST calls made to
+`virt-operator` pods have failed.
+
+This usually indicates that the `virt-operator` pods cannot connect to the API
+server.
 
 This error is frequently caused by one of the following problems:
 
-- The API server is overloaded, which causes timeouts. To verify if this is
-the case, check the metrics of the API server, and view its response times and
+- The API server is overloaded, which causes timeouts. To verify if this is the
+case, check the metrics of the API server, and view its response times and
 overall calls.
 
 - The `virt-operator` pod cannot reach the API server. This is commonly caused
@@ -20,16 +22,15 @@ by DNS issues on the node and networking connectivity issues.
 Cluster-level actions, such as upgrading and controller reconciliation, might
 not be available.
 
-However, workloads such as virtual machines (VMs) and VM instances
-(VMIs) are not likely to be affected.
+However, customer workloads, such as virtual machines (VMs) and VM instances
+(VMIs), are not likely to be affected.
 
 ## Diagnosis
 
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A \
-     -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Check the status of the `virt-operator` pods:
@@ -38,8 +39,8 @@ However, workloads such as virtual machines (VMs) and VM instances
    $ oc -n $NAMESPACE get pods -l kubevirt.io=virt-operator
    ```
 
-3. Check the `virt-operator` logs for error messages when connecting to the
-API server:
+3. Check the `virt-operator` logs for error messages when connecting to the API
+server:
 
    ```bash
    $ oc -n $NAMESPACE logs <virt-operator>
@@ -53,8 +54,8 @@ API server:
 
 ## Mitigation
 
-- If the `virt-operator` pod cannot connect to the API server, delete the pod
-to force a restart:
+- If the `virt-operator` pod cannot connect to the API server, delete the pod to
+force a restart:
 
   ```bash
   $ oc delete -n $NAMESPACE <virt-operator>
