@@ -2,25 +2,24 @@
 
 ## Meaning
 
-More than 80% of REST calls have failed in the `virt-api` pods in the last
-5 minutes.
+For the last 10 minutes or longer, over 80% of the REST calls made to `virt-api`
+pods have failed.
 
 ## Impact
 
-A very high rate of failed REST calls to `virt-api` might lead to slow
-response and execution of API calls, and potentially to API calls being
-completely dismissed.
+A very high rate of failed REST calls to `virt-api` might lead to slow response
+and execution of API calls, and potentially to API calls being completely
+dismissed.
 
-However, currently running virtual machine workloads are not likely to
-be affected.
+However, currently running virtual machine workloads are not likely to be
+affected.
 
 ## Diagnosis
 
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A \
-     -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Obtain the list of `virt-api` pods on your deployment:
@@ -41,8 +40,8 @@ be affected.
    $ oc describe -n $NAMESPACE <virt-api>
    ```
 
-5. Check if any problems occurred with the nodes. For example, they might
-be in a `NotReady` state:
+5. Check if any problems occurred with the nodes. For example, they might be in
+a `NotReady` state:
 
    ```bash
    $ oc get nodes
