@@ -2,19 +2,19 @@
 
 ## Meaning
 
-More than 80% of REST calls in `virt-controller` pods failed in the last 5
-minutes.
+For the last 10 minutes or longer, over 80% of the REST calls made to
+`virt-controller` pods have failed.
 
 The `virt-controller` has likely fully lost the connection to the API server.
 
 This error is frequently caused by one of the following problems:
 
-- The API server is overloaded, which causes timeouts. To verify if this is
-the case, check the metrics of the API server, and view its response times and
+- The API server is overloaded, which causes timeouts. To verify if this is the
+case, check the metrics of the API server, and view its response times and
 overall calls.
 
-- The `virt-controller` pod cannot reach the API server. This is commonly
-caused by DNS issues on the node and networking connectivity issues.
+- The `virt-controller` pod cannot reach the API server. This is commonly caused
+by DNS issues on the node and networking connectivity issues.
 
 ## Impact
 
@@ -26,8 +26,7 @@ However, running workloads are not impacted.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A \
-     -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
    ```
 
 2. List the available `virt-controller` pods:
@@ -40,13 +39,13 @@ However, running workloads are not impacted.
 API server:
 
    ```bash
-   $ oc logs -n  $NAMESPACE <virt-controller>
+   $ oc logs -n $NAMESPACE <virt-controller>
    ```
 
 ## Mitigation
 
-- If the `virt-controller` pod cannot connect to the API server, delete the
-pod to force a restart:
+- If the `virt-controller` pod cannot connect to the API server, delete the pod
+to force a restart:
 
   ```bash
   $ oc delete -n $NAMESPACE <virt-controller>
