@@ -2,8 +2,8 @@
 
 ## Meaning
 
-This alert fires when no `virt-operator` pod in the `Running` state has
-been detected for 10 minutes.
+This alert fires when no `virt-operator` pod in the `Running` state has been
+detected for 10 minutes.
 
 The `virt-operator` is the first Operator to start in a cluster. Its primary
 responsibilities include the following:
@@ -18,12 +18,12 @@ The `virt-operator` deployment has a default replica of 2 pods.
 
 ## Impact
 
-This alert indicates a failure at the level of the cluster. Critical cluster-wide
-management functionalities, such as certification rotation, upgrade, and
-reconciliation of controllers, might not be available.
+This alert indicates a failure at the level of the cluster. Critical
+cluster-wide management functionalities, such as certification rotation,
+upgrade, and reconciliation of controllers, might not be available.
 
-The `virt-operator` is not directly responsible for virtual machines (VMs)
-in the cluster. Therefore, its temporary unavailability does not significantly
+The `virt-operator` is not directly responsible for virtual machines (VMs) in
+the cluster. Therefore, its temporary unavailability does not significantly
 affect VM workloads.
 
 ## Diagnosis
@@ -31,8 +31,7 @@ affect VM workloads.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A \
-     -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Check the status of the `virt-operator` deployment:
@@ -61,8 +60,8 @@ affect VM workloads.
 
 ## Mitigation
 
-Based on the information obtained during the diagnosis procedure, try to find
-the root cause and resolve the issue.
+Based on the information obtained during the diagnosis procedure, try to
+identify the root cause and resolve the issue.
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
