@@ -1,28 +1,28 @@
 digraph G{
 rankdir=LR;
-    NorthboundStale -> {OVNKubernetesNorthboundDatabaseLeaderError}
+    NoOvnClusterManagerLeader -> NoRunningOvnControlPlane
+    NoOvnMasterLeader -> NoRunningOvnMaster
+    OVNKubernetesNorthdInactive -> {NoRunningOvnMaster, NodeWithoutOVNKubeNodePodRunning}
+    OVNKubernetesControllerDisconnectedSouthboundDatabase -> NodeWithoutOVNKubeNodePodRunning
+    
+    NorthboundStale -> {NoOvnMasterLeader, NodeWithoutOVNKubeNodePodRunning, OVNKubernetesNorthboundDatabaseLeaderError}
     OVNKubernetesNorthboundDatabaseLeaderError -> {OVNKubernetesNorthboundDatabaseMultipleLeadersError, OVNKubernetesNorthboundDatabaseClusterMemberError}
     OVNKubernetesNorthboundDatabaseMultipleLeadersError -> OVNKubernetesNorthboundDatabaseClusterIDError
     OVNKubernetesNorthboundDatabaseClusterMemberError -> {OVNKubernetesNorthboundDatabaseOutboundConnectionMissing, OVNKubernetesNorthboundDatabaseInboundConnectionMissing}
     OVNKubernetesNorthboundDatabaseOutboundConnectionMissing -> OVNKubernetesNorthboundDatabaseOutboundConnectionError
     OVNKubernetesNorthboundDatabaseInboundConnectionMissing -> OVNKubernetesNorthboundDatabaseInboundConnectionError
-
-    SouthboundStale -> {OVNKubernetesSouthboundDatabaseLeaderError}
+    
+    SouthboundStale -> {NorthboundStale, OVNKubernetesNorthdInactive, OVNKubernetesSouthboundDatabaseLeaderError}
     OVNKubernetesSouthboundDatabaseLeaderError -> {OVNKubernetesSouthboundDatabaseMultipleLeadersError, OVNKubernetesSouthboundDatabaseClusterMemberError}
     OVNKubernetesSouthboundDatabaseMultipleLeadersError -> OVNKubernetesSouthboundDatabaseClusterIDError
     OVNKubernetesSouthboundDatabaseClusterMemberError -> {OVNKubernetesSouthboundDatabaseOutboundConnectionMissing, OVNKubernetesSouthboundDatabaseInboundConnectionMissing}
     OVNKubernetesSouthboundDatabaseOutboundConnectionMissing -> OVNKubernetesSouthboundDatabaseOutboundConnectionError
     OVNKubernetesSouthboundDatabaseInboundConnectionMissing -> OVNKubernetesSouthboundDatabaseInboundConnectionError
 
-
-    NoOvnMasterLeader -> NoRunningOvnMaster
     V4SubnetAllocationThresholdExceeded
     V6SubnetAllocationThresholdExceeded
-    NoOvnMasterLeader
-    OVNKubernetesNorthdInactive
     OVNKubernetesNodePodAddError
     OVNKubernetesNodePodDeleteError
-    NodeWithoutOVNKubeNodePodRunning -> OVNKubernetesControllerDisconnectedSouthboundDatabase
     OVNKubernetesNodeOVSOverflowUserspace
     OVNKubernetesNodeOVSOverflowKernel
     OVNKubernetesResourceRetryFailure
