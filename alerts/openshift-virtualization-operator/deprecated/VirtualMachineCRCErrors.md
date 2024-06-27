@@ -1,5 +1,7 @@
 # VirtualMachineCRCErrors
 
+<!-- This file is deprecated, see VMStorageClassWarning for the relevant and up-to-date runbook content -->
+
 ## Meaning
 
 This alert fires when the storage class is incorrectly configured.
