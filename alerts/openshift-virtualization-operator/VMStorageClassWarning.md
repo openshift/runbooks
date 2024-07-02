@@ -37,30 +37,8 @@ severe performance degradation.
 
 ## Mitigation
 
-Add the `krbd:rxbounce` map option to the storage class configuration to use
-a bounce buffer when receiving data:
-
-```yaml
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: vm-sc
-parameters:
-  # ...
-  mounter: rbd
-  mapOptions: "krbd:rxbounce"
-provisioner: openshift-storage.rbd.csi.ceph.com
-# ...
-```
-
-The `krbd:rxbounce` option creates a bounce buffer to receive data. The default
-behavior is for the destination buffer to receive data directly. A bounce buffer
-is required if the stability of the destination buffer cannot be guaranteed.
-
-See [Optimizing ODF PersistentVolumes for Windows VMs](https://access.redhat.com/articles/6978371)
-for details.
+Create a default OpenShift Virtualization storage class with the `krbd:rxbounce` map option. See [Optimizing ODF PersistentVolumes for Windows VMs](https://access.redhat.com/articles/6978371) for details.
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.
-
