@@ -15,6 +15,11 @@ For golden images, _latest_ refers to the latest operating system of the
 distribution. For other disk images, _latest_ refers to the latest hash of the
 image that is available.
 
+In case there is no default (OpenShift Container Platform or virtualization)
+storage class, and the
+`DataImportCron` import PVC is `Pending` for one, the alert is suppressed as the
+root cause is already alerted by CDINoDefaultStorageClass.
+
 ## Impact
 
 VMs might be created from outdated disk images.
@@ -23,61 +28,54 @@ VMs might fail to start because no boot source is available for cloning.
 
 ## Diagnosis
 
-1. Check the cluster for a default storage class:
-
+1. Check the cluster for a default OpenShift Container Platform storage class:
    ```bash
-   $ oc get sc
+   $ oc get sc -o jsonpath='{.items[?(.metadata.annotations.storageclass\.kubernetes\.io\/is-default-class=="true")].metadata.name}'
    ```
 
-   The output displays the storage classes with `(default)` beside the name of
-   the default storage class. You must set a default storage class, either on
-   the cluster or in the `DataImportCron` specification, in order for the
-   `DataImportCron` to poll and import golden images. If no storage class is
-   defined, the DataVolume controller fails to create PVCs and the following
-   event is displayed: `DataVolume.storage spec is missing accessMode and no
-   storageClass to choose profile`.
+   Check the cluster for a default virtualization storage class:
+   ```bash
+   $ oc get sc -o jsonpath='{.items[?(.metadata.annotations.storageclass\.kubevirt\.io\/is-default-virt-class=="true")].metadata.name}'
+   ```
 
-2. Obtain the `DataImportCron` namespace and name:
+   The output displays the default (OpenShift Container Platform and/or
+virtualization) storage
+   class. You must either set a default storage class on the cluster, or ask for
+   a specific storage class in the `DataImportCron` specification, in order for
+   the `DataImportCron` to poll and import golden images. If the default
+   storage class does not exist, the created import DataVolume and PVC will be
+   in `Pending` phase.
+
+2. Obtain the `DataImportCrons` which are not up-to-date:
 
    ```bash
-   $ oc get dataimportcron -A -o json | jq -r '.items[] | select(.status.conditions[] | select(.type == "UpToDate" and .status == "False")) | .metadata.namespace + "/" + .metadata.name'
+   $ oc get dataimportcron -A -o jsonpath='{range .items[*]}{.status.conditions[?(@.type=="UpToDate")].status}{"\t"}{.metadata.namespace}{"/"}{.metadata.name}{"\n"}{end}' | grep False
    ```
 
 3. If a default storage class is not defined on the cluster, check the
-`DataImportCron` specification for a default storage class:
+`DataImportCron` specification for optional storage class:
 
    ```bash
-   $ oc get dataimportcron <dataimportcron> -o yaml | grep -B 5 storageClassName
-   ```
-
-   Example output:
-
-   ```yaml
-           url: docker://.../cdi-func-test-tinycore
-       storage:
-         resources:
-           requests:
-             storage: 5Gi
-         storageClassName: rook-ceph-block
+   $ oc -n <namespace> get dataimportcron <dataimportcron> -o jsonpath='{.spec.template.spec.storage.storageClassName}{"\n"}'
    ```
 
 4. Obtain the name of the `DataVolume` associated with the `DataImportCron`
 object:
 
    ```bash
-   $ oc -n <namespace> get dataimportcron <dataimportcron> -o json | jq .status.lastImportedPVC.name
+   $ oc -n <namespace> get dataimportcron <dataimportcron> -o jsonpath='{.status.lastImportedPVC.name}{"\n"}'
    ```
 
-5. Check the `DataVolume` log for error messages:
+5. Check the `DataVolume` status:
 
    ```bash
-   $ oc -n <namespace> get dv <datavolume> -o yaml
+   $ oc -n <namespace> get dv <datavolume> -o jsonpath-as-json='{.status}'
    ```
 
 6. Set the `CDI_NAMESPACE` environment variable:
 
    ```bash
-   $ export CDI_NAMESPACE="$(oc get deployment -A | grep cdi-operator | awk '{print $1}')"
+   $ export CDI_NAMESPACE="$(oc get deployment -A -o jsonpath='{.items[?(.metadata.name=="cdi-operator")].metadata.namespace}')"
    ```
 
 7. Check the `cdi-deployment` log for error messages:
