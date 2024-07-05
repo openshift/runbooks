@@ -2,19 +2,19 @@
 
 ## Meaning
 
-This alert fires when there is no default (OpenShift Container Platform or
-OpenShift Virtualization) storage
-class, and a data volume is pending for one.
+This alert fires when a data volume is `Pending` because there is no default
+storage class.
 
-A default OpenShift Virtualization storage class has precedence over a default
-OpenShift Container Platform
+A default virtualization storage class has precedence over a default OpenShift
+Container Platform
 storage class for creating a VirtualMachine disk image.
 
 ## Impact
 
-If there is no default OpenShift Container Platform or OpenShift Virtualization
-storage class, a data volume that
-does not have a specified storage class remains in a "pending" state.
+If there is no default OpenShift Container Platform storage class and no
+default virtualization
+storage class, a data volume that does not have a specified storage class
+remains in a `Pending` phase.
 
 ## Diagnosis
 
@@ -23,23 +23,23 @@ the following
 command:
 
   ```bash
-  $ oc get sc -o json | jq '.items[].metadata|select(.annotations."storageclass.kubernetes.io/is-default-class"=="true")|.name'
+  $ oc get sc -o jsonpath='{.items[?(.metadata.annotations.storageclass\.kubernetes\.io\/is-default-class=="true")].metadata.name}'
   ```
 
-2. Check for a default OpenShift Virtualization storage class by running the
-following command:
+2. Check for a default virtualization storage class by running the following
+command:
 
   ```bash
-  $ oc get sc -o json | jq '.items[].metadata|select(.annotations."storageclass.kubevirt.io/is-default-virt-class"=="true")|.name'
+  $ oc get sc -o jsonpath='{.items[?(.metadata.annotations.storageclass\.kubevirt\.io\/is-default-virt-class=="true")].metadata.name}'
   ```
 
 ## Mitigation
 
-Create a default storage class for either OpenShift Container Platform or
-OpenShift Virtualization or for both.
+Create a default storage class for OpenShift Container Platform,
+virtualization, or both.
 
-A default OpenShift Virtualization storage class has precedence over a default
-OpenShift Container Platform
+A default virtualization storage class has precedence over a default OpenShift
+Container Platform
 storage class for creating a virtual machine disk image.
 
 * Create a default OpenShift Container Platform storage class by running the
@@ -49,8 +49,8 @@ following command:
   $ oc patch storageclass <storage-class-name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
   ```
 
-* Create a default OpenShift Virtualization storage class by running the
-following command:
+* Create a default virtualization storage class by running the following
+command:
 
   ```bash
   $ oc patch storageclass <storage-class-name> -p '{"metadata": {"annotations":{"storageclass.kubevirt.io/is-default-virt-class":"true"}}}'
