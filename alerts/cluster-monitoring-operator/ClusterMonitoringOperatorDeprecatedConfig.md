@@ -20,8 +20,7 @@ the
 
   `The configuration field k8sPrometheusAdapter in
   openshift-monitoring/cluster-monitoring-config was deprecated in 4.16 and has
-  no effect, you can migrate
-  to metricsServer config instead`.
+  no effect`.
 
   __Summary__
 
