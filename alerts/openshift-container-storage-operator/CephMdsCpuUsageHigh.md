@@ -38,13 +38,14 @@ oc patch -n openshift-storage storagecluster ocs-storagecluster \
 In order to run multiple active MDS servers, use below command
 
 ```bash
-oc patch -n openshift-storage cephfilesystem ocs-storagecluster-cephfilesystem\
+oc patch -n openshift-storage storagecluster ocs-storagecluster\
     --type merge \
-    --patch '{"spec": {"metadataServer": {"activeCount": 2}}}'
+    --patch '{"spec": {"managedResources": {"cephFilesystems":{"activeMetadataServers": 2}}}}'
 
 Make sure we have enough CPU provisioned for MDS depending on the load.
 ```
 
-Always increase the `activeCount` by 1. The scaling of activeCount works only
-if you have more than one PV. If there is only one PV that is causing CPU load,
+Always increase the `activeMetadataServers` by 1.
+The scaling of activeMetadataServers works only if you have more than one PV.
+If there is only one PV that is causing CPU load,
 look at increasing the cpu resource as described above.
