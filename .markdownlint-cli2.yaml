@@ -45,3 +45,7 @@ config:
   blanks-around-lists: false
   single-trailing-newline: false
   no-multiple-blanks: false
+
+  # Allow duplicate headings with different parents.
+  no-duplicate-heading:
+    siblings_only: true

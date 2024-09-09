@@ -2,23 +2,27 @@
 
 ## Meaning
 
-The `PrometheusOperatorRejectedResources` alert triggers when Prometheus Operator
-rejects invalid `AlertmanagerConfig`, `PodMonitor`, `ServiceMonitor`, or `PrometheusRule`
-objects.
+The `PrometheusOperatorRejectedResources` alert triggers when the Prometheus
+Operator detects and rejects invalid `AlertmanagerConfig`, `PodMonitor`,
+`ServiceMonitor`, or `PrometheusRule` objects.
 
 ## Impact
 
 The custom resources that trigger the alert are ignored by Prometheus Operator.
 As a consequence, they will not be part of the final configuration of the
-Prometheus, Alertmanager, or Thanos Ruler components managed by Prometheus Operator.
+Prometheus, Alertmanager, or Thanos Ruler components managed by the Prometheus
+Operator.
 
 ## Diagnosis
 
-Identify the custom resource type and the namespace from the `resource` and `namespace`
-labels of the `PrometheusOperatorRejectedResources` alert. You can find this information
-by using the OpenShift web console or the command line interface (CLI).
+### Identify the custom resource type
 
-### Using the Openshift web console
+The first step is to identify the custom resource type and the namespace from
+the `resource` and `namespace` labels of the
+`PrometheusOperatorRejectedResources` alert. You can find this information by
+using the OpenShift web console or the command line interface (CLI).
+
+#### Using the Openshift web console
 
 1. Browse to **Observe** -> **Alerting**.
 2. Search for the `PrometheusOperatorRejectedResources` alert.
@@ -26,67 +30,127 @@ by using the OpenShift web console or the command line interface (CLI).
 4. Scroll down and view the **Labels** field. The resource type is indicated by
 the `resource` label.
 
+#### Using the CLI
+
+Get the Alertmanager URL and view a list of alerts that have fired:
+
+```bash
+### Retrieve the Alertmanager URL
+$ ALERTMANAGER=$(oc get route alertmanager-main -n openshift-monitoring -o jsonpath='{@.spec.host}')
+
+### Get active alerts
+$ curl -sk -H "Authorization: Bearer $(oc create token prometheus-k8s -n openshift-monitoring)" \
+    https://$ALERTMANAGER/api/v2/alerts?filter=alertname=PrometheusOperatorRejectedResources
+```
+
 The `namespace` label can be either `openshift-monitoring` or `openshift-user-workload-monitoring`,
 which dictates your course of action:
 * When the value is `openshift-monitoring`, this is an issue with the platform
-monitoring stack. Please submit a request to Customer Support.
+monitoring stack. Please submit a request to the Customer Support.
 * When the value is `openshift-user-workload-monitoring`, this is an issue with
 a user-defined monitoring resource.
 
-To identify the rejected monitoring object, check the logs of the Prometheus Operator
-deployment in the `openshift-user-workload-monitoring` namespace. The namespace
-and the name of the rejected resource will appear in the log entry after the
-error message.
+
+### Identify the resource(s) and reason
+
+To identity which monitoring objects have been rejected and why, use one of the
+2 following methods depending on the OCP version.
+
+#### OCP 4.16 and later
+
+The Prometheus operator emits events about invalid resources.
+
+##### Using the Openshift web console
+
+1. Browse to **Home** -> **Events**.
+2. Select "All projects" in the Project drop-down list.
+3. Select the `resource` label in the Resources drop-down list (for instance,
+`ServiceMonitor`).
+
+##### Using the CLI
+
+Check the Kubernetes events related to the `resource` label using the following
+command (example for `ServiceMonitor` resources):
+
+```bash
+oc get events --field-selector involvedObject.kind=ServiceMonitor --all-namespaces
+```
+
+The following is a sample event about a rejected custom resource:
+
+```log
+NAMESPACE   LAST SEEN   TYPE      REASON                 OBJECT                       MESSAGE
+default     106s        Warning   InvalidConfiguration   servicemonitor/example-app   ServiceMonitor example-app was rejected due to invalid configuration: it accesses file system via bearer token file which Prometheus specification prohibits
+```
+
+
+#### Before OCP 4.16
+
+Check the logs of the Prometheus Operator deployment in the
+`openshift-user-workload-monitoring` namespace. The namespace and the name of
+the rejected resource will appear in the log entry after the error message.
+
 ```bash
 oc logs deployment/prometheus-operator -c prometheus-operator -n openshift-user-workload-monitoring
 ```
 
 The following is a sample error message about a rejected custom resource:
+
 ```log
 level=warn ts=2023-07-03T20:37:20.740723141Z caller=operator.go:1917 component=prometheusoperator msg="skipping servicemonitor" error="it accesses file system via bearer token file which Prometheus specification prohibits" servicemonitor=quarkus-demo/otel-collector namespace=openshift-user-workload-monitoring prometheus=user-workload
 ```
 
-### Diagnose using the CLI
-
-* Get the Alertmanager URL and view a list of alerts that have fired:
-```bash
-### Gets alertmanager URL
-$ ALERT_MANAGER=$(oc get route alertmanager-main -n openshift-monitoring -o jsonpath='{@.spec.host}')
-
-### Gets fired alerts
-$ curl -sk -H "Authorization: Bearer $(oc create token prometheus-k8s -n openshift-monitoring)"  https://$ALERT_MANAGER/api/v2/alerts?filter=alertname=PrometheusOperatorRejectedResources
-```
-
 ## Mitigation
 
-Fix the misconfigured custom resource and reapply it to the cluster.
+The mitigation depends on which resources are being rejected and why.
 
-The root causes for this alert can vary depending on the specific configuration and
-deployment of Prometheus Operator.
-Possible causes include the following:
+### ServiceMonitor and PodMonitor
 
-- **AlertManagerConfig**
-  - Invalid receiver settings--for example, a missing URL in a Slack action.
-  - Invalid route settings.
-  - Settings that request a feature that is unavailable in the current version.
-  - Unsupported match rules in inhibition rules.
-- **ServiceMonitor and PodMonitor**
-  - An invalid relabeling configuration--for example, a malformed regular expression.
-  - An invalid TLS configuration.
-  - A scrape interval configured to be longer than the scrape timeout.
-  - Information missing in authentication settings.
-  - Violation of file system access rules, which can occur when a `ServiceMonitor`
-    or `PodMonitor` object references a file to use as a bearer token or references
-    a TLS file. These configurations are not allowed in user-defined monitoring.
-    Instead, you must create a secret that contains the credential data in the
-    same namespace as the `ServiceMonitor` or `PodMonitor` object and use a secret
-    key reference in the `ServiceMonitor` or `PodMonitor` configuration.
-- **PrometheusRules**
-  - A `PrometheusRules` object that contains an invalid expression.
+- Invalid relabeling configuration (for example, a malformed regular expression).
+  - Fix the relabeling configuration syntax.
+- An invalid TLS configuration.
+  - Fix the TLS configuration.
+- A scrape interval less than the scrape timeout.
+  - Change the scrape timeout or the scrape interval value.
+- Invalid secret or configmap key reference.
+  - Verify that the secret/configmap object exists and that they key is present
+    in the secret/configmap.
+- Violation of file system access rules, which can occur when a `ServiceMonitor`
+  or `PodMonitor` object references a file to use as a bearer token or references
+  a TLS file. These configurations are not allowed in user-defined monitoring.
+  - you must create a secret that contains the credential data in the
+    same namespace as the `ServiceMonitor` or `PodMonitor` object and use a
+    secret key reference in the `ServiceMonitor` or `PodMonitor`
+    configuration.
 
-The admission webhook should be able to catch the error of an invalid expression
-in a `PrometheusRules` object. If that error shows up in the operator logs,
-the admission webhook might be offline. Please check the deployment `prometheus-operator-admission-webhook`.
+### AlertmanagerConfig
+
+- Invalid secret or configmap key reference.
+- Verify that the secret/configmap object exists and that they key is present
+  in the secret/configmap.
+- Invalid receiver or route settings (for example, a missing URL in a Slack action).
+  - Fix the improper syntax.
+- Configuration option which is not yet available in the Alertmanager version.
+  - Update the resource to not use this option.
+- Unsupported match rules in inhibition rules.
+  - Fix the match rule syntax.
+
+The admission webhook should be able to catch most of these errors. In this
+case, the admission webhook might be offline. Please check the
+`prometheus-operator-admission-webhook` deployment in the
+`openshift-monitoring` namespace.
+
+
+### PrometheusRule
+
+The resource can be invalid because it contains an invalid expression which
+needs to be fixed. The admission webhook should be able to catch the error of
+an invalid expression in a `PrometheusRule` object. In this case, the admission
+webhook might be offline. Please check the
+`prometheus-operator-admission-webhook` deployment in the
+`openshift-monitoring` namespace.
+
 
 ## Additional resources
+
 - ["PrometheusOperatorRejectedResources" alert firing continuously in a Red Hat OpenShift Service in RHOCP 4](https://access.redhat.com/solutions/6992399)
