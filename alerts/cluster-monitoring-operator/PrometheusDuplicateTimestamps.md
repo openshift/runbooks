@@ -40,13 +40,14 @@ Consequently, queries may yield incorrect and unexpected results.
 ## Mitigation
 
 If the alert originates from the `openshift-monitoring` namespace, please open a
-support case. If not, proceed based on the reviewed logs for the affected
-Prometheus instance:
+support case. If not, this might be due to one or both of the following issues:
 
-### The logs reveal one of the following issues
+### Target duplication
 
-- The same target is defined in different scrape pools
-- Distinct targets across different scrape pools are producing the same samples
+The logs might help determine the following information:
+
+- The same target is defined in different scrape pools.
+- Distinct targets across different scrape pools are producing the same samples.
 
 This happens when the target is duplicated, that is, defined multiple times with
 identical target labels.
@@ -56,10 +57,16 @@ Proceed with the following steps to fix the issue:
 1. Use the logs to guide you to the place where the conflicting targets are defined.
 2. Remove the duplicated targets or ensure that distinct targets are labeled uniquely.
 
-### The logs only revolve around the same scrape pool
+### Target is exposing duplicated samples for the same timestamp
 
-This might mean that the target exposes duplicated samples. In this scenario, even
-if the samples have the same value, they are considered duplicates.
+In this scenario, even if the samples have the same value for the same
+timestamp, they are considered duplicates.
+
+#### NOTE
+
+A regression introduced in OpenShift Container Platform 4.16.0 might cause the alert
+to fire when a target is exposing samples of the same series with different explicit
+timestamps (see [OCPBUGS-39179] to track the resolution).
 
 Proceed with the following steps to fix the issue:
 
@@ -81,3 +88,5 @@ Proceed with the following steps to fix the issue:
 3. After resolving the issue, disable the `debug` log level.
 
 [a guide to change log level]: https://docs.openshift.com/container-platform/latest/observability/monitoring/config-map-reference-for-the-cluster-monitoring-operator.html
+
+[OCPBUGS-39179]: https://issues.redhat.com/browse/OCPBUGS-39179
