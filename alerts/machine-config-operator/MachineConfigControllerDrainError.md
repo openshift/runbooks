@@ -71,40 +71,40 @@ The MCC logs explicitly list which pods are failing to drain. You should start e
 
 - If a PDB is causing the failure you can temporarily patch it to set the `minAvailable` to 0 so it can scale the pod down successfully. Then patch it to the previous value after the upgrade completes.
 
-```console
-oc patch pdb $PDB -n $NS --type=merge -p '{"spec":{"minAvailable":0}}'
-```
+   ```console
+   oc patch pdb $PDB -n $NS --type=merge -p '{"spec":{"minAvailable":0}}'
+   ```
 - If a webhook is preventing the pod deletion:
 
-Check the `openshift-kube-apiserver` logs to see exactly what webhook is preventing deletion.
+    1. Check the `openshift-kube-apiserver` logs to see exactly what webhook is preventing deletion.
 
-```console
-Failed calling webhook, failing open vault.hashicorp.com: failed calling webhook "webhook_name": failed to call webhook: Post "https://hashi-vault-agent-injector-svc.vault-injector.svc:443/mutate?timeout=30s": context canceled2022-10-11T19:13:53.345381984Z E1011 19:13:53.345348      16 dispatcher.go:184] failed calling webhook "webhook_name": failed to call webhook: Post "https://name-injector-svc.vault-injector.svc:443/mutate?timeout=30s": context canceled
-```
-Check if it's a `mutating` or `validating` webhook.
-```console
-$ oc get validatingwebhookconfiguration
-$ oc get mutatingwebhookconfiguration
-```
-Backup and delete the webhook 
-```console
-$ oc get validatingwebhookconfiguration/<webhook_name> -o yaml > webhook.yaml
-$ oc delete <webhook_type> <webhook_name>         
-```
-This should allow the drain to continue and if the webhook does not come back automatically you can recreate it via the backup.
+       ```console
+       Failed calling webhook, failing open vault.hashicorp.com: failed calling webhook "webhook_name": failed to call webhook: Post "https://hashi-vault-agent-injector-svc.vault-injector.svc:443/mutate?timeout=30s": context canceled2022-10-11T19:13:53.345381984Z E1011 19:13:53.345348      16 dispatcher.go:184] failed calling webhook "webhook_name": failed to call webhook: Post "https://name-injector-svc.vault-injector.svc:443/mutate?timeout=30s": context canceled
+       ```
+    2. Check if it's a `mutating` or `validating` webhook.
+        ```console
+        $ oc get validatingwebhookconfiguration
+        $ oc get mutatingwebhookconfiguration
+        ```
+    3. Backup and delete the webhook 
+        ```console
+        $ oc get validatingwebhookconfiguration/<webhook_name> -o yaml > webhook.yaml
+        $ oc delete <webhook_type> <webhook_name>         
+        ```
+    4. This should allow the drain to continue and if the webhook does not come back automatically you can recreate it via the backup.
 
 - If a pod cannot unmount storage, troubleshoot why it's failing. For example, if you are using NFS storage, the problem could be a network issue with the storage server. 
 
-Otherwise, if you are comfortable with possible data loss, you can force delete the pod and immediately remove resources from the API and bypass graceful deletion: 
+- Otherwise, if you are comfortable with possible data loss, you can force delete the pod and immediately remove resources from the API and bypass graceful deletion: 
 
-```console
-$ oc delete pod <pod-name> --force=true --grace-period=0
-```
+    ```console
+    $ oc delete pod <pod-name> --force=true --grace-period=0
+    ```
 - If the finalizers are causing the pod to be stuck in terminating status you can try patching the finalizers to null:
 
-```console
-oc patch pod <pod_name> -p '{"metadata":{"finalizers":null}}' -n <namespace_name>
-```
-Or, you can force delete the pod using the previous command. 
+    ```console
+    oc patch pod <pod_name> -p '{"metadata":{"finalizers":null}}' -n <namespace_name>
+    ```
+ - Or, you can force delete the pod using the previous command. 
 
 
