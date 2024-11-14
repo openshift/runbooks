@@ -1,0 +1,11 @@
+reviewers:
+- flavianmissi
+- xiuwang
+- wewang58
+- stevsmit
+approvers:
+- flavianmissi
+- xiuwang
+- wewang58
+- stevsmit
+component: "Image Registry"
