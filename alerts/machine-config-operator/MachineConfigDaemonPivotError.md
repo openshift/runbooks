@@ -9,15 +9,9 @@ trying to pivot OS image to a new version.
 >Alerts the user when an error is detected upon pivot.
 This triggers if the pivot errors are above zero for 2 minutes.
 
-This alert will occur if
-
-- The mcd_pivot_errors_total is
-greater then 0 for 2 minutes.
-- mcd_pivot_errors_total is a guage counter
-that can increment if there are errors
-during an update.
-- These errors can occur during an OS update
-or kernel change.
+This alert occurs when a node experiences
+OS update or kernel change failure(s)
+lasting over 2 minutes during a cluster upgrade.
 
 ## Impact
 
