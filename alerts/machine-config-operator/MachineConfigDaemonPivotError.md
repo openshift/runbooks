@@ -4,12 +4,10 @@
 
 This alert is triggered when the Machine Config Daemon (MCD)
 detects an error when trying to pivot the
-operating system (OS) image to a new version
-or is unable to pivot to a new version during a cluster upgrade.
-
-This alert occurs when a node experiences
-OS update or kernel change failure(s)
-lasting more than 2 minutes during a cluster upgrade.
+operating system (OS) image to a new version or a kernel
+change. If the MCD is unable to complete
+the pivot or change within 2 minutes the alert
+will fire.
 
 ## Impact
 
