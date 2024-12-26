@@ -19,8 +19,8 @@ the descheduler detects this as a pod that failed to be evicted. As a
 consequence,
 the manner in which OpenShift Virtualization handles eviction requests causes
 the descheduler
-to make incorrect decisions and take incorrect actions that might destabilize
-the cluster.
+to make incorrect decisions and take incorrect actions that might
+destabilize the cluster.
 
 To correctly handle the special case of an evicted VM pod triggering a live
 migration to another node, the `Kube Descheduler Operator` introduced
@@ -51,9 +51,8 @@ stability.
          devEnableEvictionsInBackground: true
    ```
 
-If these lines are not present, the `Kube Descheduler Operator` is not
-correctly configured
-to work alongside OpenShift Virtualization.
+If these lines are not present, the `Kube Descheduler Operator` is not correctly
+configured to work alongside OpenShift Virtualization.
 
 ## Mitigation
 
