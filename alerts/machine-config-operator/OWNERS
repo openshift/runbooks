@@ -5,6 +5,7 @@ approvers:
   - kikisdeliveryservice
   - sinnykumari
   - yuqi-zhang
+  - djoshy 
 reviewers:
   - cgwalters
   - kikisdeliveryservice
@@ -14,5 +15,6 @@ reviewers:
   - jkyros
   - raisaat
   - mburke5678
+  - djoshy 
 
 component: "Machine Config Operator"
