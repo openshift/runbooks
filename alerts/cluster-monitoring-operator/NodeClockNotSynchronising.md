@@ -24,6 +24,19 @@ oc -n default debug node/<affected_node_name>
 chroot /host
 systemctl status chronyd
 ```
+### Bug#1822211 
+
+https://access.redhat.com/solutions/4976641
+Issue
+    When trying to run oc debug node over a tainted node with NoExecute effect, the debug pod got terminated.
+    Error trying to debug a node when the node is tainted:
+    error: unable to create the debug pod "worker-0.example.redhat.com-debug"
+Resolution
+    Add a toleration to a "dummy" namespace, and let the debug pod to be created in this namespace with --to-namespace option:
+```shell
+$ oc new-project dummy
+$ oc patch namespace dummy --type=merge -p '{"metadata": {"annotations": { "scheduler.alpha.kubernetes.io/defaultTolerations": "[{\"operator\": \"Exists\"}]"}}}'
+$ oc debug node/worker-0.example.redhat.com --to-namespace dummy
 
 ## Mitigation
 
