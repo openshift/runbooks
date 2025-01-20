@@ -31,7 +31,7 @@ custom workloads.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace | tr -d '\n')"
    ```
 
 2. Obtain the name of the `virt-operator` deployment:

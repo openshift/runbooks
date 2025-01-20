@@ -18,7 +18,7 @@ Network functionality is affected.
 deployment or daemon set that is not ready:
 
    ```bash
-   $ oc get networkaddonsconfig -o custom-columns="":.status.conditions[*].message
+   $ oc get networkaddonsconfig -o custom-columns=':.status.conditions[*].message'
    ```
 
    Example output:
@@ -30,7 +30,7 @@ deployment or daemon set that is not ready:
 2. Check the component's pod for errors:
 
    ```bash
-   $ oc -n cluster-network-addons get daemonset <pod> -o yaml
+   $ oc -n cluster-network-addons get daemonset <demonset> -o yaml
    ```
 
 3. Check the component's logs:
@@ -42,7 +42,7 @@ deployment or daemon set that is not ready:
 4. Check the component's details for error conditions:
 
    ```bash
-   $ oc -n cluster-network-addons describe <pod>
+   $ oc -n cluster-network-addons describe pod <pod>
    ```
 
 ## Mitigation

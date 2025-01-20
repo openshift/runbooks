@@ -29,7 +29,7 @@ have a running `virt-handler` pod:
 3. Check the status of the `virt-handler` daemon:
 
    ```bash
-   $ oc get daemonset virt-handler --all-namespaces
+   $ oc get daemonsets --all-namespaces | grep virt-handler
    ```
 
    Example output:
@@ -46,7 +46,7 @@ have a running `virt-handler` pod:
 daemon set for pod deployment issues:
 
    ```bash
-   $ oc get daemonset virt-handler --all-namespaces -o yaml | jq .status
+   $ oc get daemonsets --all-namespaces -o json | jq '.items[] | select(.metadata.name=="virt-handler") | .status'
    ```
 
 5. Check the nodes for issues such as a `NotReady` status:
@@ -59,7 +59,7 @@ daemon set for pod deployment issues:
 a workloads placement policy:
 
    ```bash
-   $ oc get kubevirt kubevirt --all-namespaces -o yaml
+   $ oc get kubevirt -n <namespace> <KubeVirt-name> -o yaml
    ```
 
 ## Mitigation
