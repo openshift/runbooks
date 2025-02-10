@@ -26,7 +26,7 @@ However, running workloads are not impacted.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace | tr -d '\n')"
+   $ export NAMESPACE="$(oc get kubevirt -A -o jsonpath='{.items[].metadata.namespace}')"
    ```
 
 2. List the available `virt-controller` pods:

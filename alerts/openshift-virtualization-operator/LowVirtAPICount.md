@@ -15,7 +15,7 @@ becomes a single point of failure.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace | tr -d '\n')"
+   $ export NAMESPACE="$(oc get kubevirt -A -o jsonpath='{.items[].metadata.namespace}')"
    ```
 
 2. Check the number of available `virt-api` pods:

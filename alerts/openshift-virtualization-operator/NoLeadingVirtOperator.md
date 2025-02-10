@@ -31,7 +31,7 @@ rotation, upgrade, and reconciliation of controllers, might not be available.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace | tr -d '\n')"
+   $ export NAMESPACE="$(oc get kubevirt -A -o jsonpath='{.items[].metadata.namespace}')"
    ```
 
 2. Obtain the status of the `virt-operator` pods:
@@ -43,7 +43,7 @@ rotation, upgrade, and reconciliation of controllers, might not be available.
 3. Check the `virt-operator` pod logs to determine the leader status:
 
    ```bash
-   $ oc -n $NAMESPACE logs <virt-operator> | grep lead
+   $ oc -n $NAMESPACE logs -l kubevirt.io=virt-operator | grep leader
    ```
 
    Leader pod example:
