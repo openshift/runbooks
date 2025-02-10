@@ -252,7 +252,7 @@ the certificate from the secret using this command:
 oc extract secret/$SECRET_NAME -n $NAMESPACE --keys=tls.crt --to=- > certificate.crt
 ```
 
-Then we inspect is expiration date.
+Then we inspect its expiration date.
 
 ```shell
 openssl x509 -noout -enddate -in certificate.crt
