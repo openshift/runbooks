@@ -55,6 +55,33 @@ We are ready to diagnosing the root cause by inspecting each component on the sc
 workflow.
 
 ### Potential Issues and Resolutions
+
+#### Unknown Content Type
+
+Beginning with OCP `4.19`, Prometheus is more strict concerning the `Content-Type`
+header received when scraping, if the target being scraped does not specify
+a `Content-Type` header or if the header is unparsable or unrecognised and
+no [`fallback_scrape_protocol`] is set for the target, the scrape is considered
+as having failed, which would lead to the alert being fired.
+
+For more context, error logs similar to the one below should be present:
+
+   ```shell
+   $ NAMESPACE='<value of namespace label from alert>'
+
+   $ oc -n $NAMESPACE logs -l 'app.kubernetes.io/name=prometheus' --tail=-1 | \
+   grep 'Failed to determine correct type of scrape target.*' \
+   | sort | uniq -c | sort -n
+   msg="Failed to determine correct type of scrape target." \
+   component="scrape manager" \
+   scrape_pool=<monitor>/<namespace>/<service-monitor-name>/<endpoint-id> \
+   target=concerned-target content_type="concerned-content_type" \
+   fallback_media_type="fallback_media_type-if-any" err="explicit_error"
+   ```
+
+In such a case, please open a support case, attaching the artifacts gathered
+during the diagnosis procedure.
+
 #### Network Issues
 
 Check the network connectivity between the Prometheus pod and the target pod.
@@ -62,6 +89,7 @@ Ensure that the target pod is reachable from the Prometheus pod and that there a
 no firewall rules or network interruptions blocking communication.
 
 There are some useful metrics to help investigating network issues:
+
 - `net_conntrack_dialer_conn_attempted_total`
 - `net_conntrack_dialer_conn_closed_total`
 - `net_conntrack_dialer_conn_established_total`
@@ -92,34 +120,41 @@ to have an overview of resource utilization. The Dashboard `Kubernetes/Compute R
 can show the CPU, memory, network and storage usage of the pod.
 
 To view more details of CPU and memory usage, we can check these metrics:
+
 - CPU Usage
-  * `container_cpu_usage_seconds_total`: Cumulative CPU usage in seconds.
-  * `pod:container_cpu_usage:sum` Represents the average CPU load of a pod over
+
+  - `container_cpu_usage_seconds_total`: Cumulative CPU usage in seconds.
+  - `pod:container_cpu_usage:sum` Represents the average CPU load of a pod over
   the last 5 minutes.
-  * `container_cpu_cfs_throttled_seconds_total` Duration when the CPU was throttled
+  - `container_cpu_cfs_throttled_seconds_total` Duration when the CPU was throttled
   due to limits.
 - Memory Usage
-  * `container_memory_usage_bytes` Current memory usage in bytes.
-  * `container_memory_rss` Resident set size in bytes. This metric gives an
+
+  - `container_memory_usage_bytes` Current memory usage in bytes.
+  - `container_memory_rss` Resident set size in bytes. This metric gives an
   understanding of the memory actively used by a pod.
-  * `container_memory_swap` Swap memory usage in bytes.
-  * `container_memory_working_set_bytes` Total memory in use. This includes all
+  - `container_memory_swap` Swap memory usage in bytes.
+  - `container_memory_working_set_bytes` Total memory in use. This includes all
   memory regardless of when it was accessed.
-  * `container_memory_failcnt` Cumulative count of memory allocation failures.
+  - `container_memory_failcnt` Cumulative count of memory allocation failures.
 - File System Usage
-  * `container_fs_reads_bytes_total` and `container_fs_writes_bytes_total`
+
+  - `container_fs_reads_bytes_total` and `container_fs_writes_bytes_total`
   Cumulative filesystem read and write operations in bytes.
-  * `container_fs_reads_total` and `container_fs_writes_total` Cumulative
+  - `container_fs_reads_total` and `container_fs_writes_total` Cumulative
   filesystem read and write operations in bytes.
-  * `kubelet_volume_stats_available_bytes` The free space in a volume in bytes.
+  - `kubelet_volume_stats_available_bytes` The free space in a volume in bytes.
 
 If some basic metrics are not available, we can also use this command to get
  CPU and memory usage of a pod:
-```bash
+
+```shell
 oc top pod $POD_NAME
 ```
+
 As well as this command for volume free space:
-```bash
+
+```shell
 oc exec -n $NAMESPACE $POD_NAME -- df
 ```
 
@@ -139,9 +174,11 @@ configuration is generated from the `ServiceMonitor` and `PodMonitors`.
 We can get the `ServiceMonitor` and `PodMonitors` related to the alert with this
 command using the `namespace` and `job` label. The name of `ServiceMonitor` is the
 `job` name unless the property `jobLabel` is set in `ServiceMonitor`.
-```bash
+
+```shell
 oc get servicemonitor $SERVICE_MONITOR_NAME -n $NAMESPACE -o yaml
 ```
+
 Check the target's port, selector, scheme, TLS settings, etc for invalid values.
 Please refer to [the Prometheus Operator API document](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md)
 for detailed specification of `ServiceMonitor` and `PodMonitors`.
@@ -162,6 +199,7 @@ Therefore we can deduce which secret holds the certificate.
 Here is an example.
 We have a `ServiceMonitor` using `/etc/prometheus/secrets/metrics-client-certs/tls.crt`
 as its certificate file.
+
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -203,19 +241,25 @@ spec:
       app.kubernetes.io/name: node-exporter
       app.kubernetes.io/part-of: openshift-monitoring
 ```
+
 In the `Prometheus` that scrapes this target, the volume mounted at `/etc/prometheus/secrets/*`
 are the secrets having the same name as the subdirectory. In this example, the secret
 is `metrics-client-certs` in the namespace `openshift-monitoring`. Now we extract
 the certificate from the secret using this command:
-```bash
+
+```shell
 oc extract secret/$SECRET_NAME -n $NAMESPACE --keys=tls.crt --to=- > certificate.crt
 ```
-Then we inspect is expiration date.
-```bash
+
+Then we inspect its expiration date.
+
+```shell
 openssl x509 -noout -enddate -in certificate.crt
 ```
+
 The output should contain `notAfter` field as its expiration date.
-```bash
+
+```shell
 notAfter=Aug  6 13:11:20 2025 GMT
 ```
 
@@ -228,23 +272,28 @@ force a certificate renewal](https://access.redhat.com/solutions/5899121).
 
 To diagnose potential issues with automatic certificate renewal, perform the
 following checks:
+
 1. Ensure the `prometheus-k8s` stateful set logs do not display errors related to
    certificates.
-   ```bash
+
+   ```shell
    oc logs statefulset/prometheus-k8s -n openshift-monitoring
    ```
+
 2. Verify that the scraped target pod(s) logs are free from certificate-related errors.
 3. Check that the `cluster-monitoring-operator` pod is running and its logs contain
    no errors regarding certificate rotation.
-   ```bash
+
+   ```shell
    oc logs deployment/cluster-monitoring-operator -n openshift-monitoring
    ```
+
 4. Confirm the `prometheus-operator` pod is operational and its logs have no errors
    concerning certificate rotation.
-   ```bash
+
+   ```shell
    oc logs deployment/prometheus-operator -n openshift-monitoring
    ```
-
 
 #### Prometheus Scraping Interval
 
@@ -261,7 +310,6 @@ If scrape duration is close to the scrape interval, we may consider to increase
 the interval.
 
 The scrape interval is configured in the `ServiceMonitor` or `PodMonitor`.
-
 
 #### Target metrics path
 
@@ -280,3 +328,5 @@ it to stabilize.
 Check if the node where the target is running has experienced failures or evictions.
 See [Verifying Node Health](https://docs.openshift.com/container-platform/4.13/support/troubleshooting/verifying-node-health.html)
 for more information.
+
+[`fallback_scrape_protocol`]: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
