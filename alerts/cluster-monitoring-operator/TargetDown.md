@@ -1,6 +1,6 @@
 # TargetDown
 
-This runbook provides guidance for diagnosing and resolving the `TargetDown`` alert
+This runbook provides guidance for diagnosing and resolving the `TargetDown` alert
 in OpenShift Container Platform.
 
 ## Meaning
@@ -16,7 +16,7 @@ predetermined duration.
   not be captured by Prometheus. If metrics are not captured, you will have only
   limited insights about the health and performance of the associated application.
 - **Alerts**: If a target is down, the accuracy of certain alerts can be compromised.
-  For example, critical alerts might not be triggered, potentially cause service
+  For example, critical alerts might not be triggered, potentially causing service
   disruptions to go undetected.
 - **Resource Optimization**: Auto-scalers might not function correctly if essential
   metrics are missing, which can result in wasted resources or a degraded user
@@ -33,9 +33,9 @@ predetermined duration.
   console. The metric labels will help pinpoint the affected Prometheus instance
   and the down target.
 
-The alert and the metric `up` have labels `namespace`, `service`， `job`, `pod`
-and `prometheus`.
-With these labels we can identify which Prometheus instance fails to scrape which
+The alert and the metric `up` have the `namespace`, `service`， `job`, `pod`
+and `prometheus` labels.
+With these labels, we can identify which Prometheus instance fails to scrape which
 target:
 
 - The label `prometheus` should be either `openshift-monitoring/k8s` or `openshift-user-workload-monitoring/user-workload`,
@@ -51,7 +51,7 @@ target:
 
 Now we have both end of the metric scraping flow as well as the monitor resources
 linking them together.
-We are ready to diagnosing the root cause by inspecting each component on the scraping
+We are ready to diagnose the root cause by inspecting each component on the scraping
 workflow.
 
 ### Potential Issues and Resolutions
@@ -67,18 +67,18 @@ There are some useful metrics to help investigating network issues:
 - `net_conntrack_dialer_conn_established_total`
 - `net_conntrack_dialer_conn_failed_total`
 
-OpenShift guide on [Troubleshooting network issues](https://docs.openshift.com/container-platform/4.13/support/troubleshooting/troubleshooting-network-issues.html)
+OpenShift guide on [Troubleshooting network issues](https://docs.openshift.com/container-platform/4.17/support/troubleshooting/troubleshooting-network-issues.html)
 provides more details.
 
 #### Target Resource Exhaustion
 
-Check if the pod's healthy and ready probes reports good state.
+Check if the pod's health and ready probes reports a good state.
 Then check whether the metric endpoint is responsive.
 We can either forward the metric port to local and then query it using use `curl`,
  `wget` or similar tools. Or on the container exposing the metric, send
 query to the port serving the metric endpoint.
 
-If query returns an error, it is probably an application problem.
+If the query returns an error, it is probably an application problem.
 If the query takes too long or times out, it is probably due to resource exhaustion.
 
 Some applications may enforce rate limiting or throttling. Check if the scraping
@@ -129,7 +129,7 @@ Investigate if the application or service running on the target is experiencing
 issues or has even crashed. Review logs and last metrics from the target pod to
 identify any errors or crashes.
 
-Here is [a guide to investigate pod issues](https://docs.openshift.com/container-platform/4.13/support/troubleshooting/investigating-pod-issues.html)
+Here is [a guide to investigate pod issues](https://docs.openshift.com/container-platform/4.17/support/troubleshooting/investigating-pod-issues.html)
 in OpenShift.
 
 #### Incorrect Target Configuration
@@ -154,10 +154,10 @@ certificate expiration. Please refer to the next section for details.
 If the target uses SSL/TLS for communication, check if the SSL/TLS certificate
 has expired or certificate files accessible by Prometheus.
 
-The certificate used by Prometheus to scrape metrics endpoint is indicated in the
-`.spec.endpoints.tlsConfig.certFile` property of a `ServiceMonitor` or `PodMonitor`.
+Prometheus use a certificate to scrape the metrics endpoint is indicated in the
+property `.spec.endpoints.tlsConfig.certFile` of a `ServiceMonitor` or `PodMonitor`.
 The path of the certificate file points to a mounted volume on the Prometheus Pod.
-Therefore we can deduce which secret holds the certificate.
+Therefore, we can deduce which secret holds the certificate.
 
 Here is an example.
 We have a `ServiceMonitor` using `/etc/prometheus/secrets/metrics-client-certs/tls.crt`
@@ -203,23 +203,23 @@ spec:
       app.kubernetes.io/name: node-exporter
       app.kubernetes.io/part-of: openshift-monitoring
 ```
-In the `Prometheus` that scrapes this target, the volume mounted at `/etc/prometheus/secrets/*`
-are the secrets having the same name as the subdirectory. In this example, the secret
+The `Prometheus` that scrapes this target has a volume mounted at `/etc/prometheus/secrets/*`
+where the secrets have the same name as the subdirectory. In this example, the secret
 is `metrics-client-certs` in the namespace `openshift-monitoring`. Now we extract
 the certificate from the secret using this command:
 ```bash
 oc extract secret/$SECRET_NAME -n $NAMESPACE --keys=tls.crt --to=- > certificate.crt
 ```
-Then we inspect is expiration date.
+Then we inspect its expiration date.
 ```bash
 openssl x509 -noout -enddate -in certificate.crt
 ```
-The output should contain `notAfter` field as its expiration date.
+The output should contain the `notAfter` field as its expiration date.
 ```bash
 notAfter=Aug  6 13:11:20 2025 GMT
 ```
 
-Normally OpenShift **automatically renews** the certificates before expiration date.
+Openshift usually **renews certificates automatically** before the expiration date.
 This date should be sometime in the future. If the certificate does expire without
 automatic renewal, please contact the OpenShift support team.
 
@@ -245,7 +245,6 @@ following checks:
    oc logs deployment/prometheus-operator -n openshift-monitoring
    ```
 
-
 #### Prometheus Scraping Interval
 
 Ensure that the scraping interval for the target is appropriately configured.
@@ -255,7 +254,7 @@ timeout when scraping.
 The last scrape duration is visible on the **Observe** -> **Targets** tab in the
 OpenShift web Console.
 
-Otherwise we can check the metric `scrape_duration_seconds`.
+Otherwise, we can check the metric `scrape_duration_seconds`.
 
 If scrape duration is close to the scrape interval, we may consider to increase
 the interval.
@@ -278,5 +277,5 @@ it to stabilize.
 #### Node failures
 
 Check if the node where the target is running has experienced failures or evictions.
-See [Verifying Node Health](https://docs.openshift.com/container-platform/4.13/support/troubleshooting/verifying-node-health.html)
+See [Verifying Node Health](https://docs.openshift.com/container-platform/4.17/support/troubleshooting/verifying-node-health.html)
 for more information.
