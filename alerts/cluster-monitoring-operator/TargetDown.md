@@ -154,8 +154,8 @@ certificate expiration. Please refer to the next section for details.
 If the target uses SSL/TLS for communication, check if the SSL/TLS certificate
 has expired or certificate files accessible by Prometheus.
 
-The certificate used by Prometheus to scrape the metrics endpoint is indicated in the
-`.spec.endpoints.tlsConfig.certFile` property of a `ServiceMonitor` or `PodMonitor`.
+Prometheus use a certificate to scrape the metrics endpoint is indicated in the
+property `.spec.endpoints.tlsConfig.certFile` of a `ServiceMonitor` or `PodMonitor`.
 The path of the certificate file points to a mounted volume on the Prometheus Pod.
 Therefore, we can deduce which secret holds the certificate.
 
@@ -219,7 +219,7 @@ The output should contain the `notAfter` field as its expiration date.
 notAfter=Aug  6 13:11:20 2025 GMT
 ```
 
-Normally, OpenShift **automatically renews** the certificates before the expiration date.
+Openshift usually **renews certificates automatically** before the expiration date.
 This date should be sometime in the future. If the certificate does expire without
 automatic renewal, please contact the OpenShift support team.
 
