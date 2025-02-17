@@ -26,10 +26,10 @@ have a running `virt-handler` pod:
    $ oc get vmis --all-namespaces
    ```
 
-3. Check the status of the `virt-handler` daemon:
+3. Check the status of the `virt-handler` daemonset:
 
    ```bash
-   $ oc get daemonset virt-handler --all-namespaces
+   $ oc get daemonsets --all-namespaces -l kubevirt.io=virt-handler
    ```
 
    Example output:
@@ -46,7 +46,7 @@ have a running `virt-handler` pod:
 daemon set for pod deployment issues:
 
    ```bash
-   $ oc get daemonset virt-handler --all-namespaces -o yaml | jq .status
+   $ oc get daemonsets --all-namespaces -o json | jq '.items[] | select(.metadata.name=="virt-handler") | .status'
    ```
 
 5. Check the nodes for issues such as a `NotReady` status:
@@ -59,7 +59,7 @@ daemon set for pod deployment issues:
 a workloads placement policy:
 
    ```bash
-   $ oc get kubevirt kubevirt --all-namespaces -o yaml
+   $ oc get kubevirt -n <namespace> -o yaml
    ```
 
 ## Mitigation
