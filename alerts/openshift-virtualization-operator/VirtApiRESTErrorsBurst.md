@@ -37,7 +37,7 @@ affected.
 4. Obtain the details of the `virt-api` pods:
 
    ```bash
-   $ oc describe pod -n $NAMESPACE <virt-api>
+   $ oc describe pods -n $NAMESPACE -l kubevirt.io=virt-api
    ```
 
 5. Check if any problems occurred with the nodes. For example, they might be in
