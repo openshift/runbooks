@@ -43,7 +43,7 @@ rotation, upgrade, and reconciliation of controllers, might not be available.
 3. Check the `virt-operator` pod logs to determine the leader status:
 
    ```bash
-   $ oc -n $NAMESPACE logs -l kubevirt.io=virt-operator | grep leader
+   $ oc -n $NAMESPACE logs -l kubevirt.io=virt-operator | grep lead
    ```
 
    Leader pod example:
