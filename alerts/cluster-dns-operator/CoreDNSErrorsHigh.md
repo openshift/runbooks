@@ -48,6 +48,6 @@ spec:
       ...output omitted...
 ```
 
-If there is a connectivity issue between the coredns pods and the upstream nameserver, review the undercloud connectivity.
+If there is a connectivity issue between the coredns pods and the upstream nameservers, review the undercloud connectivity.
 
 If the upstream nameservers is not healthy to respond to the queries by the coredns pods, apply a silence to the alert, until these servers are troubleshooted.
