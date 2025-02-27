@@ -10,44 +10,55 @@ Warning: Some requests are not resolved.
 
 ## Diagnosis
 
-1. Check dns's operator:
+1. Check DNS operator:
 
     ```shell
-    $ oc get co dns
+    oc get co/dns
     ```
 
-2. Check dns's daemonsets if they are running on all nodes:
+2. Check CoreDNS daemonsets if they are running on all nodes:
 
     ```shell
-    $ oc get ds -n openshift-dns
+    oc get ds -n openshift-dns
     ```
 
-3. Check dns' pods if they can reach upstream nameservers:
+3. Check CoreDNS pods if they can reach the upstream nameservers:
 
     ```shell
-    $ oc exec -c dns dns-default-xxxxx -it -n openshift-dns -- dig @$IP_OF_UPSTREAM_NAMESERVER -q $DOMAIN_NAME
+    # CoreDNS pods name start with dns-default as prefix
+    oc exec pod/$COREDNS_POD_NAME -c dns -n openshift-dns -- \
+        dig -q $DOMAIN_NAME @$IP_OF_UPSTREAM_NAMESERVER
     ```
 
-4. Check dns' upstream nameservers if they are returning SERVFAIL:
+4. Check the upstream nameservers if they are returning SERVFAIL:
 
     ```shell
-    $ oc logs -c dns -l dns.operator.openshift.io/daemonset-dns=default --max-log-requests $NUMBER_OF_COREDNS_PODS -n openshift-dns --timestamps --follow
+    # Enable Debug logLevel in CoreDNS
+    oc patch dnses.operator.openshift.io/default \
+        --patch '{"spec":{"logLevel":"Debug"}}' --type=merge
+    
+    # Follow the log streams in proportion to the number of CoreDNS pods
+    oc logs -c dns -l dns.operator.openshift.io/daemonset-dns=default \
+        -n openshift-dns --follow --max-log-requests $NUMBER_OF_COREDNS_PODS --timestamps
     ```
 
 ## Mitigation
 
-If there is a connectivity issue between the coredns pods and the workload, review the [Controlling DNS pod placement](https://docs.openshift.com/container-platform/4.17/networking/networking_operators/dns-operator.html#nw-controlling-dns-pod-placement_dns-operator):
+- If there is a connectivity issue between the CoreDNS pods and the workload,
+review the [Controlling DNS pod placement](https://docs.openshift.com/container-platform/4.17/networking/networking_operators/dns-operator.html#nw-controlling-dns-pod-placement_dns-operator):
 
-```shell
-$ oc edit dns.operator/default
-```
+    ```shell
+    oc edit dns.operator/default
+    ```
 
-```yaml
-spec:
-  nodePlacement:
-      ...output omitted...
-```
+    ```yaml
+    spec:
+      nodePlacement:
+        ...output omitted...
+    ```
 
-If there is a connectivity issue between the coredns pods and the upstream nameservers, review the undercloud connectivity.
+- If there is a connectivity issue between the CoreDNS pods and the upstream
+nameservers, review the undercloud connectivity.
 
-If the upstream nameservers is not healthy to respond to the queries by the coredns pods, apply a silence to the alert, until these servers are troubleshooted.
+- If the upstream nameservers is not healthy to respond to the queries by
+the CoreDNS pods, apply a silence to the alert, until these servers are troubleshooted.
