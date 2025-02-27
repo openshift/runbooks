@@ -25,13 +25,13 @@ Warning: Some requests are not resolved.
 3. Check dns' pods if they can reach upstream nameservers:
 
     ```shell
-    $ oc exec -c dns dns-default-xxxxx -it -n openshift-dns -- dig www.example.com @$IP_OF_UPSTREAM_NAMESERVER
+    $ oc exec -c dns dns-default-xxxxx -it -n openshift-dns -- dig @$IP_OF_UPSTREAM_NAMESERVER -q $DOMAIN_NAME
     ```
 
 4. Check dns' upstream nameservers if they are returning SERVFAIL:
 
     ```shell
-    $ oc logs -c dns -l dns.operator.openshift.io/daemonset-dns=default -n openshift-dns 
+    $ oc logs -c dns -l dns.operator.openshift.io/daemonset-dns=default --max-log-requests $NUMBER_OF_COREDNS_PODS -n openshift-dns --timestamps --follow
     ```
 
 ## Mitigation
