@@ -16,20 +16,26 @@ Outdated VMIs will not receive the security fixes associated with the
 
 ## Diagnosis
 
-1. Identify the outdated VMIs:
+1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ oc get vmi -l kubevirt.io/outdatedLauncherImage --all-namespaces
+   $ export NAMESPACE="$(oc get kubevirt -A -o jsonpath='{.items[].metadata.namespace}')"
    ```
 
-2. Check the `KubeVirt` custom resource (CR) to determine whether
+2. Identify the outdated VMIs:
+
+   ```bash
+   $ oc get vmi -l kubevirt.io/outdatedLauncherImage -n $NAMESPACE
+   ```
+
+3. Check the `KubeVirt` custom resource (CR) to determine whether
 `workloadUpdateMethods` is configured in the `workloadUpdateStrategy` stanza:
 
    ```bash
-   $ oc get kubevirt --all-namespaces -o yaml
+   $ oc get kubevirt -n $NAMESPACE -o yaml
    ```
 
-3. Check each outdated VMI to determine whether it is live-migratable:
+4. Check each outdated VMI to determine whether it is live-migratable:
 
    ```bash
    $ oc get vmi <vmi> -o yaml
