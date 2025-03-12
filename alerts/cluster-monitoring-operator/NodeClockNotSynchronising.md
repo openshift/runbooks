@@ -1,67 +1,110 @@
-# NodeClockNotSynchronising
+# Node Clock Issues (NodeClockSkewDetected and NodeClockNotSynchronising)
 
 ## Meaning
 
-The `NodeClockNotSynchronising` alert triggers when a node is affected by
-issues with the NTP server for that node. For example, this alert might trigger
-when certificates are rotated for the API Server on a node, and the
-certificates fail validation because of an invalid time.
-
+These alerts indicate problems with system time synchronization on an OpenShift worker node (RHCOS):
+- NodeClockSkewDetected: System clock is offset by more than 300ms
+- NodeClockNotSynchronising: System is unable to synchronize its clock
 
 ## Impact
-This alert is critical. It indicates an issue that can lead to the API Server
-Operator becoming degraded or unavailable. If the API Server Operator becomes
-degraded or unavailable, this issue can negatively affect other Operators, such
-as the Cluster Monitoring Operator.
+
+- etcd cluster instability and potential data inconsistency
+- Certificate validation failures for OpenShift API communications
+- Authentication issues between OpenShift components
+- Kubernetes scheduler timing inconsistencies
+- Inaccurate logging timestamps affecting troubleshooting
+- Operator reconciliation timing issues
 
 ## Diagnosis
 
-To diagnose the underlying issue, start a debug pod on the affected node and
-check the `chronyd` service:
-
+1. Identify the affected node from the alert labels:
 ```shell
-oc -n default debug node/<affected_node_name>
-chroot /host
-systemctl status chronyd
+oc get nodes <NODE_NAME> -o wide
+```
+
+2. Check time synchronization status on the node:
+```shell
+oc debug node/<NODE_NAME> -- chroot /host timedatectl status
+```
+
+3. Verify chronyd service status (RHCOS uses chronyd):
+```shell
+oc debug node/<NODE_NAME> -- chroot /host systemctl status chronyd
+```
+
+4. Check the chrony sources and status:
+```shell
+oc debug node/<NODE_NAME> -- chroot /host chronyc sources
+oc debug node/<NODE_NAME> -- chroot /host chronyc tracking
+```
+
+5. Review chrony configuration:
+```shell
+oc debug node/<NODE_NAME> -- chroot /host cat /etc/chrony.conf
+```
+
+6. Check for NTP traffic restrictions:
+```shell
+oc debug node/<NODE_NAME> -- chroot /host firewall-cmd --list-all
 ```
 
 ## Mitigation
 
-1. If the `chronyd` service is failing or stopped, start it:
+1. Chronyd service issues:
+   - Restart the chronyd service:
+   ```shell
+   oc debug node/<NODE_NAME> -- chroot /host systemctl restart chronyd
+   ```
+   
+   - Force time synchronization:
+   ```shell
+   oc debug node/<NODE_NAME> -- chroot /host chronyc makestep
+   ```
 
-    ```shell
-    systemctl start chronyd
-    ```
-    If the chronyd service is ready, restart it
+2. Configuration fixes through MachineConfig:
+   - Create a MachineConfig CR to update chrony configuration:
+   ```yaml
+   apiVersion: machineconfiguration.openshift.io/v1
+   kind: MachineConfig
+   metadata:
+     labels:
+       machineconfiguration.openshift.io/role: worker
+     name: worker-chrony-configuration
+   spec:
+     config:
+       ignition:
+         version: 3.2.0
+       storage:
+         files:
+         - contents:
+             source: data:,server%20time.example.com%20iburst%0Adriftfile%20/var/lib/chrony/drift%0Amakestep%201.0%203%0Artcsync%0Alogdir%20/var/log/chrony
+           mode: 0644
+           path: /etc/chrony.conf
+           overwrite: true
+   ```
 
-    ```shell
-    systemctl restart chronyd
-    ```
+3. For consistent cluster-wide configuration:
+   - Use the same NTP servers across all nodes
+   - Consider local NTP servers if running air-gapped
+   - Ensure proper network connectivity to time sources
 
-    If `chronyd` starts or restarts successfuly, the service adjusts the clock
-    and displays something similar to the following example output:
+4. For serious clock drift:
+   - If the node continues to have problems, consider reboot:
+   ```shell
+   oc debug node/<NODE_NAME> -- chroot /host systemctl reboot
+   ```
+   
+   - For persistent issues, the node may need replacement:
+   ```shell
+   oc adm cordon <NODE_NAME>
+   oc adm drain <NODE_NAME> --ignore-daemonsets
+   ```
 
-    ```shell
-    Oct 18 19:39:36 ip-100-67-47-86 chronyd[2055318]: System clock wrong by 16422.107473 seconds, adjustment started
-    Oct 19 00:13:18 ip-100-67-47-86 chronyd[2055318]: System clock was stepped by 16422.107473 seconds
-    ```
+## Additional Notes
 
-2. Verify that the `chronyd` service is running:
-
-    ```shell
-    systemctl status chronyd
-    ```
-
-3. Verify using PromQL:
-
-    ```console
-    min_over_time(node_timex_sync_status[5m])
-    node_timex_maxerror_seconds
-    ```
-    `node_timex_sync_status` returns `1` if NTP is working properly,or `0` if
-    NTP is not working properly. `node_timex_maxerror_seconds` indicates how
-    many seconds NTP is falling behind.
-
-    The alert triggers when the value for
-    `min_over_time(node_timex_sync_status[5m])` equals `0` and the value for
-    `node_timex_maxerror_seconds` is greater than or equal to `16`.
+- Time synchronization is absolutely critical for OpenShift cluster health
+- RHCOS uses chronyd as the default time synchronization daemon
+- Chrony configuration can be managed via MachineConfig operator
+- Time skew most severely impacts etcd and authentication subsystems
+- Check for virtualization issues if running on virtual infrastructure
+- Hardware clock issues may require investigation with your infrastructure provider

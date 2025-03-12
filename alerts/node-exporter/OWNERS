@@ -1,9 +1,0 @@
-# Node Exporter Alert Runbooks Maintainers
-
-reviewers:
-- monitoring-team
-- node-team
-
-approvers:
-- monitoring-team
-- node-team
