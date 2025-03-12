@@ -2,71 +2,101 @@
 
 ## Meaning
 
-The `NodeFilesystemSpaceFillingUp` alert triggers when two conditions are met:  
+This alert indicates that a filesystem on an OpenShift worker node (RHCOS) is
+running out of space and is predicted to be full within a specific timeframe:
 
-* The current file system usage exceeds a certain threshold.
-* An extrapolation algorithm predicts that the file system will run out of
-  space within a certain amount of time. If the time period is less than 24
-  hours, this is a `Warning` alert. If the time is less than 4
-  hours, this is a `Critical` alert.
+- Warning: predicted to run out of space within 24 hours and current usage > 60%
+- Critical: predicted to run out of space within 4 hours and current usage > 85%
 
 ## Impact
 
-As a file system starts to get low on space, system performance usually
-degrades gradually.
-
-If a file system fills up and runs out of space, processes that need to write
-to the file system can no longer do so, which can result in lost data and
-system instability.
+- Potential service disruptions on the OpenShift worker node
+- Pods may fail to create or run due to insufficient storage
+- Image pulls may fail if `/var/lib/containers` is affected
+- Node may become unschedulable if critical system partitions fill up
+- etcd may crash if `/var/lib/etcd` fills up (on control plane nodes)
 
 ## Diagnosis
 
-* Study recent trends of file system usage on a dashboard. Sometimes, a periodic
-pattern of writing and cleaning up in the file system can cause the linear
-prediction algorithm to trigger a false alert.
+1. Identify which node and filesystem is affected through the alert labels:
 
-* Use the Linux operating system tools and utilities to investigate what
-directories are using the most space in the file system. Is the issue an
-irregular condition, such as a process failing to clean up behind itself and
-using a large amount of space? Or does the issue seem to be related to
-organic growth?
+   ```shell
+   oc get nodes <NODE_NAME> -o wide
+   ```
 
-To assist in your diagnosis, watch the following metric in PromQL:
+2. For critical system areas, check via debug pod:
 
-```console
-node_filesystem_free_bytes
-```
+   ```shell
+   oc debug node/<NODE_NAME> -- chroot /host df -h
+   ```
 
-Then, check the `mountpoint` label for the alert.
+3. Identify large directories on the affected node:
+
+   ```shell
+   oc debug node/<NODE_NAME> -- \
+     chroot /host du -h --max-depth=1 <mountpoint> | sort -hr
+   ```
+
+4. Check container-specific storage:
+
+   ```shell
+   oc debug node/<NODE_NAME> -- \
+     chroot /host du -h --max-depth=1 \
+     /var/lib/containers /var/lib/kubelet | sort -hr
+   ```
+
+5. Check for any large log files:
+
+   ```shell
+   oc debug node/<NODE_NAME> -- chroot /host find /var/log -type f -size +100M
+   ```
 
 ## Mitigation
 
-If the `mountpoint` label is `/`, `/sysroot` or `/var`, remove unused images to
-resolve the issue:
+1. For container storage issues:
 
-1. Debug the node by accessing the node file system:
+   - Clean up unused containers and images on the node:
 
-    ```console
-    $ NODE_NAME=<instance label from alert>
-    $ oc -n default debug node/$NODE_NAME
-    $ chroot /host
-    ```
+   ```shell
+   oc debug node/<NODE_NAME> -- chroot /host crictl rmi --prune
+   ```
 
-1. Remove dangling images:
+   - Remove unused pods:
 
-    ```console
-    $ podman images -q -f dangling=true | xargs --no-run-if-empty podman rmi
-    ```
+   ```shell
+   oc debug node/<NODE_NAME> -- \
+     chroot /host crictl rm \
+     $(crictl ps -a -q --state exited)
+   ```
 
-1. Remove unused images:
+2. For log file issues:
 
-    ```console
-    $ podman images | grep -v -e registry.redhat.io -e "quay.io/openshift" -e registry.access.redhat.com -e docker-registry.usersys.redhat.com -e docker-registry.ops.rhcloud.com -e rhmap | xargs --no-run-if-empty podman rmi 2>/dev/null
-    ```
+   - RHCOS uses the systemd journal for logs, so you may need to clean up
+     journal storage:
 
-1. Exit debug:
+   ```shell
+   oc debug node/<NODE_NAME> -- chroot /host journalctl --vacuum-time=1d
+   ```
 
-    ```console
-    $ exit
-    $ exit
-    ```
+3. Long-term solutions:
+
+   - Adjust MachineConfig to increase partition sizes
+   - Consider using the Container Storage Interface (CSI) for pods with high
+     storage needs
+   - Configure proper log rotation for containers in the OpenShift logging stack
+   - Increase storage capacity of critical volumes in the cluster infrastructure
+   - Set appropriate resource quotas and limits for namespaces
+
+4. For temporary relief, mark node as unschedulable to prevent new pods:
+
+   ```shell
+   oc adm cordon <NODE_NAME>
+   ```
+
+## Additional Notes
+
+- RHCOS uses an immutable filesystem model for the OS components
+- Modifications to system directories require proper MachineConfig resources
+- The `/var` directory is one of the few writable areas for system services
+- Container storage paths are most commonly filled due to accumulated images
+- Regular monitoring of storage trends should be implemented across the cluster
