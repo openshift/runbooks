@@ -2,7 +2,7 @@
 
 ## Meaning
 
-This alert indicates that a filesystem on an OpenShift worker node (RHCOS) is
+This alert indicates that a filesystem on an OpenShift nodes (RHCOS) is
 running out of space and is predicted to be full within a specific timeframe:
 
 - Warning: predicted to run out of space within 24 hours and current usage > 60%
