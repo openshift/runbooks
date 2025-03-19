@@ -10,7 +10,7 @@ running out of space and is predicted to be full within a specific timeframe:
 
 ## Impact
 
-- Potential service disruptions on the OpenShift worker node
+- Potential service disruptions on the OpenShift node
 - Pods may fail to create or run due to insufficient storage
 - Image pulls may fail if `/var/lib/containers` is affected
 - Node may become unschedulable if critical system partitions fill up
