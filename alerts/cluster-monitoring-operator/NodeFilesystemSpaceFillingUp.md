@@ -10,11 +10,13 @@ running out of space and is predicted to be full within a specific timeframe:
 
 ## Impact
 
-- Potential service disruptions on the OpenShift node
-- Pods may fail to create or run due to insufficient storage
-- Image pulls may fail if `/var/lib/containers` is affected
-- Node may become unschedulable if critical system partitions fill up
-- etcd may crash if `/var/lib/etcd` fills up (on control plane nodes)
+- Potential service disruptions on the affected node
+- Pods failing to create or run due to insufficient storage
+- Failures in pulling images
+- The node becoming unschedulable if critical system partitions fill up
+- Possible crashes of key components (e.g., etcd on control-plane nodes), causing instability
+
+This list is not exhaustive; other problems may arise from insufficient disk space, impacting the stability and availability of services running on OpenShift.
 
 ## Diagnosis
 
