@@ -1,8 +1,7 @@
-# OperatorConditionsUnhealthy
+# OperatorConditionsUnhealthy [Deprecated]
 
-## Meaning
-
-This alert triggers when the operator conditions or its secondary resources
+This alert is deprecated. You can safely ignore or silence it.
+y resources
 are in an error or warning state.
 
 ## Impact
