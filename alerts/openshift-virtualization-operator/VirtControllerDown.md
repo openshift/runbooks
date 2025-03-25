@@ -13,7 +13,7 @@ an existing VMI.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o jsonpath='{.items[].metadata.namespace}')"
    ```
 
 2. Check the status of the `virt-controller` deployment:

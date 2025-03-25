@@ -18,7 +18,7 @@ Identify worker nodes that do not have a running `virt-handler` pod:
 1. Export the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o jsonpath='{.items[].metadata.namespace}')"
    ```
 
 2. Check the status of the `virt-handler` pods to identify pods that have not

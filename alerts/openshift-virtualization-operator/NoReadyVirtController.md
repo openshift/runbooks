@@ -21,7 +21,7 @@ launching a new VMI or shutting down an existing VMI.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
+   $ export NAMESPACE="$(oc get kubevirt -A -o jsonpath='{.items[].metadata.namespace}')"
    ```
 
 2. Verify the number of `virt-controller` devices:
@@ -46,7 +46,7 @@ conditions such as crashing pods or failure to pull images:
 5. Obtain the details of the `virt-controller` pods:
 
    ```bash
-   $ get pods -n $NAMESPACE | grep virt-controller
+   $ oc get pods -n $NAMESPACE | grep virt-controller
    ```
 
 6. Check the logs of the `virt-controller` pods for error messages:
