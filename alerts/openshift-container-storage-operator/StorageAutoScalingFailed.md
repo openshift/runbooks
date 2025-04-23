@@ -54,6 +54,22 @@ the requested storage parameters.
     If the pv is in `Pending` state, there might be a storage issue. Check the
     events of the pv for more information.
 
+4. The Pod, PVC and PV are behaving as expected but the resize has not happened yet:
+    One of the primary reasons for this error is attempting to resize resources
+    more than once within a 6-hour period, particularly in AWS clusters. AWS
+    enforces a restriction that allows only one resize operation within this
+    window, and any additional attempts will result in error messages appearing
+    in the PVC event logs.
+    ```bash
+    pvcName=$(oc get pod <osd_pod> -n <namespace> -o jsonpath='{.spec.volumes[*].persistentVolumeClaim.claimName}')
+    oc describe pvc $pvcName -n <namespace> -o yaml
+    ```
+
+    The events will be something similar to the following:
+    ```bash
+    Warning  VolumeResizeFailed      13m                    external-resizer ebs.csi.aws.com  resize volume "<pvc_name>" by resizer "ebs.csi.aws.com" failed: rpc error: code = Internal desc = Could not resize volume "<volume_name>": rpc error: code = Internal desc = Could not modify volume "<volume_name>": operation error EC2: ModifyVolume, https response error StatusCode: 400, RequestID: 3cc60db2-8d04-4c29-9d03-dd80cc32fd81, api error VolumeModificationRateExceeded: You've reached the maximum modification rate per volume limit. Wait at least 6 hours between modifications per EBS volume.
+    ```
+
 ## Mitigation
 
 1. If resources are depleted and pods start failing, allocate additional
