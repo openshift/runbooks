@@ -1,4 +1,4 @@
-# DuplicateStorageAutoScalerCRsFound
+# StorageAutoScalerCRIsInvalid
 
 ## Meaning
 
