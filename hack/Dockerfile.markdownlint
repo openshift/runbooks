@@ -1,5 +1,5 @@
 FROM fedora
 WORKDIR /workdir
 COPY install-markdownlint.sh /tmp
-RUN /tmp/install-markdownlint.sh
+RUN /workdir/hack/install-markdownlint.sh
 ENTRYPOINT /workdir/hack/markdownlint.sh
