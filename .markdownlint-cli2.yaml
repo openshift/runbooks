@@ -49,3 +49,6 @@ config:
   # Allow duplicate headings with different parents.
   no-duplicate-heading:
     siblings_only: true
+
+  # Disabling MD059/descriptive-link-text.
+  MD059: false
