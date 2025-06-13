@@ -17,9 +17,9 @@ dashboards, or within recording rules and alerts.
 
 ## Diagnosis
 
-Determine which component triggered the alert, as it can originate from
-Prometheus, Thanos Querier or Thanos Ruler. Checking the alert message's
-`pod` label should help with that.
+Determine which component triggered the alert. It can originate from
+Prometheus, Thanos Querier, or Thanos Ruler. Checking the alert message's
+`job` label should help with this.
 
 Also, note the alert message's `namespace` label: the namespace for
 default cluster monitoring is `openshift-monitoring` and the namespace for
@@ -29,16 +29,21 @@ user workload monitoring is `openshift-user-workload-monitoring`.
 
 Proceed with the following steps to fix the issue:
 
-1. Enable the `debug` log level on the Prometheus instance. See
-[a guide to change log level] for monitoring components in OpenShift.
+1. Enable the `debug` log level on the component. See
+[a guide to changing the log level] for monitoring components in OpenShift.
 2. Review the new debug logs. The logs should reveal the problematic
 selectors:
 
    ```shell
    $ NAMESPACE='<value of namespace label from alert>'
-   $ POD='<value of pod label from alert>'
+   $ NAME='<name of the component, see mapping below>'
+   # job label (from the alert) -> NAME mapping:
+   # prometheus-k8s -> prometheus
+   # prometheus-user-workload -> prometheus
+   # thanos-ruler -> thanos-ruler
+   # thanos-querier -> thanos-query
 
-   $ oc -n $NAMESPACE logs pod/$POD \ 
+   $ oc -n $NAMESPACE logs -l app.kubernetes.io/name=$NAME --tail=-1 \
    | grep 'narrow_matcher_label' | sort | uniq -c | sort -n
    ```
 
@@ -46,7 +51,7 @@ selectors:
 
    ### Narrow selector in query
 
-    In this case, you should expect logs like:
+    In this case, you should expect logs like the following:
 
     ```text
     ... msg="selector set to explicitly match an integer, but values could be
@@ -59,11 +64,11 @@ selectors:
     ```
 
     The log should contain the problematic selector to help identify the
-    query. We will focus on `le`, but similar logs should show up
+    query. We will focus on `le`, but similar logs should appear
     for the `quantile` label.
 
     For the first log, the selector should be adapted to the fact that in OCP
-    4.19 and above, the value of `le` is ingested as `1.0`. If the query needs
+    4.19 and later, the value of `le` is ingested as `1.0`. If the query needs
     to cover data from both before and after the OCP >= 4.19 upgrade, the
     selector should be `{le=~"1(.0)?"}`. If the query only covers data after
     the upgrade, the selector should be `{le="1.0"}`.
@@ -71,11 +76,11 @@ selectors:
     Even in cases where the query only covers data before the upgrade, it is
     recommended to use selectors that also account for float values.
 
-    For Prometheus, enabling [query logging] can help learn more about the query
+    For Prometheus, enabling [query logging] can help you learn more about the query
 
    ### Narrow regex in metric relabel configuration
 
-    In this case, you should expect logs like:
+    In this case, you should expect logs like the following:
 
     ```text
     ... msg="relabel_config involves 'le' or 'quantile' labels, it may need to
@@ -101,6 +106,6 @@ only fired for false positives, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.
 
-[a guide to change log level]: https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/monitoring/configuring-core-platform-monitoring#setting-log-levels-for-monitoring-components_storing-and-recording-data
+[a guide to changing the log level]: https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/monitoring/configuring-core-platform-monitoring#setting-log-levels-for-monitoring-components_storing-and-recording-data
 
 [query logging]: https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/monitoring/configuring-core-platform-monitoring#setting-query-log-file-for-prometheus_storing-and-recording-data
