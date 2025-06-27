@@ -14,7 +14,7 @@ Resources maintained by the operator might not be functioning correctly.
 Check the operator conditions:
 
 ```bash
-oc get HyperConverged kubevirt-hyperconverged -n kubevirt -o jsonpath='{.status.conditions}'
+oc get HyperConverged kubevirt-hyperconverged -n openshift-cnv -o jsonpath='{.status.conditions}'
 ```
 
 ## Mitigation
