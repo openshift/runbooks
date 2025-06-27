@@ -18,31 +18,31 @@ Network functionality is affected.
 deployment or daemon set that is not ready:
 
    ```bash
-   $ oc get networkaddonsconfig -o custom-columns=':.status.conditions[*].message' | tr -d '\n'
+   $ oc get networkaddonsconfig -o custom-columns="":.status.conditions[*].message
    ```
 
    Example output:
 
    ```text
-   DaemonSet "openshift-cnv/macvtap-cni" update is being processed...
+   DaemonSet "cluster-network-addons/macvtap-cni" update is being processed...
    ```
 
 2. Check the component's pod for errors:
 
    ```bash
-   $ oc -n openshift-cnv get daemonset <daemonset> -o yaml
+   $ oc -n cluster-network-addons get daemonset <pod> -o yaml
    ```
 
 3. Check the component's logs:
 
    ```bash
-   $ oc -n openshift-cnv logs <pod>
+   $ oc -n cluster-network-addons logs <pod>
    ```
 
 4. Check the component's details for error conditions:
 
    ```bash
-   $ oc -n openshift-cnv describe pod <pod>
+   $ oc -n cluster-network-addons describe <pod>
    ```
 
 ## Mitigation
