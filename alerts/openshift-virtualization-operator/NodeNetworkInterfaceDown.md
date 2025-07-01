@@ -54,15 +54,9 @@ Network interface failures can lead to:
    - Test the interface with a different cable/port
 
 2. For software or configuration issues:
-   ```bash
-   # Restart NetworkManager
-   systemctl restart NetworkManager
-   ```
 
-   ```bash
-   # Bring interface up manually
-   ip link set <interface-name> up
-   ```
+   [OCPV:NodeNetworkInterfaceDown alert for unused network
+interfaces](https://access.redhat.com/solutions/7123315)
 
 3. If the issue persists:
    - Check network interface configuration files
