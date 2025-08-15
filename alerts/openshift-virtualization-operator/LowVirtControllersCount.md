@@ -25,7 +25,7 @@ OpenShift Virtualization might become completely unresponsive.
 1. Set the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o jsonpath='{.items[].metadata.namespace}')"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Verify that running `virt-controller` pods are available:
@@ -34,17 +34,17 @@ OpenShift Virtualization might become completely unresponsive.
    $ oc -n $NAMESPACE get pods -l kubevirt.io=virt-controller
    ```
 
-3. Check the `virt-controller` logs for error messages:
+3. Check the `virt-launcher` logs for error messages:
 
    ```bash
-   $ oc -n $NAMESPACE logs -l kubevirt.io=virt-controller
+   $ oc -n $NAMESPACE logs <virt-launcher>
    ```
 
-4. Obtain the details of the `virt-controller` pod to check for status conditions
+4. Obtain the details of the `virt-launcher` pod to check for status conditions
 such as unexpected termination or a `NotReady` state.
 
    ```bash
-   $ oc -n $NAMESPACE describe pods -l kubevirt.io=virt-controller
+   $ oc -n $NAMESPACE describe pod/<virt-launcher>
    ```
 
 ## Mitigation
