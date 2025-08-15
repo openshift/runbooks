@@ -1,7 +1,7 @@
-# DuplicateWaspAgentDSDetected
+# DuplicateWaspAgentDSDetected [Deprecated]
 
-## Meaning
-wasp-agent is a node-local agent that enables swap for burstable QoS pods.
+This alert is deprecated. You can safely ignore or silence it.
+QoS pods.
 It mimics the behavior of kubelet swap feature.
 wasp-agent deployment consists of Daemonset, serivce account,
 role binding, privileged SCC. Wasp-agent currently deployed automatically
