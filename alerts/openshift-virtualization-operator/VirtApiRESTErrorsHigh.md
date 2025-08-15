@@ -18,7 +18,7 @@ affected.
 1. Set the `NAMESPACE` environment variable as follows:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o jsonpath='{.items[].metadata.namespace}')"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Check the status of the `virt-api` pods:
@@ -36,7 +36,7 @@ affected.
 4. Obtain the details of the `virt-api` pods:
 
    ```bash
-   $ oc describe pods -n $NAMESPACE -l kubevirt.io=virt-api
+   $ oc describe -n $NAMESPACE <virt-api>
    ```
 
 5. Check if any problems occurred with the nodes. For example, they might be in
