@@ -1,8 +1,7 @@
-# VirtHandlerRESTErrorsHigh
+# VirtHandlerRESTErrorsHigh [Deprecated]
 
-## Meaning
-
-More than 5% of REST calls failed in `virt-handler` in the last 60 minutes. This
+This alert is deprecated. You can safely ignore or silence it.
+60 minutes. This
 alert usually indicates that the `virt-handler` pods have partially lost
 connection to the API server.
 
