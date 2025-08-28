@@ -1,8 +1,7 @@
-# SSPOperatorDown
+# SSPOperatorDown [Deprecated]
 
-## Meaning
-
-This alert fires when all the Scheduling, Scale and Performance (SSP) Operator
+This alert is deprecated. You can safely ignore or silence it.
+(SSP) Operator
 pods are down.
 
 The SSP Operator is responsible for deploying and reconciling the common
