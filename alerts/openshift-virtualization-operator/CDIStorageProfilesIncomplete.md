@@ -18,7 +18,7 @@ The CDI cannot create a VM disk on the PVC.
 - Identify the incomplete storage profile:
 
   ```bash
-  $ oc get storageprofile -o json | jq '.items[] | select(.status.claimPropertySets == null or .status.claimPropertySets == []) | .metadata.name'
+  $ oc get storageprofile <storage_class>
   ```
 
 ## Mitigation
