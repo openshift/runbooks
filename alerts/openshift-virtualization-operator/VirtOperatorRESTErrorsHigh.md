@@ -1,8 +1,7 @@
-# VirtOperatorRESTErrorsHigh
+# VirtOperatorRESTErrorsHigh [Deprecated]
 
-## Meaning
-
-This alert fires when more than 5% of the REST calls in `virt-operator` pods
+This alert is deprecated. You can safely ignore or silence it.
+erator` pods
 failed in the last 60 minutes. This usually indicates the `virt-operator` pods
 cannot connect to the API server.
 
