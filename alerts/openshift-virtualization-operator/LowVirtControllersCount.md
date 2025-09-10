@@ -17,34 +17,28 @@ The responsiveness of OpenShift Virtualization might become negatively
 affected. For example,
 certain requests might be missed.
 
-In addition, if another `virt-launcher` instance terminates unexpectedly,
+In addition, if another `virt-controller` instance terminates unexpectedly,
 OpenShift Virtualization might become completely unresponsive.
 
 ## Diagnosis
 
-1. Set the `NAMESPACE` environment variable:
+1. Verify that running `virt-controller` pods are available:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o jsonpath='{.items[].metadata.namespace}')"
+   $ oc -n openshift-cnv get pods -l kubevirt.io=virt-controller
    ```
 
-2. Verify that running `virt-controller` pods are available:
+2. Check the `virt-controller` logs for error messages:
 
    ```bash
-   $ oc -n $NAMESPACE get pods -l kubevirt.io=virt-controller
+   $ oc -n openshift-cnv logs <virt-controller>
    ```
 
-3. Check the `virt-controller` logs for error messages:
+3. Obtain the details of the `virt-controller` pod to check for status
+conditions such as unexpected termination or a `NotReady` state.
 
    ```bash
-   $ oc -n $NAMESPACE logs -l kubevirt.io=virt-controller
-   ```
-
-4. Obtain the details of the `virt-controller` pod to check for status conditions
-such as unexpected termination or a `NotReady` state.
-
-   ```bash
-   $ oc -n $NAMESPACE describe pods -l kubevirt.io=virt-controller
+   $ oc -n openshift-cnv describe pod/<virt-controller>
    ```
 
 ## Mitigation
