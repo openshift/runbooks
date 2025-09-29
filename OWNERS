@@ -1,14 +1,12 @@
-maintainers:
-- RiRa12621
-
 approvers:
-- RiRa12621
 - jan--f
+- simonpasquier
 
 reviewers:
-- RiRa12621
 - jan--f
 - ravitri
+- simonpasquier
 
 emeritus_approvers:
 - paulfantom
+- RiRa12621
