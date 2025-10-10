@@ -2,16 +2,15 @@
 
 approvers:
   - wking
-  - petr-muller
   - DavidHurta
   - PratikMahajan
   - hongkailiu
 reviewers:
   - wking
-  - petr-muller
   - DavidHurta
   - hongkailiu
 emeritus_approvers:
+  - petr-muller
   - smarterclayton
   - abhinavdahiya
   - LalatenduMohanty
