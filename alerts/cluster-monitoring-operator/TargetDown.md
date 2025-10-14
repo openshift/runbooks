@@ -46,8 +46,10 @@ target:
 - The labels `namespace` and `service` that help us locate the `Service` exposing
   the metric endpoint.
 - The label `namespace` and `job` can locate the `ServiceMonitor` or `PodMonitor`
-  that configures Prometheus to scrape the target. The `job` label is the name of
-  the monitor.
+  that configures Prometheus to scrape the target. For
+  `ServiceMonitor`, the `job` label is the `Service` name, unless
+  `jobLabel` is set.  For `PodMonitor`, the `job` label is the
+  namespace and name of the `PodMonitor`, unless `jobLabel` is set.
 
 Now we have both end of the metric scraping flow as well as the monitor resources
 linking them together.
