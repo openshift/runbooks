@@ -125,7 +125,7 @@ availability. Control plane nodes can maintain
 the ETCD database so long as two control
 plane nodes are working. Worker nodes can take on
 more workloads if another worker node becomes
-unavailable. You [can add, remove, and replace nodes](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/nodes/working-with-nodes)
+unavailable. You [can add, remove, and replace nodes](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html/nodes/working-with-nodes)
 to add stability to a cluster. OpenShift clusters
 should be planned with this in mind in order to take
 full advantage of OpenShift features.
