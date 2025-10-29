@@ -48,7 +48,7 @@ Identify the duplicate wasp-agent daemonset :
 
 
 ## Additional notes
-* [wasp-agent user-guide](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html-single/virtualization/index#virt-configuring-higher-vm-workload-density)
+* [wasp-agent user-guide](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html-single/virtualization/index#virt-configuring-higher-vm-workload-density)
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
