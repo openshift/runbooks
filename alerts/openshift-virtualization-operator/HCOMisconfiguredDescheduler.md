@@ -4,72 +4,111 @@
 
 A descheduler is a OpenShift Container Platform application that causes the
 control plane to
-re-arrange the workloads in a better way.
+re-arrange the workloads in a more optimized way.
 
 The descheduler uses the OpenShift Container Platform eviction API to evict
-pods, and receives
-feedback from `kube-api` on whether the eviction request was granted.
-In contrast, to keep a VM live and trigger a live migration,
-OpenShift Virtualization handles eviction requests in a custom manner,
-and a live migration takes time to perform.
+pods. However,
+OpenShift Virtualization VMs, which run as `virt-launcher` pods, require
+special handling
+so they can be properly migrated by OpenShift Virtualization through live
+migration.
 
-Therefore, when a `virt-launcher` pod is migrating to another node in the
-background,
-the descheduler detects this as a pod that failed to be evicted. As a
-consequence,
-the manner in which OpenShift Virtualization handles eviction requests causes
-the descheduler
-to make incorrect decisions and take incorrect actions that might
-destabilize the cluster.
-
-To correctly handle the special case of an evicted VM pod triggering a live
-migration to another node, the `Kube Descheduler Operator` introduced
-a `profileCustomizations` named `devEnableEvictionsInBackground`.
-This is currently considered an `alpha` feature for
-on `Kube Descheduler Operator`.
+In earlier releases, a specific `profileCustomizations` setting
+(`devEnableEvictionsInBackground`) was required to configure the descheduler
+correctly for OpenShift Virtualization. More recent releases include dedicated
+descheduler
+profiles that already handle this requirement.
 
 ## Impact
 
-Using the descheduler operator for KubeVirt VMs without the
-`devEnableEvictionsInBackground` profile customization might lead
-to unstable or unpredictable behavior, which negatively impacts cluster
-stability.
+Using the descheduler operator for OpenShift Virtualization VMs without the
+correct
+configuration may result in unstable or unpredictable behavior,
+which can negatively affect cluster stability.
 
 ## Diagnosis
 
-1. Check the CR for `Kube Descheduler Operator`:
+1. Check the `KubeDescheduler` custom resource (CR):
 
    ```bash
-   $ oc get -n openshift-kube-descheduler-operator KubeDescheduler cluster -o yaml
+   oc get -n openshift-kube-descheduler-operator KubeDescheduler cluster -o yaml
    ```
 
-2. Search for the following lines in the CR:
+2. Verify that the CR contains one of the following profile configurations:
 
    ```yaml
    spec:
-      profileCustomizations:
-         devEnableEvictionsInBackground: true
+     profiles:
+     - KubeVirtRelieveAndMigrate
    ```
 
-If these lines are not present, the `Kube Descheduler Operator` is not correctly
-configured to work alongside OpenShift Virtualization.
+   or
+
+   ```yaml
+   spec:
+     profiles:
+     - DevKubeVirtRelieveAndMigrate
+   ```
+
+   or
+
+   ```yaml
+   spec:
+     profiles:
+     - LongLifecycle
+     profileCustomizations:
+       devEnableEvictionsInBackground: true
+   ```
+
+If none of these are present, the `Kube Descheduler Operator` is not correctly
+configured for OpenShift Virtualization.
 
 ## Mitigation
 
-Do one of the following:
+Configure the descheduler with an appropriate profile for your cluster.
+The order of preference is:
 
-* Add the following lines to the CR for `Kube Descheduler Operator`:
+1. `KubeVirtRelieveAndMigrate`
+2. `DevKubeVirtRelieveAndMigrate`
+3. `LongLifecycle` with the `devEnableEvictionsInBackground` customization
+
+To check which profiles are supported in your descheduler release,
+use the following command:
+
+```bash
+oc get crd kubedeschedulers.operator.openshift.io -o json | jq '.spec.versions[] | select(.name=="v1").schema.openAPIV3Schema.properties.spec.properties.profiles.items.enum[]'
+```
+
+Depending on the available profiles, apply one of the following configurations
+to the `KubeDescheduler` CR (kind: `kubedeschedulers`, namespace:
+`openshift-kube-descheduler-operator`, name: `cluster`):
+
+* **Configure the `KubeVirtRelieveAndMigrate` profile**
    ```yaml
    spec:
-      profileCustomizations:
-         devEnableEvictionsInBackground: true
+     profiles:
+     - KubeVirtRelieveAndMigrate
    ```
 
-* Remove the `Kube Descheduler Operator`.
+* **Configure the `DevKubeVirtRelieveAndMigrate` profile**
+   ```yaml
+   spec:
+     profiles:
+     - DevKubeVirtRelieveAndMigrate
+   ```
 
-Note that `EvictionsInBackground` is an alpha feature,
-and as such, it is provided as an experimental feature
-and is subject to change.
+* **Configure the `LongLifecycle` profile with the
+`devEnableEvictionsInBackground` profile customization**
+   ```yaml
+   spec:
+     profiles:
+     - LongLifecycle
+     profileCustomizations:
+       devEnableEvictionsInBackground: true
+   ```
+
+* If none of the listed steps are possible,
+**remove the `Kube Descheduler Operator`**.
 
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
