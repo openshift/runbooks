@@ -33,11 +33,6 @@ optionally inspect its log:
     $ oc get pods -n openshift-cluster-version -l k8s-app=cluster-version-operator
     ```
 
-* Check the cluster version status:
-    ```console
-    $ oc get clusterversion
-    ```
-
 * Inspect the pod logs for any errors:
     ```console
     $ oc logs -n openshift-cluster-version deployment/cluster-version-operator --container cluster-version-operator
