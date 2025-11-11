@@ -12,6 +12,13 @@ This component (`uwl-metrics-collector-deployment`) is separate from the platfor
 
 User-defined workload metrics (e.g., custom application metrics) from the Hub cluster are not being successfully stored in the ACM Observability stack. This will cause custom Grafana dashboards to be empty or show "No Data".
 
+**Data loss risk**: The UWL metrics collector has an internal buffer. If this issue is not resolved quickly (typically within 1-2 hours), metrics may be dropped to prevent memory exhaustion, resulting in permanent gaps in your application monitoring data.
+
+**Symptoms visible to users:**
+* Custom application dashboards show "No Data" or gaps
+* ServiceMonitor metrics missing from Grafana
+* Custom application alerts not firing due to missing data
+
 This alert does not affect the collection of OpenShift platform metrics (cluster CPU, memory, etc.), which are handled by the separate `metrics-collector-deployment`.
 
 ## Diagnosis
@@ -46,6 +53,16 @@ The `uwl-metrics-collector-deployment` authenticates using an mTLS client certif
     ```
 
 * Look for a secret name related to client certs (e.g., `observability-controller-open-cluster-management.io-observability-signer-client-cert` or a `uwl-` specific version).
+
+### 4. Check the observability-observatorium-api service health
+
+Verify the API service is healthy and has valid endpoints:
+
+```console
+$ oc get endpoints observability-observatorium-api -n open-cluster-management-observability
+```
+
+The output should show IP addresses. If empty, the observability-observatorium-api pods may be failing their readiness probes.
 
 ## Mitigation
 

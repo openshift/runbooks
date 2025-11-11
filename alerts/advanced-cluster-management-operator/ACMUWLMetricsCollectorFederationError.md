@@ -12,13 +12,32 @@ This component is different from the platform metrics collector. This one (`uwl-
 
 Metrics from user-defined workloads (e.g., custom application metrics) on the Hub cluster are not being collected by ACM Observability. This will cause user-created dashboards in Grafana to have no data.
 
+**What user workload monitoring includes:**
+* Custom Prometheus metrics exposed by your applications (e.g., `/metrics` endpoints)
+* ServiceMonitors and PodMonitors created in user namespaces
+* Custom application-specific metrics and alerts
+
+**Who is affected:**
+* Application developers relying on custom metrics dashboards
+* Teams monitoring custom application SLIs/SLOs
+
 This alert does not affect the collection of OpenShift platform metrics (cluster CPU, memory, etc.), which are handled by the separate `metrics-collector-deployment`.
 
 ## Diagnosis
 
 The primary goal is to determine why the `uwl-metrics-collector-deployment` pod is receiving HTTP errors from the user workload Prometheus. The most likely cause is an RBAC (Role-Based Access Control) failure.
 
-### 1. Check the logs of the uwl-metrics-collector-deployment pod
+### 1. Verify User Workload Monitoring is enabled
+
+Before investigating collector issues, confirm that User Workload Monitoring is enabled on your cluster:
+
+```console
+$ oc get configmap cluster-monitoring-config -n openshift-monitoring -o yaml | grep enableUserWorkload
+```
+
+If not present or set to `false`, user workload monitoring is not enabled. See the [OpenShift documentation](https://docs.openshift.com/container-platform/latest/monitoring/enabling-monitoring-for-user-defined-projects.html) for enabling it.
+
+### 2. Check the logs of the uwl-metrics-collector-deployment pod
 
 This is the most important step. The logs will show the exact error.
 
@@ -26,7 +45,7 @@ This is the most important step. The logs will show the exact error.
 $ oc logs -f deployment/uwl-metrics-collector-deployment -n open-cluster-management-observability
 ```
 
-### 2. Analyze the log error
+### 3. Analyze the log error
 
 * **If you see `err="... i/o timeout"` or `err="... EOF"`**: 
 
@@ -36,7 +55,7 @@ $ oc logs -f deployment/uwl-metrics-collector-deployment -n open-cluster-managem
 
     This is an authentication/authorization error. This is the cause of the alert. It means the collector is not authorized to scrape the user workload Prometheus.
 
-### 3. If you see 403/401 errors, investigate the collector's RBAC permissions
+### 4. If you see 403/401 errors, investigate the collector's RBAC permissions
 
 * Find the `ServiceAccount` used by the `uwl-metrics-collector-deployment` pod:
     ```console

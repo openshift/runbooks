@@ -50,9 +50,17 @@ The `metrics-collector-deployment` pod uses a `ServiceAccount` that requires per
 
 * Ensure the `roleRef.name` is `cluster-monitoring-view` and the `subjects` section correctly lists the `endpoint-observability-operator-sa` `ServiceAccount` from the `open-cluster-management-observability` namespace.
 
-### 3. Investigate other cluster issues
+### 3. Check for NetworkPolicy blocking traffic
 
-If the logs show 5xx errors, or the `NetworkPolicy` tests caused wider cluster instability (e.g., OVN issues), it's possible the `prometheus-k8s` pods or the `kube-rbac-proxy` in the `openshift-monitoring` namespace are unhealthy or unable to contact the Kubernetes API server to validate the collector's token.
+If you see `i/o timeout` or connection refused errors, check for NetworkPolicies that might be blocking traffic:
+
+```console
+$ oc get networkpolicy -n open-cluster-management-observability
+$ oc get networkpolicy -n openshift-monitoring
+```
+
+Look for policies that might restrict egress from the metrics-collector pod or ingress to the prometheus-k8s service.
+
 
 ## Mitigation
 
@@ -78,6 +86,16 @@ If a custom `NetworkPolicy` was recently applied, it may be blocking the `metric
 
 If the collector logs show 5xx errors, the problem may be with Prometheus itself.
 
-* Check the health of the `prometheus-k8s` pods in the `openshift-monitoring` namespace.
+* Check the health of the `prometheus-k8s` pods in the `openshift-monitoring` namespace:
+    ```console
+    $ oc get pods -n openshift-monitoring -l app.kubernetes.io/name=prometheus
+    ```
 
-* Check the logs of the `kube-rbac-proxy` container within the `prometheus-k8s` pods, as it may be failing its own authentication checks against the Kube API server.
+* Check the logs of the `kube-rbac-proxy` container within the `prometheus-k8s` pods, as it may be failing its own authentication checks against the Kube API server:
+    ```console
+    $ oc logs -n openshift-monitoring prometheus-k8s-0 -c kube-rbac-proxy
+    ```
+
+You should see successful scrape operations with no 403 errors. The alert will clear after 10+ minutes of successful federation.
+
+**Expected resolution time**: Alert should clear within 10-15 minutes after RBAC permissions are restored and successful scraping resumes.

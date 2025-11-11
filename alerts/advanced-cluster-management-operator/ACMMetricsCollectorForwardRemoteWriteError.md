@@ -10,7 +10,12 @@ This alert will not fire for network-level failures like `i/o timeout` or `EOF` 
 
 ## Impact
 
-When this alert is firing, metrics from the Hub cluster itself are successfully collected but cannot be sent to the central Thanos storage. This will cause the Hub cluster to appear "dark" or "offline" in Grafana, and its health and performance metrics will be missing. This can also negatively affect SLO/SLI calculations that rely on Hub cluster metrics.
+When this alert is firing, metrics from the Hub cluster itself are successfully collected but cannot be sent to the central Thanos storage. This will cause the Hub cluster to appear "dark" or "offline" in Grafana, and its health and performance metrics will be missing.
+
+**Time sensitivity**: The metrics collector has a limited in-memory buffer. If this issue persists for an extended period (typically >1-2 hours), older metrics may be dropped to make room for new ones, resulting in permanent data gaps.
+
+This can also negatively affect SLO/SLI calculations that rely on Hub cluster metrics.
+
 
 ## Diagnosis
 
@@ -43,6 +48,18 @@ $ oc logs -f deployment/metrics-collector-deployment -n open-cluster-management-
     * The metrics-collector's client certificate (`observability-controller-open-cluster-management.io-observability-signer-client-cert` secret) is invalid or has expired.
     * The metrics-collector's `ServiceAccount` token is invalid or not authorized.
     * The `observability-observatorium-api` server's own mTLS configuration is broken and is failing to validate the (valid) client.
+
+### 3. Inspect the client certificate
+
+Check if the certificate exists and when it expires:
+
+```console
+$ oc get secret observability-controller-open-cluster-management.io-observability-signer-client-cert \
+  -n open-cluster-management-observability -o jsonpath='{.data.tls\.crt}' | \
+  base64 -d | openssl x509 -noout -dates -subject
+```
+
+Look for the `notAfter` date to verify the certificate has not expired.
 
 ## Mitigation
 

@@ -18,6 +18,9 @@ If the Thanos Compactor is halted, the metric data in the S3 object store is no 
 
 * **Increased Query Latency**: Queries for long-range time-series data will be slow and resource-intensive.
 
+* **Block Overlap**: Over time, uncompacted blocks may overlap, further degrading query performance and potentially causing duplicate data points in query results.
+
+
 ## Diagnosis
 
 The first step is to identify why the compactor has halted by inspecting its logs for fatal, non-retriable errors.
@@ -61,6 +64,17 @@ $ oc get secret thanos-object-storage -n open-cluster-management-observability -
 ```
 
 Check the `endpoint`, `access_key`, and `secret_key` values in the output to ensure they are correct.
+
+**Verify the ObjectBucketClaim status:**
+
+If you suspect S3 connection issues, verify the OBC is healthy:
+
+```console
+$ oc get obc -n open-cluster-management-observability
+$ oc get configmap <OBC-NAME> -n open-cluster-management-observability -o yaml
+```
+
+Check that the ConfigMap contains valid endpoint and bucket information.
 
 ## Mitigation
 
@@ -127,6 +141,24 @@ The `thanos-object-storage` secret in the `open-cluster-management-observability
     ```console
     $ oc delete pod -n open-cluster-management-observability observability-thanos-compact-0
     ```
+
+### 4. Verify Resolution
+
+After applying any mitigation, verify the compactor has recovered:
+
+* Check the halted metric has returned to 0:
+    ```console
+    $ oc exec -n open-cluster-management-observability observability-thanos-compact-0 -- wget -qO- http://localhost:10902/metrics | grep acm_thanos_compact_halted
+    ```
+
+* Monitor the pod logs for successful compaction activity:
+    ```console
+    $ oc logs -n open-cluster-management-observability observability-thanos-compact-0 --tail=50 -f
+    ```
+
+* The alert should clear within 5-10 minutes of successful compaction.
+
+**Expected resolution time**: Alert should clear within 5-10 minutes after the compactor resumes normal operation.
 
 For more detailed troubleshooting steps and additional scenarios, refer to the Red Hat Knowledge Base article:
 [Thanos compactor halted](https://access.redhat.com/solutions/7080672)
