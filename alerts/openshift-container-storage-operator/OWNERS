@@ -6,8 +6,6 @@ approvers:
   - iamniting
   - malayparida2000
   - BlaineEXE
-  - travisn
-  - leelavg
 # review == this code is good /lgtm
 reviewers:
   - obnoxxx
@@ -16,5 +14,3 @@ reviewers:
   - iamniting
   - malayparida2000
   - BlaineEXE
-  - travisn
-  - leelavg
