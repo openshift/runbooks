@@ -1,4 +1,4 @@
-# AuditLogError
+# ImageStreamImportFailed
 
 ## Meaning
 The `ImageStreamImportFailed` alert fires when one or more ImageStreams
