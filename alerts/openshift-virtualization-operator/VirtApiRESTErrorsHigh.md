@@ -1,8 +1,7 @@
-# VirtApiRESTErrorsHigh
+# VirtApiRESTErrorsHigh [Deprecated]
 
-## Meaning
-
-More than 5% of REST calls have failed in the `virt-api` pods in the last 60
+This alert is deprecated. You can safely ignore or silence it.
+ the last 60
 minutes.
 
 ## Impact
