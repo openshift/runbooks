@@ -33,9 +33,17 @@ Count the number of nodes to compare.
 
 ## Mitigation
 
+### For clusters running prior to 4.13
+
 We do not support adding additional cluster networks for ovn-kubernetes.
 
 User will have to create a new cluster for more worker nodes.
 
 Choosing a larger cluster network CIDR which can hold more subnets could prevent
 this happening.
+
+### For clusters running with version 4.13 onward
+
+User can follow the OpenShift document to expand the cluster subnet IP address range.
+
+Refer: https://docs.redhat.com/en/documentation/openshift_container_platform/4.13/html/release_notes/ocp-4-13-release-notes#ocp-4-13-expand-cluster-network-ip-address-range_release-notes
