@@ -15,7 +15,31 @@ creation of pods.
 
 ## Diagnosis
 
-The following two approaches can be used for the diagnosis.
+### Automated Analysis (Non-HCP Clusters)
+
+Configuration Anomaly Detection (CAD) automatically analyzes this alert for
+non-HCP clusters and creates a backplane cluster report that includes:
+
+- Top Space Consumers by Namespace
+- Largest ConfigMaps and Secrets
+- Event storage by namespace
+
+**Note**: Check the PagerDuty incident notes for the command to view the
+cluster report. If the notes report a failure to clean up the snapshot, you
+must access the node and manually clean up the etcd snapshot. The target node
+and file path are provided in the PagerDuty incident notes.
+
+#### Viewing Cluster Reports
+
+List all cluster reports for the cluster:
+```console
+$ osdctl cluster reports list --cluster-id <$CLUSTER_ID>
+```
+
+View a specific report:
+```console
+$ osdctl cluster reports get --cluster-id <$CLUSTER_ID> --report-id <$REPORT_ID>
+```
 
 ### CLI Checks
 
