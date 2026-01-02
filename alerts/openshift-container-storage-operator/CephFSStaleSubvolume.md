@@ -47,7 +47,7 @@ safely delete them to reclaim storage space.
 To delete a stale subvolume:
 
 ```bash
-odf subvolume delete <subvolumes> <filesystem> <subvolumegroup>
+odf subvolume delete <filesystem> <subvolume> <subvolumegroup>
 ```
 
 The subvolume,subvolumegroup and filesystem details can be retrieved from the
