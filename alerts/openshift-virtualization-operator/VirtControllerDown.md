@@ -1,7 +1,7 @@
 # VirtControllerDown
 
 ## Meaning
-No running `virt-controller` pod has been detected for 5 minutes.
+No running `virt-controller` pod has been detected for 10 minutes.
 
 ## Impact
 Any actions related to virtual machine (VM) lifecycle management fail. This
