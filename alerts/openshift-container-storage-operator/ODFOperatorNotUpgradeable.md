@@ -23,7 +23,8 @@ oc get operatorconditions -n openshift-storage
 
 Get detailed information about the odf operator condition:
 
-**Note**: If you see two odf-operator conditions, pick the name with the oldest version.
+**Note**: If you see two odf-operator conditions, pick the name with the oldest
+version.
 
 ```bash
 oc get operatorconditions -n openshift-storage <odf-operator-condition-name> -o yaml

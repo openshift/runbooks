@@ -15,8 +15,8 @@ As a result the MDS related operations, like, caps revocation, will become slow.
 
 ## Diagnosis
 
-Check the usage of `ceph_mds_mem_rss` metric and ensure that it is under 95% of the
-cache limit set in `mds_cache_memory_limit`.
+Check the usage of `ceph_mds_mem_rss` metric and ensure that it is under 95% of
+the cache limit set in `mds_cache_memory_limit`.
 
 The MDS tries to stay under a reservation of the `mds_cache_memory_limit` by
 trimming unused metadata in its cache and recalling cached items in the client

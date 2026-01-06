@@ -24,7 +24,8 @@ the upgrade will not be able to progress/complete.
 ## Diagnosis
 
 If a node fails to drain, first check the `machine-config-controller` pod
-inside the `openshift-machine-config-operator` namespace by using the following command.
+inside the `openshift-machine-config-operator` namespace by using the following
+command.
 The `machine-config-controller` pod is the central point of management
 for incoming updates to machines.
 

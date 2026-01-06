@@ -42,7 +42,8 @@ optionally inspect its log:
     $ oc get events -n openshift-cluster-version --sort-by=.metadata.creationTimestamp
     ```
 ### 2. Node failures
-Check if the node where the operator pod is running has experienced failures or evictions.
+Check if the node where the operator pod is running has experienced failures or
+evictions.
 
 * Determine which node the `cluster-version-operator` pod is scheduled on:
     ```console

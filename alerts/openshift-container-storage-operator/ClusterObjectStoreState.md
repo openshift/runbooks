@@ -11,7 +11,8 @@ for more than 15s.
 
 Cluster Object Store is in unhealthy state
 OR
-Number of ready replicas for Rook Ceph RGW deployments is less than the desired replicas.
+Number of ready replicas for Rook Ceph RGW deployments is less than the desired
+replicas.
 
 ## Diagnosis
 
