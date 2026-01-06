@@ -54,7 +54,7 @@ Ceph status shows that the OSD is full .Example Ceph OSD-FULL error
   curl -k -H "Authorization: Bearer $(oc -n openshift-monitoring sa get-token prometheus-k8s)"  https://${MYALERTMANAGER}/api/v1/alerts | jq '.data[] | select( .labels.alertname) | { ALERT: .labels.alertname, STATE: .status.state}'
 ```
 
-2) If CephClusterReadOnly alert is listed from the above curl command, then see :
+2) If CephClusterReadOnly alert is listed from the above curl command, then see:
 
     [CephClusterReadOnly alert](../CephClusterReadOnly.md)
 

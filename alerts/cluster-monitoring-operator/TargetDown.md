@@ -29,8 +29,8 @@ predetermined duration.
 - Navigate to **Observe** -> **Targets** in the OpenShift web console. Choose **Down**
   in the **Filter** combo button to quickly list down targets. Click on individual
   targets for details and error messages from the last scrape attempt.
-- Alternatively, query `up == 0` in **Observe** -> **Metrics** in the OpenShift web
-  console. The metric labels will help pinpoint the affected Prometheus instance
+- Alternatively, query `up == 0` in **Observe** -> **Metrics** in the OpenShift
+  web console. The metric labels will help pinpoint the affected Prometheus instance
   and the down target.
 
 The alert and the metric `up` have the `namespace`, `service`， `job`, `pod`
@@ -283,7 +283,8 @@ following checks:
    oc logs statefulset/prometheus-k8s -n openshift-monitoring
    ```
 
-2. Verify that the scraped target pod(s) logs are free from certificate-related errors.
+2. Verify that the scraped target pod(s) logs are free from certificate-related
+   errors.
 3. Check that the `cluster-monitoring-operator` pod is running and its logs contain
    no errors regarding certificate rotation.
 

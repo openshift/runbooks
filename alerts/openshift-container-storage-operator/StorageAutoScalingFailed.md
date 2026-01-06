@@ -54,7 +54,8 @@ the requested storage parameters.
     If the pv is in `Pending` state, there might be a storage issue. Check the
     events of the pv for more information.
 
-4. The Pod, PVC and PV are behaving as expected but the resize has not happened yet:
+4. The Pod, PVC and PV are behaving as expected but the resize has not happened
+   yet:
     One of the primary reasons for this error is attempting to resize resources
     more than once within a 6-hour period, particularly in AWS clusters. AWS
     enforces a restriction that allows only one resize operation within this
@@ -101,8 +102,8 @@ oc get pods -n <namespace> -l app=rook-ceph-osd
 oc delete pod <osd-pod-name> -n <namespace>
 ```
 
-3. During vertical scaling, if the pv takes time to resize, then the osds would not
-resize correctly. In this case, the osd pods can be restarted.
+3. During vertical scaling, if the pv takes time to resize, then the osds would
+   not resize correctly. In this case, the osd pods can be restarted.
 ```bash
 oc get pods -n <namespace> -l app=rook-ceph-osd
 oc delete pod <osd-pod-name> -n <namespace>
