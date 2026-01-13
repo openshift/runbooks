@@ -142,11 +142,11 @@ SERVFAIL), a high rate can still cause:
 For detailed diagnosis steps, refer to:
 
 - [Troubleshooting DNS in OpenShift](https://access.redhat.com/solutions/3804501)
-- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
 
 ## Mitigation
 
 For mitigation strategies and solutions, refer to:
 
 - [Troubleshooting DNS in OpenShift](https://access.redhat.com/solutions/3804501)
-- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)

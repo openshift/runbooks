@@ -132,11 +132,11 @@ High device drop rates can cause:
 For detailed diagnosis steps, refer to:
 
 - [Reducing packet drops in OVS](https://access.redhat.com/solutions/5666711)
-- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
 
 ## Mitigation
 
 For mitigation strategies and solutions, refer to:
 
 - [Reducing packet drops in OVS](https://access.redhat.com/solutions/5666711)
-- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)

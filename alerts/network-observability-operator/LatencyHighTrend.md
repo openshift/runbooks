@@ -153,11 +153,11 @@ High or increasing latency can lead to:
 For detailed diagnosis steps, refer to:
 
 - [Troubleshooting latency in OpenShift](https://access.redhat.com/solutions/4255351)
-- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
 
 ## Mitigation
 
 For mitigation strategies and solutions, refer to:
 
 - [Troubleshooting latency in OpenShift](https://access.redhat.com/solutions/4255351)
-- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)

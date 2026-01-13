@@ -143,11 +143,11 @@ data.
 For detailed diagnosis steps, refer to:
 
 - [Configuring IPsec encryption](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/network_security/configuring-ipsec-ovn)
-- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
 
 ## Mitigation
 
 For mitigation strategies and solutions, refer to:
 
 - [Configuring IPsec encryption](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/network_security/configuring-ipsec-ovn)
-- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)

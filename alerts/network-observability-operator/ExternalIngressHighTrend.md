@@ -152,12 +152,12 @@ High external ingress traffic can lead to:
 
 ## Diagnosis
 
-For detailed diagnosis steps, refer to the [Troubleshooting Network
-Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+For detailed diagnosis steps, refer to the
+[OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
 documentation.
 
 ## Mitigation
 
-For mitigation strategies and solutions, refer to the [Troubleshooting Network
-Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+For mitigation strategies and solutions, refer to the
+[OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
 documentation.

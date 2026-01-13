@@ -147,11 +147,11 @@ High denial rates can lead to:
 For detailed diagnosis steps, refer to:
 
 - [Network policy](https://docs.redhat.com/en/documentation/openshift_container_platform/4.15/html/networking/network-policy)
-- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
 
 ## Mitigation
 
 For mitigation strategies and solutions, refer to:
 
 - [Network policy](https://docs.redhat.com/en/documentation/openshift_container_platform/4.15/html/networking/network-policy)
-- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
