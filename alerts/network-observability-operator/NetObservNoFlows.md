@@ -35,7 +35,7 @@ as DNSErrors or PacketDropsByKernel), this alert:
 - **Cannot have variants** - there is only one alert instance
 
 The alert triggers with this hardcoded PromQL expression:
-```
+```promql
 sum(rate(netobserv_ingest_flows_processed[1m])) == 0
 ```
 

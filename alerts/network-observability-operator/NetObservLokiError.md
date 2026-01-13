@@ -37,7 +37,7 @@ be configured as a health rule. Unlike other Network Observability alerts
 - **Cannot have variants** - there is only one alert instance
 
 The alert triggers with this hardcoded PromQL expression:
-```
+```promql
 sum(rate(netobserv_loki_dropped_entries_total[1m])) > 0
 ```
 
