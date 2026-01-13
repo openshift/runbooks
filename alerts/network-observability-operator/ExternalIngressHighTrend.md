@@ -12,11 +12,11 @@ it's configured in the FlowCollector custom resource.
 **Possible alert variants:**
 
 - `ExternalIngressHighTrend_Critical` - Global cluster-wide external ingress
-  traffic increase exceeds critical threshold compared to baseline (no grouping)
+  traffic increase exceeds critical threshold compared to baseline
 - `ExternalIngressHighTrend_Warning` - Global cluster-wide external ingress
-  traffic increase exceeds warning threshold compared to baseline (no grouping)
+  traffic increase exceeds warning threshold compared to baseline
 - `ExternalIngressHighTrend_Info` - Global cluster-wide external ingress
-  traffic increase exceeds info threshold compared to baseline (no grouping)
+  traffic increase exceeds info threshold compared to baseline
 - `ExternalIngressHighTrend_PerDstNamespace{Critical,Warning,Info}` - External
   ingress traffic increase to a specific namespace exceeds threshold
 - `ExternalIngressHighTrend_PerDstNode{Critical,Warning,Info}` - External
@@ -32,12 +32,14 @@ averaged over a 2-hour window (configurable via `trendDuration`).
 External traffic is defined as traffic where the source IP is not within the
 cluster's pod or service CIDR ranges.
 
-**Note:** This alert does not require any specific agent feature to be enabled.
+**Note:** This alert does not require any specific agent feature to be
+enabled.
 
 ### Switch to metric-only mode (alternative to alerts)
 
-If you want to monitor external ingress trends in the Network Health dashboard without
-generating Prometheus alerts, you can change the health rule to metric-only mode:
+If you want to monitor external ingress trends in the Network Health dashboard
+without generating Prometheus alerts, you can change the health rule to
+metric-only mode:
 
 ```console
 $ oc edit flowcollector cluster
@@ -64,8 +66,9 @@ spec:
 
 In metric-only mode:
 
-- External ingress trend violations remain visible in the **Network Health** dashboard
-- No Prometheus alerts are generated (no AlertManager notifications)
+- External ingress trend violations remain visible in the **Network Health**
+  dashboard
+- No Prometheus alerts are generated
 - Metrics are still calculated and stored as recording rules
 - Useful for teams that prefer passive monitoring without alert fatigue
 
@@ -93,9 +96,9 @@ spec:
         variants:
         - groupBy: Namespace
           thresholds:
-            info: "100"      # Increased from 50
-            warning: "200"   # Increased from 150
-            critical: "400"  # Increased from 300
+            info: "100"
+            warning: "200"
+            critical: "400"
           trendOffset: 24h
           trendDuration: 2h
 ```
@@ -121,7 +124,8 @@ spec:
 For more information on configuring Network Observability alerts, managing
 ingress traffic, and DDoS protection, see the
 [Network Observability documentation](https://docs.openshift.com/container-platform/latest/network_observability/observing-network-traffic.html)
-and [Ingress Operator documentation](https://docs.openshift.com/container-platform/latest/networking/ingress-operator.html).
+and
+[Ingress Operator documentation](https://docs.openshift.com/container-platform/latest/networking/ingress-operator.html).
 
 ## Impact
 
@@ -148,8 +152,12 @@ High external ingress traffic can lead to:
 
 ## Diagnosis
 
-TBD
+For detailed diagnosis steps, refer to the [Troubleshooting Network
+Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+documentation.
 
 ## Mitigation
 
-TBD
+For mitigation strategies and solutions, refer to the [Troubleshooting Network
+Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+documentation.

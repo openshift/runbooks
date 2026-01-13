@@ -2,19 +2,20 @@
 
 ## Meaning
 
-The `DNSErrors` alert template is triggered when Network Observability detects a
-high percentage of DNS errors (excluding NX_DOMAIN errors, which have their own
-alert template). This template can generate multiple alert instances depending
-on how it's configured in the FlowCollector custom resource.
+The `DNSErrors` alert template is triggered when Network Observability
+detects a high percentage of DNS errors (excluding NX_DOMAIN errors, which
+have their own alert template). This template can generate multiple alert
+instances depending on how it's configured in the FlowCollector custom
+resource.
 
 **Possible alert variants:**
 
 - `DNSErrors_Critical` - Global cluster-wide DNS error rate exceeds critical
-  threshold (no grouping)
+  threshold
 - `DNSErrors_Warning` - Global cluster-wide DNS error rate exceeds warning
-  threshold (no grouping)
-- `DNSErrors_Info` - Global cluster-wide DNS error rate exceeds info threshold
-  (no grouping)
+  threshold
+- `DNSErrors_Info` - Global cluster-wide DNS error rate exceeds info
+  threshold
 - `DNSErrors_PerDstNamespace{Critical,Warning,Info}` - DNS error rate for
   traffic destined to a specific namespace exceeds threshold
 - `DNSErrors_PerSrcNamespace{Critical,Warning,Info}` - DNS error rate for
@@ -28,22 +29,24 @@ on how it's configured in the FlowCollector custom resource.
 - `DNSErrors_PerSrcWorkload{Critical,Warning,Info}` - DNS error rate for
   traffic originating from a specific workload exceeds threshold
 
-The alert fires when the percentage of DNS errors exceeds the configured threshold. DNS errors are tracked only in
-return traffic (responses from DNS servers).
+The alert fires when the percentage of DNS errors exceeds the configured
+threshold. DNS errors are tracked only in return traffic (responses from DNS
+servers).
 
-**Note:** This alert requires the `DNSTracking` agent feature to be enabled in
-the FlowCollector configuration.
+**Note:** This alert requires the `DNSTracking` agent feature to be enabled
+in the FlowCollector configuration.
 
 ### Switch to metric-only mode (alternative to alerts)
 
 If you want to monitor DNS errors in the Network Health dashboard without
-generating Prometheus alerts, you can change the health rule to metric-only mode:
+generating Prometheus alerts, you can change the health rule to metric-only
+mode:
 
 ```console
 $ oc edit flowcollector cluster
 ```
 
-Change the mode from `alert` to `recording`:
+Change the mode from `Alert` to `MetricOnly`:
 
 ```yaml
 spec:
@@ -63,7 +66,7 @@ spec:
 In metric-only mode:
 
 - DNS error violations remain visible in the **Network Health** dashboard
-- No Prometheus alerts are generated (no AlertManager notifications)
+- No Prometheus alerts are generated
 - Metrics are still calculated and stored as recording rules
 - Useful for teams that prefer passive monitoring without alert fatigue
 
@@ -134,8 +137,14 @@ network operations.
 
 ## Diagnosis
 
-TBD
+For detailed diagnosis steps, refer to:
+
+- [Troubleshooting DNS in OpenShift](https://access.redhat.com/solutions/3804501)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
 
 ## Mitigation
 
-TBD
+For mitigation strategies and solutions, refer to:
+
+- [Troubleshooting DNS in OpenShift](https://access.redhat.com/solutions/3804501)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)

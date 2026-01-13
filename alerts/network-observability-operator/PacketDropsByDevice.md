@@ -2,24 +2,25 @@
 
 ## Meaning
 
-The `PacketDropsByDevice` alert template is triggered when Network Observability
-detects a high percentage of packet drops at the device level based on
-statistics from `/proc/net/dev`. This template can generate multiple alert
-instances depending on how it's configured in the FlowCollector custom resource.
+The `PacketDropsByDevice` alert template is triggered when Network
+Observability detects a high percentage of packet drops at the device level
+based on statistics from `/proc/net/dev`. This template can generate multiple
+alert instances depending on how it's configured in the FlowCollector custom
+resource.
 
 **Possible alert variants:**
 
-- `PacketDropsByDevice_Critical` - Global cluster-wide device packet drop rate
-  exceeds critical threshold (no grouping)
+- `PacketDropsByDevice_Critical` - Global cluster-wide device packet drop
+  rate exceeds critical threshold
 - `PacketDropsByDevice_Warning` - Global cluster-wide device packet drop rate
-  exceeds warning threshold (no grouping)
+  exceeds warning threshold
 - `PacketDropsByDevice_Info` - Global cluster-wide device packet drop rate
-  exceeds info threshold (no grouping)
+  exceeds info threshold
 - `PacketDropsByDevice_PerNode{Critical,Warning,Info}` - Device packet drop
   rate on a specific node exceeds threshold
 
-Unlike `PacketDropsByKernel` which tracks drops in the kernel network stack via
-eBPF, `PacketDropsByDevice` monitors drops reported by network interfaces
+Unlike `PacketDropsByKernel` which tracks drops in the kernel network stack
+via eBPF, `PacketDropsByDevice` monitors drops reported by network interfaces
 themselves in `/proc/net/dev`. These are typically hardware-level or
 driver-level drops.
 
@@ -28,8 +29,9 @@ standard Linux network interface statistics available on all nodes.
 
 ### Switch to metric-only mode (alternative to alerts)
 
-If you want to monitor device packet drops in the Network Health dashboard without
-generating Prometheus alerts, you can change the health rule to metric-only mode:
+If you want to monitor device packet drops in the Network Health dashboard
+without generating Prometheus alerts, you can change the health rule to
+metric-only mode:
 
 ```console
 $ oc edit flowcollector cluster
@@ -54,7 +56,7 @@ spec:
 In metric-only mode:
 
 - Packet drop violations remain visible in the **Network Health** dashboard
-- No Prometheus alerts are generated (no AlertManager notifications)
+- No Prometheus alerts are generated
 - Metrics are still calculated and stored as recording rules
 - Useful for teams that prefer passive monitoring without alert fatigue
 
@@ -82,8 +84,8 @@ spec:
         variants:
         - groupBy: Node
           thresholds:
-            info: "5"       # Increased from 2
-            warning: "10"   # Increased from 5
+            info: "5"
+            warning: "10"
 ```
 
 ### Disable this alert entirely
@@ -127,8 +129,14 @@ High device drop rates can cause:
 
 ## Diagnosis
 
-TBD
+For detailed diagnosis steps, refer to:
+
+- [Reducing packet drops in OVS](https://access.redhat.com/solutions/5666711)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
 
 ## Mitigation
 
-TBD
+For mitigation strategies and solutions, refer to:
+
+- [Reducing packet drops in OVS](https://access.redhat.com/solutions/5666711)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)

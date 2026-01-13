@@ -2,19 +2,19 @@
 
 ## Meaning
 
-The `IPsecErrors` alert template is triggered when Network Observability detects
-a high percentage of IPsec encryption errors. This template can generate
-multiple alert instances depending on how it's configured in the FlowCollector
-custom resource.
+The `IPsecErrors` alert template is triggered when Network Observability
+detects a high percentage of IPsec encryption errors. This template can
+generate multiple alert instances depending on how it's configured in the
+FlowCollector custom resource.
 
 **Possible alert variants:**
 
 - `IPsecErrors_Critical` - Global cluster-wide IPsec error rate exceeds
-  critical threshold (no grouping)
-- `IPsecErrors_Warning` - Global cluster-wide IPsec error rate exceeds warning
-  threshold (no grouping)
+  critical threshold
+- `IPsecErrors_Warning` - Global cluster-wide IPsec error rate exceeds
+  warning threshold
 - `IPsecErrors_Info` - Global cluster-wide IPsec error rate exceeds info
-  threshold (no grouping)
+  threshold
 - `IPsecErrors_PerDstNamespace{Critical,Warning,Info}` - IPsec error rate for
   traffic destined to a specific namespace exceeds threshold
 - `IPsecErrors_PerSrcNamespace{Critical,Warning,Info}` - IPsec error rate for
@@ -39,7 +39,8 @@ with OVN-Kubernetes IPsec encryption enabled.
 ### Switch to metric-only mode (alternative to alerts)
 
 If you want to monitor IPsec errors in the Network Health dashboard without
-generating Prometheus alerts, you can change the health rule to metric-only mode:
+generating Prometheus alerts, you can change the health rule to metric-only
+mode:
 
 ```console
 $ oc edit flowcollector cluster
@@ -65,7 +66,7 @@ spec:
 In metric-only mode:
 
 - IPsec error violations remain visible in the **Network Health** dashboard
-- No Prometheus alerts are generated (no AlertManager notifications)
+- No Prometheus alerts are generated
 - Metrics are still calculated and stored as recording rules
 - Useful for teams that prefer passive monitoring without alert fatigue
 
@@ -93,9 +94,9 @@ spec:
         variants:
         - groupBy: Node
           thresholds:
-            info: "10"      # Increased from 5
-            warning: "25"   # Increased from 15
-            critical: "50"  # Increased from 30
+            info: "10"
+            warning: "25"
+            critical: "50"
 ```
 
 ### Disable this alert entirely
@@ -119,7 +120,8 @@ spec:
 For more information on configuring Network Observability alerts and IPsec
 encryption, see the
 [Network Observability documentation](https://docs.openshift.com/container-platform/latest/network_observability/observing-network-traffic.html)
-and [OVN-Kubernetes IPsec documentation](https://docs.openshift.com/container-platform/latest/networking/ovn_kubernetes_network_provider/configuring-ipsec-ovn.html).
+and
+[OVN-Kubernetes IPsec documentation](https://docs.openshift.com/container-platform/latest/networking/ovn_kubernetes_network_provider/configuring-ipsec-ovn.html).
 
 ## Impact
 
@@ -138,8 +140,14 @@ data.
 
 ## Diagnosis
 
-TBD
+For detailed diagnosis steps, refer to:
+
+- [Configuring IPsec encryption](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/network_security/configuring-ipsec-ovn)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
 
 ## Mitigation
 
-TBD
+For mitigation strategies and solutions, refer to:
+
+- [Configuring IPsec encryption](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/network_security/configuring-ipsec-ovn)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)

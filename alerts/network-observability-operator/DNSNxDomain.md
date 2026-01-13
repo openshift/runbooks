@@ -2,27 +2,28 @@
 
 ## Meaning
 
-The `DNSNxDomain` alert template is triggered when Network Observability detects
-a high percentage of DNS NX_DOMAIN errors. NX_DOMAIN indicates that the queried
-domain name does not exist. This template can generate multiple alert instances
-depending on how it's configured in the FlowCollector custom resource.
+The `DNSNxDomain` alert template is triggered when Network Observability
+detects a high percentage of DNS NX_DOMAIN errors. NX_DOMAIN indicates that
+the queried domain name does not exist. This template can generate multiple
+alert instances depending on how it's configured in the FlowCollector custom
+resource.
 
 **Possible alert variants:**
 
-- `DNSNxDomain_Critical` - Global cluster-wide NX_DOMAIN rate exceeds critical
-  threshold (no grouping)
+- `DNSNxDomain_Critical` - Global cluster-wide NX_DOMAIN rate exceeds
+  critical threshold
 - `DNSNxDomain_Warning` - Global cluster-wide NX_DOMAIN rate exceeds warning
-  threshold (no grouping)
+  threshold
 - `DNSNxDomain_Info` - Global cluster-wide NX_DOMAIN rate exceeds info
-  threshold (no grouping)
+  threshold
 - `DNSNxDomain_PerDstNamespace{Critical,Warning,Info}` - NX_DOMAIN rate for
   traffic destined to a specific namespace exceeds threshold
 - `DNSNxDomain_PerSrcNamespace{Critical,Warning,Info}` - NX_DOMAIN rate for
   traffic originating from a specific namespace exceeds threshold
-- `DNSNxDomain_PerDstNode{Critical,Warning,Info}` - NX_DOMAIN rate for traffic
-  destined to a specific node exceeds threshold
-- `DNSNxDomain_PerSrcNode{Critical,Warning,Info}` - NX_DOMAIN rate for traffic
-  originating from a specific node exceeds threshold
+- `DNSNxDomain_PerDstNode{Critical,Warning,Info}` - NX_DOMAIN rate for
+  traffic destined to a specific node exceeds threshold
+- `DNSNxDomain_PerSrcNode{Critical,Warning,Info}` - NX_DOMAIN rate for
+  traffic originating from a specific node exceeds threshold
 - `DNSNxDomain_PerDstWorkload{Critical,Warning,Info}` - NX_DOMAIN rate for
   traffic destined to a specific workload exceeds threshold
 - `DNSNxDomain_PerSrcWorkload{Critical,Warning,Info}` - NX_DOMAIN rate for
@@ -31,13 +32,14 @@ depending on how it's configured in the FlowCollector custom resource.
 NX_DOMAIN errors are tracked only in return traffic (responses from DNS
 servers).
 
-**Note:** This alert requires the `DNSTracking` agent feature to be enabled in
-the FlowCollector configuration.
+**Note:** This alert requires the `DNSTracking` agent feature to be enabled
+in the FlowCollector configuration.
 
 ### Switch to metric-only mode (alternative to alerts)
 
-If you want to monitor DNS NX_DOMAIN errors in the Network Health dashboard without
-generating Prometheus alerts, you can change the health rule to metric-only mode:
+If you want to monitor DNS NX_DOMAIN errors in the Network Health dashboard
+without generating Prometheus alerts, you can change the health rule to
+metric-only mode:
 
 ```console
 $ oc edit flowcollector cluster
@@ -63,7 +65,7 @@ spec:
 In metric-only mode:
 
 - NX_DOMAIN violations remain visible in the **Network Health** dashboard
-- No Prometheus alerts are generated (no AlertManager notifications)
+- No Prometheus alerts are generated
 - Metrics are still calculated and stored as recording rules
 - Useful for teams that prefer passive monitoring without alert fatigue
 
@@ -91,9 +93,9 @@ spec:
         variants:
         - groupBy: Namespace
           thresholds:
-            info: "20"      # Increased from 10
-            warning: "40"   # Increased from 30
-            critical: "70"  # Increased from 60
+            info: "20"
+            warning: "40"
+            critical: "70"
 ```
 
 ### Disable this alert entirely
@@ -127,8 +129,8 @@ High rates of NX_DOMAIN errors can indicate:
 - DNS-based service discovery issues
 - Potential security concerns
 
-While NX_DOMAIN errors are less critical than other DNS errors (like SERVFAIL),
-a high rate can still cause:
+While NX_DOMAIN errors are less critical than other DNS errors (like
+SERVFAIL), a high rate can still cause:
 
 - Wasted network resources and DNS server load
 - Application delays due to failed lookups
@@ -137,8 +139,14 @@ a high rate can still cause:
 
 ## Diagnosis
 
-TBD
+For detailed diagnosis steps, refer to:
+
+- [Troubleshooting DNS in OpenShift](https://access.redhat.com/solutions/3804501)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
 
 ## Mitigation
 
-TBD
+For mitigation strategies and solutions, refer to:
+
+- [Troubleshooting DNS in OpenShift](https://access.redhat.com/solutions/3804501)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)

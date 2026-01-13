@@ -2,27 +2,28 @@
 
 ## Meaning
 
-The `NetpolDenied` alert template is triggered when Network Observability detects
-a high percentage of traffic being denied by Kubernetes NetworkPolicies. This
-template can generate multiple alert instances depending on how it's configured
-in the FlowCollector custom resource.
+The `NetpolDenied` alert template is triggered when Network Observability
+detects a high percentage of traffic being denied by Kubernetes
+NetworkPolicies. This template can generate multiple alert instances depending
+on how it's configured in the FlowCollector custom resource.
 
 **Possible alert variants:**
 
 - `NetpolDenied_Critical` - Global cluster-wide NetworkPolicy denial rate
-  exceeds critical threshold (no grouping)
+  exceeds critical threshold
 - `NetpolDenied_Warning` - Global cluster-wide NetworkPolicy denial rate
-  exceeds warning threshold (no grouping)
+  exceeds warning threshold
 - `NetpolDenied_Info` - Global cluster-wide NetworkPolicy denial rate exceeds
-  info threshold (no grouping)
-- `NetpolDenied_PerDstNamespace{Critical,Warning,Info}` - NetworkPolicy denial
-  rate for traffic destined to a specific namespace exceeds threshold
-- `NetpolDenied_PerSrcNamespace{Critical,Warning,Info}` - NetworkPolicy denial
-  rate for traffic originating from a specific namespace exceeds threshold
-- `NetpolDenied_PerDstNode{Critical,Warning,Info}` - NetworkPolicy denial rate
-  for traffic destined to a specific node exceeds threshold
-- `NetpolDenied_PerSrcNode{Critical,Warning,Info}` - NetworkPolicy denial rate
-  for traffic originating from a specific node exceeds threshold
+  info threshold
+- `NetpolDenied_PerDstNamespace{Critical,Warning,Info}` - NetworkPolicy
+  denial rate for traffic destined to a specific namespace exceeds threshold
+- `NetpolDenied_PerSrcNamespace{Critical,Warning,Info}` - NetworkPolicy
+  denial rate for traffic originating from a specific namespace exceeds
+  threshold
+- `NetpolDenied_PerDstNode{Critical,Warning,Info}` - NetworkPolicy denial
+  rate for traffic destined to a specific node exceeds threshold
+- `NetpolDenied_PerSrcNode{Critical,Warning,Info}` - NetworkPolicy denial
+  rate for traffic originating from a specific node exceeds threshold
 - `NetpolDenied_PerDstWorkload{Critical,Warning,Info}` - NetworkPolicy denial
   rate for traffic destined to a specific workload exceeds threshold
 - `NetpolDenied_PerSrcWorkload{Critical,Warning,Info}` - NetworkPolicy denial
@@ -37,8 +38,9 @@ in the FlowCollector configuration.
 
 ### Switch to metric-only mode (alternative to alerts)
 
-If you want to monitor NetworkPolicy denials in the Network Health dashboard without
-generating Prometheus alerts, you can change the health rule to metric-only mode:
+If you want to monitor NetworkPolicy denials in the Network Health dashboard
+without generating Prometheus alerts, you can change the health rule to
+metric-only mode:
 
 ```console
 $ oc edit flowcollector cluster
@@ -63,8 +65,9 @@ spec:
 
 In metric-only mode:
 
-- NetworkPolicy denial violations remain visible in the **Network Health** dashboard
-- No Prometheus alerts are generated (no AlertManager notifications)
+- NetworkPolicy denial violations remain visible in the **Network Health**
+  dashboard
+- No Prometheus alerts are generated
 - Metrics are still calculated and stored as recording rules
 - Useful for teams that prefer passive monitoring without alert fatigue
 
@@ -92,9 +95,9 @@ spec:
         variants:
         - groupBy: Namespace
           thresholds:
-            info: "20"      # Increased from 10
-            warning: "40"   # Increased from 25
-            critical: "70"  # Increased from 50
+            info: "20"
+            warning: "40"
+            critical: "70"
 ```
 
 ### Disable this alert entirely
@@ -117,7 +120,8 @@ spec:
 
 For more information on NetworkPolicies and Network Observability, see the
 [NetworkPolicy documentation](https://docs.openshift.com/container-platform/latest/networking/network_policy/about-network-policy.html)
-and [Network Observability documentation](https://docs.openshift.com/container-platform/latest/network_observability/observing-network-traffic.html).
+and
+[Network Observability documentation](https://docs.openshift.com/container-platform/latest/network_observability/observing-network-traffic.html).
 
 ## Impact
 
@@ -125,7 +129,8 @@ NetworkPolicy denials can indicate:
 
 - Misconfigured NetworkPolicies blocking legitimate traffic
 - Applications unable to communicate with required services
-- Security policies working as intended (in which case the alert may be noise)
+- Security policies working as intended (in which case the alert may be
+  noise)
 - Changes to NetworkPolicies causing unintended blocking
 - Pods attempting unauthorized access (security event)
 
@@ -139,8 +144,14 @@ High denial rates can lead to:
 
 ## Diagnosis
 
-TBD
+For detailed diagnosis steps, refer to:
+
+- [Network policy](https://docs.redhat.com/en/documentation/openshift_container_platform/4.15/html/networking/network-policy)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
 
 ## Mitigation
 
-TBD
+For mitigation strategies and solutions, refer to:
+
+- [Network policy](https://docs.redhat.com/en/documentation/openshift_container_platform/4.15/html/networking/network-policy)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)

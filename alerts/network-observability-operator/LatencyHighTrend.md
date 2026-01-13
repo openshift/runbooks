@@ -6,20 +6,21 @@ The `LatencyHighTrend` alert template is triggered when Network Observability
 detects a significant increase in TCP latency (Round-Trip Time) compared to a
 baseline from the past. This is a trend-based alert that compares current
 latency against historical values. This template can generate multiple alert
-instances depending on how it's configured in the FlowCollector custom resource.
+instances depending on how it's configured in the FlowCollector custom
+resource.
 
 **Possible alert variants:**
 
 - `LatencyHighTrend_Critical` - Global cluster-wide latency increase exceeds
-  critical threshold compared to baseline (no grouping)
+  critical threshold compared to baseline
 - `LatencyHighTrend_Warning` - Global cluster-wide latency increase exceeds
-  warning threshold compared to baseline (no grouping)
+  warning threshold compared to baseline
 - `LatencyHighTrend_Info` - Global cluster-wide latency increase exceeds info
-  threshold compared to baseline (no grouping)
-- `LatencyHighTrend_PerDstNamespace{Critical,Warning,Info}` - Latency increase
-  for traffic destined to a specific namespace exceeds threshold
-- `LatencyHighTrend_PerSrcNamespace{Critical,Warning,Info}` - Latency increase
-  for traffic originating from a specific namespace exceeds threshold
+  threshold compared to baseline
+- `LatencyHighTrend_PerDstNamespace{Critical,Warning,Info}` - Latency
+  increase for traffic destined to a specific namespace exceeds threshold
+- `LatencyHighTrend_PerSrcNamespace{Critical,Warning,Info}` - Latency
+  increase for traffic originating from a specific namespace exceeds threshold
 - `LatencyHighTrend_PerDstNode{Critical,Warning,Info}` - Latency increase for
   traffic destined to a specific node exceeds threshold
 - `LatencyHighTrend_PerSrcNode{Critical,Warning,Info}` - Latency increase for
@@ -29,10 +30,10 @@ instances depending on how it's configured in the FlowCollector custom resource.
 - `LatencyHighTrend_PerSrcWorkload{Critical,Warning,Info}` - Latency increase
   for traffic originating from a specific workload exceeds threshold
 
-The alert fires when the current latency exceeds the baseline by the configured
-percentage threshold. By default, the baseline is calculated from metrics taken
-1 day ago (configurable via `trendOffset`) averaged over a 2-hour window
-(configurable via `trendDuration`).
+The alert fires when the current latency exceeds the baseline by the
+configured percentage threshold. By default, the baseline is calculated from
+metrics taken 1 day ago (configurable via `trendOffset`) averaged over a
+2-hour window (configurable via `trendDuration`).
 
 **Note:** This alert requires the `FlowRTT` agent feature to be enabled in the
 FlowCollector configuration.
@@ -40,7 +41,8 @@ FlowCollector configuration.
 ### Switch to metric-only mode (alternative to alerts)
 
 If you want to monitor latency trends in the Network Health dashboard without
-generating Prometheus alerts, you can change the health rule to metric-only mode:
+generating Prometheus alerts, you can change the health rule to metric-only
+mode:
 
 ```console
 $ oc edit flowcollector cluster
@@ -68,7 +70,7 @@ spec:
 In metric-only mode:
 
 - Latency trend violations remain visible in the **Network Health** dashboard
-- No Prometheus alerts are generated (no AlertManager notifications)
+- No Prometheus alerts are generated
 - Metrics are still calculated and stored as recording rules
 - Useful for teams that prefer passive monitoring without alert fatigue
 
@@ -96,9 +98,9 @@ spec:
         variants:
         - groupBy: Namespace
           thresholds:
-            info: "50"      # Increased from 30 (50% increase triggers alert)
-            warning: "100"  # Increased from 75
-            critical: "200" # Increased from 150
+            info: "50"
+            warning: "100"
+            critical: "200"
           trendOffset: 24h
           trendDuration: 2h
 ```
@@ -148,8 +150,14 @@ High or increasing latency can lead to:
 
 ## Diagnosis
 
-TBD
+For detailed diagnosis steps, refer to:
+
+- [Troubleshooting latency in OpenShift](https://access.redhat.com/solutions/4255351)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
 
 ## Mitigation
 
-TBD
+For mitigation strategies and solutions, refer to:
+
+- [Troubleshooting latency in OpenShift](https://access.redhat.com/solutions/4255351)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)

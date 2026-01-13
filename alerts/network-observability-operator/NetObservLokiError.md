@@ -4,12 +4,12 @@
 
 The `NetObservLokiError` alert is an operational alert that triggers when
 Network Observability's flowlogs-pipeline is unable to write flow data to Loki
-and is consequently dropping flows. This indicates that the Loki storage backend
-is experiencing issues or is unreachable.
+and is consequently dropping flows. This indicates that the Loki storage
+backend is experiencing issues or is unreachable.
 
 Unlike other Network Observability alerts, `NetObservLokiError` does not have
-multiple variants based on grouping or severity levels. It is a single critical
-alert that indicates a failure in the flow storage pipeline.
+multiple variants based on grouping or severity levels. It is a single
+critical alert that indicates a failure in the flow storage pipeline.
 
 When flows cannot be written to Loki, they are dropped to prevent memory
 exhaustion in the flowlogs-pipeline. This results in:
@@ -20,13 +20,35 @@ exhaustion in the flowlogs-pipeline. This results in:
 - Inability to investigate past network events
 
 **Note:** This is an operational alert that monitors the health of Network
-Observability's storage integration, not the health of cluster network traffic.
-This alert only applies when using Loki as the flow storage backend.
+Observability's storage integration, not the health of cluster network
+traffic. This alert only applies when using Loki as the flow storage backend.
+
+### Configuration limitations
+
+**Important:** `NetObservLokiError` is an **alert-only template** that cannot
+be configured as a health rule. Unlike other Network Observability alerts
+(such as DNSErrors or PacketDropsByKernel), this alert:
+
+- **Cannot be converted to metric-only mode** - it is always an alert
+- **Does not support thresholds** - it fires when any Loki write errors occur
+  (> 0 drops)
+- **Does not support grouping** - it is a global cluster-wide operational
+  alert
+- **Cannot have variants** - there is only one alert instance
+
+The alert triggers with this hardcoded PromQL expression:
+```
+sum(rate(netobserv_loki_dropped_entries_total[1m])) > 0
+```
+
+This design is intentional because Loki write errors indicate **data loss**
+and should always generate alerts rather than being silently tracked as
+metrics.
 
 ### Disable this alert entirely
 
-This alert should generally NOT be disabled as it indicates data loss. However,
-if needed:
+This alert should generally NOT be disabled as it indicates data loss.
+However, if needed:
 
 ```console
 $ oc edit flowcollector cluster
@@ -63,8 +85,12 @@ detailed flow records are being lost.
 
 ## Diagnosis
 
-TBD
+For detailed diagnosis steps, refer to the [Troubleshooting Network
+Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+documentation.
 
 ## Mitigation
 
-TBD
+For mitigation strategies and solutions, refer to the [Troubleshooting Network
+Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+documentation.

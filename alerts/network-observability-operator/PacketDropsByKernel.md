@@ -2,43 +2,47 @@
 
 ## Meaning
 
-The `PacketDropsByKernel` alert template is triggered when Network Observability
-detects a high percentage of packet drops by the Linux kernel. This template
-can generate multiple alert instances depending on how it's configured in the
-FlowCollector custom resource.
+The `PacketDropsByKernel` alert template is triggered when Network
+Observability detects a high percentage of packet drops by the Linux kernel.
+This template can generate multiple alert instances depending on how it's
+configured in the FlowCollector custom resource.
 
 **Possible alert variants:**
 
-- `PacketDropsByKernel_Critical` - Global cluster-wide kernel packet drop rate
-  exceeds critical threshold (no grouping)
+- `PacketDropsByKernel_Critical` - Global cluster-wide kernel packet drop
+  rate exceeds critical threshold
 - `PacketDropsByKernel_Warning` - Global cluster-wide kernel packet drop rate
-  exceeds warning threshold (no grouping)
+  exceeds warning threshold
 - `PacketDropsByKernel_Info` - Global cluster-wide kernel packet drop rate
-  exceeds info threshold (no grouping)
-- `PacketDropsByKernel_PerDstNamespace{Critical,Warning,Info}` - Kernel packet
-  drop rate for traffic destined to a specific namespace exceeds threshold
-- `PacketDropsByKernel_PerSrcNamespace{Critical,Warning,Info}` - Kernel packet
-  drop rate for traffic originating from a specific namespace exceeds threshold
-- `PacketDropsByKernel_PerDstNode{Critical,Warning,Info}` - Kernel packet drop
-  rate for traffic destined to a specific node exceeds threshold
-- `PacketDropsByKernel_PerSrcNode{Critical,Warning,Info}` - Kernel packet drop
-  rate for traffic originating from a specific node exceeds threshold
+  exceeds info threshold
+- `PacketDropsByKernel_PerDstNamespace{Critical,Warning,Info}` - Kernel
+  packet drop rate for traffic destined to a specific namespace exceeds
+  threshold
+- `PacketDropsByKernel_PerSrcNamespace{Critical,Warning,Info}` - Kernel
+  packet drop rate for traffic originating from a specific namespace exceeds
+  threshold
+- `PacketDropsByKernel_PerDstNode{Critical,Warning,Info}` - Kernel packet
+  drop rate for traffic destined to a specific node exceeds threshold
+- `PacketDropsByKernel_PerSrcNode{Critical,Warning,Info}` - Kernel packet
+  drop rate for traffic originating from a specific node exceeds threshold
 - `PacketDropsByKernel_PerDstWorkload{Critical,Warning,Info}` - Kernel packet
   drop rate for traffic destined to a specific workload exceeds threshold
 - `PacketDropsByKernel_PerSrcWorkload{Critical,Warning,Info}` - Kernel packet
-  drop rate for traffic originating from a specific workload exceeds threshold
+  drop rate for traffic originating from a specific workload exceeds
+  threshold
 
 The alert fires when the percentage of packets dropped by the kernel exceeds
-the configured threshold. These drops are detected via eBPF kfree_skb tracepoint
-which captures packets dropped in the kernel network stack.
+the configured threshold. These drops are detected via eBPF kfree_skb
+tracepoint which captures packets dropped in the kernel network stack.
 
 **Note:** This alert requires the `PacketDrop` agent feature to be enabled in
 the FlowCollector configuration.
 
 ### Switch to metric-only mode (alternative to alerts)
 
-If you want to monitor kernel packet drops in the Network Health dashboard without
-generating Prometheus alerts, you can change the health rule to metric-only mode:
+If you want to monitor kernel packet drops in the Network Health dashboard
+without generating Prometheus alerts, you can change the health rule to
+metric-only mode:
 
 ```console
 $ oc edit flowcollector cluster
@@ -64,7 +68,7 @@ spec:
 In metric-only mode:
 
 - Packet drop violations remain visible in the **Network Health** dashboard
-- No Prometheus alerts are generated (no AlertManager notifications)
+- No Prometheus alerts are generated
 - Metrics are still calculated and stored as recording rules
 - Useful for teams that prefer passive monitoring without alert fatigue
 
@@ -92,9 +96,9 @@ spec:
         variants:
         - groupBy: Node
           thresholds:
-            info: "10"      # Increased from 5
-            warning: "20"   # Increased from 10
-            critical: "30"  # Increased from 20
+            info: "10"
+            warning: "20"
+            critical: "30"
 ```
 
 ### Disable this alert entirely
@@ -133,8 +137,14 @@ performance due to congestion control mechanisms.
 
 ## Diagnosis
 
-TBD
+For detailed diagnosis steps, refer to:
+
+- [Reducing packet drops in OVS](https://access.redhat.com/solutions/5666711)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
 
 ## Mitigation
 
-TBD
+For mitigation strategies and solutions, refer to:
+
+- [Reducing packet drops in OVS](https://access.redhat.com/solutions/5666711)
+- [Troubleshooting Network Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
