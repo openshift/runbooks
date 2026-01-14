@@ -51,6 +51,19 @@ VMs](https://docs.redhat.com/en/documentation/openshift_container_platform/lates
 **Important:** Plan and apply these updates before performing cluster
 upgrades to avoid VM restart failures or compatibility issues.
 
+Alternative: remove the machine field to let OpenShift Virtualization default
+to the newest
+supported type:
+
+```bash
+# Removes spec.template.spec.domain.machine so the mutating webhook defaults it
+oc patch vm <vm-name> -n <namespace> --type='json' \
+  -p='[{"op":"remove","path":"/spec/template/spec/domain/machine"}]'
+```
+
+Note: The automation tool performs these JSON patches
+in bulk across multiple VMs.
+
 If you cannot resolve the issue, log in to the
 [Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.
