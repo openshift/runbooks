@@ -144,10 +144,15 @@ High denial rates can lead to:
 
 ## Diagnosis
 
-For detailed diagnosis steps, refer to:
+When this alert fires, you can investigate further by using the Network Observability interface:
 
-- [Network policy](https://docs.redhat.com/en/documentation/openshift_container_platform/4.15/html/networking/network-policy)
-- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
+1. **Navigate to alert details**: Click on the alert in the Network Health dashboard to view specific details of the alert.
+
+2. **Navigate to network traffic**: From the alert details, you can navigate to the Network Traffic view to examine the specific flows that are related to this alert. This allows you to see:
+   - Source and destination of the traffic
+   - Detailed flow information
+
+For additional troubleshooting resources, refer to the documentation links in the Mitigation section below.
 
 ## Mitigation
 
