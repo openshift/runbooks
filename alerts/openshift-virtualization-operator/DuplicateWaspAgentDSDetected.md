@@ -1,4 +1,6 @@
-# DuplicateWaspAgentDSDetected
+# DuplicateWaspAgentDSDetected [Deprecated]
+
+This alert is deprecated. You can safely ignore or silence it.
 
 ## Meaning
 wasp-agent is a node-local agent that enables swap for burstable QoS pods.
