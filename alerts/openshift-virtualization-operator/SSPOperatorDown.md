@@ -1,4 +1,7 @@
-# SSPOperatorDown
+# SSPOperatorDown [Deprecated]
+
+This alert runbook has been deprecated; since it is a duplicate of the SSPDown
+alert runbook.
 
 ## Meaning
 
