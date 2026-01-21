@@ -16,8 +16,7 @@ exhaustion in the flowlogs-pipeline. This results in:
 
 - Incomplete network traffic data in the Network Observability Console
 - Gaps in historical network flow records
-- Missing network metrics in Prometheus
-- Inability to investigate past network events
+- Inability to investigate past network flows
 
 **Note:** This is an operational alert that monitors the health of Network
 Observability's storage integration, not the health of cluster network
