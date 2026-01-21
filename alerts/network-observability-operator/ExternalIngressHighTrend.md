@@ -35,17 +35,17 @@ cluster's pod or service CIDR ranges.
 **Note:** This alert does not require any specific agent feature to be
 enabled.
 
-### Switch to metric-only mode (alternative to alerts)
+### Switch to recording mode (alternative to alerts)
 
 If you want to monitor external ingress trends in the Network Health dashboard
 without generating Prometheus alerts, you can change the health rule to
-metric-only mode:
+recording mode:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
-Change the mode from `Alert` to `MetricOnly`:
+Change the mode from `Alert` to `Recording`:
 
 ```yaml
 spec:
@@ -53,7 +53,7 @@ spec:
     metrics:
       healthRules:
       - template: ExternalIngressHighTrend
-        mode: MetricOnly
+        mode: Recording
         variants:
         - groupBy: Namespace
           thresholds:
@@ -64,7 +64,7 @@ spec:
           trendDuration: 2h
 ```
 
-In metric-only mode:
+In recording mode:
 
 - External ingress trend violations remain visible in the **Network Health**
   dashboard
@@ -77,11 +77,12 @@ health without being overwhelmed by alerts for every threshold violation.
 
 ### Adjust alert thresholds
 
+The thresholds are expressed in percentage of increase.
 If the alert is firing too frequently due to low thresholds, you can adjust
 them:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Modify the `spec.processor.metrics.healthRules` section:
@@ -107,8 +108,8 @@ spec:
 
 To completely disable ExternalIngressHighTrend alerts:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Add ExternalIngressHighTrend to the disableAlerts list:
@@ -123,7 +124,7 @@ spec:
 
 For more information on configuring Network Observability alerts, managing
 ingress traffic, and DDoS protection, see the
-[Network Observability documentation](https://docs.openshift.com/container-platform/latest/network_observability/observing-network-traffic.html)
+[Network Observability documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/network-observability-alerts_nw-observe-network-traffic)
 and
 [Ingress Operator documentation](https://docs.openshift.com/container-platform/latest/networking/ingress-operator.html).
 
@@ -169,6 +170,13 @@ the Mitigation section below.
 
 ## Mitigation
 
-For mitigation strategies and solutions, refer to the
-[OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
+Depending on the cause of the traffic, the mitigation can be:
+
+- Defining [Network Policies](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/network-policy) or [Admin Network Policies](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/admin-network-policy).
+- Configuring [User-Defined Networks](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/multiple_networks/primary-networks) for network segmentation.
+- Configuring your [Ingress Cluster traffic](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/ingress_and_load_balancing/configuring-ingress-cluster-traffic).
+- Using [Red Hat OpenShift Service Mesh](https://docs.redhat.com/en/documentation/red_hat_openshift_service_mesh/latest), for instance to configure rate-limits on ingress.
+
+For a comprehensive documentation, refer to the
+[OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/latest#Networking)
 documentation.

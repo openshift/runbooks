@@ -36,17 +36,17 @@ the OVN-Kubernetes network plugin.
 **Note:** This alert requires the `NetworkEvents` agent feature to be enabled
 in the FlowCollector configuration.
 
-### Switch to metric-only mode (alternative to alerts)
+### Switch to recording mode (alternative to alerts)
 
 If you want to monitor NetworkPolicy denials in the Network Health dashboard
 without generating Prometheus alerts, you can change the health rule to
-metric-only mode:
+recording mode:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
-Change the mode from `Alert` to `MetricOnly`:
+Change the mode from `Alert` to `Recording`:
 
 ```yaml
 spec:
@@ -54,7 +54,7 @@ spec:
     metrics:
       healthRules:
       - template: NetpolDenied
-        mode: MetricOnly
+        mode: Recording
         variants:
         - groupBy: Namespace
           thresholds:
@@ -63,7 +63,7 @@ spec:
             critical: "50"
 ```
 
-In metric-only mode:
+In recording mode:
 
 - NetworkPolicy denial violations remain visible in the **Network Health**
   dashboard
@@ -79,8 +79,8 @@ health without being overwhelmed by alerts for every threshold violation.
 If the alert is firing too frequently due to low thresholds, you can adjust
 them:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Modify the `spec.processor.metrics.healthRules` section:
@@ -104,8 +104,8 @@ spec:
 
 To completely disable NetpolDenied alerts:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Add NetpolDenied to the disableAlerts list:
@@ -121,7 +121,7 @@ spec:
 For more information on NetworkPolicies and Network Observability, see the
 [NetworkPolicy documentation](https://docs.openshift.com/container-platform/latest/networking/network_policy/about-network-policy.html)
 and
-[Network Observability documentation](https://docs.openshift.com/container-platform/latest/network_observability/observing-network-traffic.html).
+[Network Observability documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/network-observability-alerts_nw-observe-network-traffic).
 
 ## Impact
 
@@ -163,5 +163,5 @@ the Mitigation section below.
 
 For mitigation strategies and solutions, refer to:
 
-- [Network policy](https://docs.redhat.com/en/documentation/openshift_container_platform/4.15/html/networking/network-policy)
-- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
+- [Network policy](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/network-policy)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/latest#Networking)

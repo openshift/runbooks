@@ -38,17 +38,17 @@ tracepoint which captures packets dropped in the kernel network stack.
 **Note:** This alert requires the `PacketDrop` agent feature to be enabled in
 the FlowCollector configuration.
 
-### Switch to metric-only mode (alternative to alerts)
+### Switch to recording mode (alternative to alerts)
 
 If you want to monitor kernel packet drops in the Network Health dashboard
 without generating Prometheus alerts, you can change the health rule to
-metric-only mode:
+recording mode:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
-Change the mode from `Alert` to `MetricOnly`:
+Change the mode from `Alert` to `Recording`:
 
 ```yaml
 spec:
@@ -56,7 +56,7 @@ spec:
     metrics:
       healthRules:
       - template: PacketDropsByKernel
-        mode: MetricOnly
+        mode: Recording
         variants:
         - groupBy: Node
           thresholds:
@@ -65,7 +65,7 @@ spec:
             critical: "20"
 ```
 
-In metric-only mode:
+In recording mode:
 
 - Packet drop violations remain visible in the **Network Health** dashboard
 - No Prometheus alerts are generated
@@ -80,8 +80,8 @@ health without being overwhelmed by alerts for every threshold violation.
 If the alert is firing too frequently due to low thresholds, you can adjust
 them:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Modify the `spec.processor.metrics.healthRules` section:
@@ -105,8 +105,8 @@ spec:
 
 To completely disable PacketDropsByKernel alerts:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Add PacketDropsByKernel to the disableAlerts list:
@@ -120,7 +120,7 @@ spec:
 ```
 
 For more information on configuring Network Observability alerts, see the
-[Network Observability documentation](https://docs.openshift.com/container-platform/latest/network_observability/observing-network-traffic.html).
+[Network Observability documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/network-observability-alerts_nw-observe-network-traffic).
 
 ## Impact
 
@@ -149,6 +149,16 @@ Observability interface:
    - Source and destination of the traffic
    - Detailed flow information
 
+In the Network Traffic view, to further narrow down your search when looking for drops,
+you can open the _Query options_ dropdown menu, and select flows containing drops.
+
+The drop causes that Network Observability displays are derived directly from the error
+codes provided [by the Linux kernel](https://github.com/torvalds/linux/blob/master/include/net/dropreason-core.h#L140), or [by OVS](https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/net/openvswitch/drop.h).
+Network Observability does not provide its own interpretation of them.
+
+When you use Network Policies, you might find the `OVS_DROP_LAST_ACTION` cause appearing
+more frequently: it is set when a network policy has rejected a packet.
+
 For additional troubleshooting resources, refer to the documentation links in
 the Mitigation section below.
 
@@ -156,5 +166,7 @@ the Mitigation section below.
 
 For mitigation strategies and solutions, refer to:
 
+- [Packet drop tracking in Network Observability](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/nw-observe-network-traffic#network-observability-pktdrop-overview_nw-observe-network-traffic)
 - [Reducing packet drops in OVS](https://access.redhat.com/solutions/5666711)
-- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
+- [Blog: Network Observability real-time per flow packets drop ](https://www.redhat.com/en/blog/network-observability-real-time-per-flow-packets-drop)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/latest#Networking)

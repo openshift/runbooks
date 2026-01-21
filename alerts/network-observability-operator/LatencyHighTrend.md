@@ -38,17 +38,17 @@ metrics taken 1 day ago (configurable via `trendOffset`) averaged over a
 **Note:** This alert requires the `FlowRTT` agent feature to be enabled in the
 FlowCollector configuration.
 
-### Switch to metric-only mode (alternative to alerts)
+### Switch to recording mode (alternative to alerts)
 
 If you want to monitor latency trends in the Network Health dashboard without
-generating Prometheus alerts, you can change the health rule to metric-only
+generating Prometheus alerts, you can change the health rule to recording
 mode:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
-Change the mode from `Alert` to `MetricOnly`:
+Change the mode from `Alert` to `Recording`:
 
 ```yaml
 spec:
@@ -56,7 +56,7 @@ spec:
     metrics:
       healthRules:
       - template: LatencyHighTrend
-        mode: MetricOnly
+        mode: Recording
         variants:
         - groupBy: Namespace
           thresholds:
@@ -67,7 +67,7 @@ spec:
           trendDuration: 2h
 ```
 
-In metric-only mode:
+In recording mode:
 
 - Latency trend violations remain visible in the **Network Health** dashboard
 - No Prometheus alerts are generated
@@ -79,11 +79,12 @@ health without being overwhelmed by alerts for every threshold violation.
 
 ### Adjust alert thresholds
 
+The thresholds are expressed in percentage of increase.
 If the alert is firing too frequently due to low thresholds, you can adjust
 them:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Modify the `spec.processor.metrics.healthRules` section:
@@ -109,8 +110,8 @@ spec:
 
 To completely disable LatencyHighTrend alerts:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Add LatencyHighTrend to the disableAlerts list:
@@ -125,7 +126,7 @@ spec:
 
 For more information on configuring Network Observability alerts and
 understanding network latency, see the
-[Network Observability documentation](https://docs.openshift.com/container-platform/latest/network_observability/observing-network-traffic.html).
+[Network Observability documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/network-observability-alerts_nw-observe-network-traffic).
 
 ## Impact
 
@@ -170,4 +171,4 @@ the Mitigation section below.
 For mitigation strategies and solutions, refer to:
 
 - [Troubleshooting latency in OpenShift](https://access.redhat.com/solutions/4255351)
-- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/latest#Networking)

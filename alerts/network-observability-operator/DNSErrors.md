@@ -36,17 +36,17 @@ servers).
 **Note:** This alert requires the `DNSTracking` agent feature to be enabled
 in the FlowCollector configuration.
 
-### Switch to metric-only mode (alternative to alerts)
+### Switch to recording mode (alternative to alerts)
 
 If you want to monitor DNS errors in the Network Health dashboard without
-generating Prometheus alerts, you can change the health rule to metric-only
+generating Prometheus alerts, you can change the health rule to recording
 mode:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
-Change the mode from `Alert` to `MetricOnly`:
+Change the mode from `Alert` to `Recording`:
 
 ```yaml
 spec:
@@ -54,7 +54,7 @@ spec:
     metrics:
       healthRules:
       - template: DNSErrors
-        mode: MetricOnly
+        mode: Recording
         variants:
         - groupBy: Namespace
           thresholds:
@@ -63,7 +63,7 @@ spec:
             critical: "50"
 ```
 
-In metric-only mode:
+In recording mode:
 
 - DNS error violations remain visible in the **Network Health** dashboard
 - No Prometheus alerts are generated
@@ -78,8 +78,8 @@ health without being overwhelmed by alerts for every threshold violation.
 If the alert is firing too frequently due to low thresholds, you can adjust
 them:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Modify the `spec.processor.metrics.healthRules` section:
@@ -103,8 +103,8 @@ spec:
 
 To completely disable DNSErrors alerts:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Add DNSErrors to the disableAlerts list:
@@ -118,7 +118,7 @@ spec:
 ```
 
 For more information on configuring Network Observability alerts, see the
-[Network Observability documentation](https://docs.openshift.com/container-platform/latest/network_observability/observing-network-traffic.html).
+[Network Observability documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/network-observability-alerts_nw-observe-network-traffic).
 
 ## Impact
 
@@ -157,4 +157,5 @@ the Mitigation section below.
 For mitigation strategies and solutions, refer to:
 
 - [Troubleshooting DNS in OpenShift](https://access.redhat.com/solutions/3804501)
-- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
+- [OpenShift DNS Operator](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/networking_operators/dns-operator)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/latest#Networking)
