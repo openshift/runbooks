@@ -24,16 +24,14 @@ traffic. This alert only applies when using Loki as the flow storage backend.
 
 ### Configuration limitations
 
-**Important:** `NetObservLokiError` is an **alert-only template** that cannot
-be configured as a health rule. Unlike other Network Observability alerts
-(such as DNSErrors or PacketDropsByKernel), this alert:
+Like other Network Observability operational alerts, `NetObservLokiError` cannot be configured, other than being disabled:
 
-- **Cannot be converted to metric-only mode** - it is always an alert
-- **Does not support thresholds** - it fires when any Loki write errors occur
-  (> 0 drops)
-- **Does not support grouping** - it is a global cluster-wide operational
+- It cannot be converted to metric-only mode - it is always an alert
+- It does not support thresholds - it fires when Loki write errors occur
+  (> 0 drops) consistently after 10 minutes
+- It does not support grouping - it is a global cluster-wide operational
   alert
-- **Cannot have variants** - there is only one alert instance
+- It cannot have variants - there is only one alert instance
 
 The alert triggers with this hardcoded PromQL expression:
 ```promql
