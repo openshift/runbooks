@@ -149,11 +149,15 @@ Observability interface:
    - Source and destination of the traffic
    - Detailed flow information
 
-In the Network Traffic view, to further narrow down your search when looking for drops,
-you can open the _Query options_ dropdown menu, and select flows containing drops.
+In the Network Traffic view, to further narrow down your search when
+looking for drops, you can open the _Query options_ dropdown menu, and
+select flows containing drops.
 
-The drop causes that Network Observability displays are derived directly from the error
-codes provided [by the Linux kernel](https://github.com/torvalds/linux/blob/master/include/net/dropreason-core.h#L140), or [by OVS](https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/net/openvswitch/drop.h).
+The drop causes that Network Observability displays are derived directly
+from the error codes provided [by the Linux
+kernel](https://github.com/torvalds/linux/blob/master/include/net/dropreason-core.h#L140),
+or [by
+OVS](https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/net/openvswitch/drop.h).
 Network Observability does not provide its own interpretation of them.
 
 When you use Network Policies, you might find the `OVS_DROP_LAST_ACTION` cause appearing
@@ -168,5 +172,6 @@ For mitigation strategies and solutions, refer to:
 
 - [Packet drop tracking in Network Observability](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/nw-observe-network-traffic#network-observability-pktdrop-overview_nw-observe-network-traffic)
 - [Reducing packet drops in OVS](https://access.redhat.com/solutions/5666711)
-- [Blog: Network Observability real-time per flow packets drop ](https://www.redhat.com/en/blog/network-observability-real-time-per-flow-packets-drop)
+- [Blog: Network Observability real-time per flow packets
+  drop](https://www.redhat.com/en/blog/network-observability-real-time-per-flow-packets-drop)
 - [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/latest#Networking)
