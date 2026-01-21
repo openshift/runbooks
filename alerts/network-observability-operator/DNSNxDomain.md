@@ -35,17 +35,17 @@ servers).
 **Note:** This alert requires the `DNSTracking` agent feature to be enabled
 in the FlowCollector configuration.
 
-### Switch to metric-only mode (alternative to alerts)
+### Switch to recording mode (alternative to alerts)
 
 If you want to monitor DNS NX_DOMAIN errors in the Network Health dashboard
 without generating Prometheus alerts, you can change the health rule to
-metric-only mode:
+recording mode:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
-Change the mode from `Alert` to `MetricOnly`:
+Change the mode from `Alert` to `Recording`:
 
 ```yaml
 spec:
@@ -53,7 +53,7 @@ spec:
     metrics:
       healthRules:
       - template: DNSNxDomain
-        mode: MetricOnly
+        mode: Recording
         variants:
         - groupBy: Namespace
           thresholds:
@@ -62,7 +62,7 @@ spec:
             critical: "60"
 ```
 
-In metric-only mode:
+In recording mode:
 
 - NX_DOMAIN violations remain visible in the **Network Health** dashboard
 - No Prometheus alerts are generated
@@ -77,8 +77,8 @@ health without being overwhelmed by alerts for every threshold violation.
 If the alert is firing too frequently due to low thresholds, you can adjust
 them:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Modify the `spec.processor.metrics.healthRules` section:
@@ -102,8 +102,8 @@ spec:
 
 To completely disable DNSNxDomain alerts:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Add DNSNxDomain to the disableAlerts list:
@@ -117,7 +117,7 @@ spec:
 ```
 
 For more information on configuring Network Observability alerts, see the
-[Network Observability documentation](https://docs.openshift.com/container-platform/latest/network_observability/observing-network-traffic.html).
+[Network Observability documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/network-observability-alerts_nw-observe-network-traffic).
 
 ## Impact
 
@@ -125,6 +125,7 @@ High rates of NX_DOMAIN errors can indicate:
 
 - Misconfigured applications trying to resolve non-existent domain names
 - Typos in service URLs or DNS names in application configuration
+- Suboptimal DNS searches
 - Deleted services that applications are still trying to reach
 - DNS-based service discovery issues
 - Potential security concerns
@@ -136,6 +137,11 @@ SERVFAIL), a high rate can still cause:
 - Application delays due to failed lookups
 - Logging noise and monitoring clutter
 - Potential security blind spots if malicious activity is masked
+
+NX_DOMAIN errors can be especially frequent in Kubernetes because of [DNS searches
+on service and pods](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/),
+which does not necessarily mean a misconfiguration or broken URL, but can still
+negatively impact performance.
 
 ## Diagnosis
 
@@ -156,7 +162,17 @@ the Mitigation section below.
 
 ## Mitigation
 
-For mitigation strategies and solutions, refer to:
+When NX_DOMAIN errors are returned despite of an apparently valid Service or Pod host name,
+such as `my-svc.my-namespace.svc`, this is likely because the resolver is configured
+to query DNS for different suffixes. It can be optimized by **adding a trailing dot on
+fully-qualified domain names** which tells the resolver that the name is unambiguous.
+
+For instance, instead of `https://my-svc.my-namespace.svc`, use:
+`https://my-svc.my-namespace.svc.cluster.local.`, with trailing dot included.
+
+For other mitigation strategies and solutions, refer to:
 
 - [Troubleshooting DNS in OpenShift](https://access.redhat.com/solutions/3804501)
-- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18#Networking)
+- [Kubernetes concepts: DNS for Services and Pods](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/)
+- [OpenShift DNS Operator](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/networking_operators/dns-operator)
+- [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/latest#Networking)

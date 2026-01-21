@@ -26,7 +26,7 @@ traffic. This alert only applies when using Loki as the flow storage backend.
 
 Like other Network Observability operational alerts, `NetObservLokiError` cannot be configured, other than being disabled:
 
-- It cannot be converted to metric-only mode - it is always an alert
+- It cannot be converted to recording mode - it is always an alert
 - It does not support thresholds - it fires when Loki write errors occur
   (> 0 drops) consistently after 10 minutes
 - It does not support grouping - it is a global cluster-wide operational
@@ -34,6 +34,7 @@ Like other Network Observability operational alerts, `NetObservLokiError` cannot
 - It cannot have variants - there is only one alert instance
 
 The alert triggers with this hardcoded PromQL expression:
+
 ```promql
 sum(rate(netobserv_loki_dropped_entries_total[1m])) > 0
 ```
@@ -47,8 +48,8 @@ metrics.
 We do not recommend disabling this alert as it indicates data loss.
 However, if needed:
 
-```console
-$ oc edit flowcollector cluster
+```bash
+oc edit flowcollector cluster
 ```
 
 Add NetObservLokiError to the disableAlerts list:
@@ -82,23 +83,48 @@ detailed flow records are being lost.
 
 ## Diagnosis
 
-When this alert fires, you can investigate further by using the Network
-Observability interface:
+Failing to store flows in Loki might be due to Loki being unavailable or wrongly configured.
 
-1. **Navigate to alert details**: Click on the alert in the Network Health
-   dashboard to view specific details of the alert.
+Make sure that Loki is up and running. If you installed it with the Loki Operator, make sure that your `LokiStack` resource is ready.
 
-2. **Navigate to network traffic**: From the alert details, you can navigate
-   to the Network Traffic view to examine the specific flows that are related
-   to this alert. This allows you to see:
-   - Source and destination of the traffic
-   - Detailed flow information
+Further analysis can be done by checking the logs in `flowlogs-pipeline`:
 
-For additional troubleshooting resources, refer to the documentation links in
-the Mitigation section below.
+```bash
+oc get pods -n netobserv -l app=flowlogs-pipeline
+oc logs -n netobserv <POD>
+```
+
+Check for any existing network policies, both in `flowlogs-pipeline` namespace and in the Loki namespace, if different, that could be blocking the traffic.
 
 ## Mitigation
 
-For mitigation strategies and solutions, refer to the [Troubleshooting Network
-Observability](https://docs.openshift.com/container-platform/latest/observability/network_observability/troubleshooting-network-observability.html)
+If the `flowslogs-pipeline` logs show connectivity issues despite Loki being up and running, make sure 
+that `FlowCollector` is configured accordingly to your Loki installation. The configuration related to Loki is defined under `spec.loki`.
+
+If the logs show errors related to rate limiting, this is more likely an issue related to `LokiStack` sizing.
+
+Refer to the documentation on Loki configuration:
+- [Specifically for Network Observability](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/installing-network-observability-operators#network-observability-loki-installation_network_observability)
+- [Loki Operator general documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_logging/latest/html/configuring_logging/configuring-lokistack-storage) (note that this documentation is primarily intended for OpenShift Logging, but largely applies to Network Observability as well)
+- [Troubleshooting rate-limit error](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/installing-troubleshooting#network-observability-troubleshooting-loki-tenant-rate-limit_network-observability-troubleshooting)
+
+If you find that a network policy is blocking the traffic:
+Network policies are automatically installed when `spec.networkPolicy.enable` is `true` in `FlowCollector`. It should not block the traffic to Loki, however if you find that it is, you can either configure it with additional allowed namespaces (via `spec.networkPolicy.additionalNamespaces`), or disable it entirely and write your own policy instead. We would also kindly ask you to report the issue to the maintainers team.
+
+If you have not installed Loki and don't intend to do so, you should disable it in `FlowCollector`:
+
+```bash
+oc edit flowcollector cluster
+```
+
+Disable Loki:
+
+```yaml
+spec:
+  loki:
+    enable: false
+```
+
+For other mitigation strategies and solutions, refer to the [Troubleshooting Network
+Observability](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/installing-troubleshooting)
 documentation.
