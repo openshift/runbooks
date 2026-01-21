@@ -168,9 +168,18 @@ the Mitigation section below.
 
 Depending on the cause of the traffic, the mitigation can be:
 
-- Defining [Network Policies](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/network-policy), [Admin Network Policies](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/admin-network-policy) or configuring an [Egress Firewall](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/egress-firewall).
-- Configuring [User-Defined Networks](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/multiple_networks/primary-networks) for network segmentation.
-- Using [Red Hat OpenShift Service Mesh](https://docs.redhat.com/en/documentation/red_hat_openshift_service_mesh/latest), for instance to configure rate-limits on egress.
+- Defining [Network
+  Policies](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/network-policy),
+  [Admin Network
+  Policies](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/admin-network-policy)
+  or configuring an [Egress
+  Firewall](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/egress-firewall).
+- Configuring [User-Defined
+  Networks](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/multiple_networks/primary-networks)
+  for network segmentation.
+- Using [Red Hat OpenShift Service
+  Mesh](https://docs.redhat.com/en/documentation/red_hat_openshift_service_mesh/latest),
+  for instance to configure rate-limits on egress.
 
 For a comprehensive documentation, refer to the
 [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/latest#Networking)

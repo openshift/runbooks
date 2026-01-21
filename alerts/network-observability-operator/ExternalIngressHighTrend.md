@@ -172,10 +172,18 @@ the Mitigation section below.
 
 Depending on the cause of the traffic, the mitigation can be:
 
-- Defining [Network Policies](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/network-policy) or [Admin Network Policies](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/admin-network-policy).
-- Configuring [User-Defined Networks](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/multiple_networks/primary-networks) for network segmentation.
-- Configuring your [Ingress Cluster traffic](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/ingress_and_load_balancing/configuring-ingress-cluster-traffic).
-- Using [Red Hat OpenShift Service Mesh](https://docs.redhat.com/en/documentation/red_hat_openshift_service_mesh/latest), for instance to configure rate-limits on ingress.
+- Defining [Network
+  Policies](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/network-policy)
+  or [Admin Network
+  Policies](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_security/admin-network-policy).
+- Configuring [User-Defined
+  Networks](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/multiple_networks/primary-networks)
+  for network segmentation.
+- Configuring your [Ingress Cluster
+  traffic](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/ingress_and_load_balancing/configuring-ingress-cluster-traffic).
+- Using [Red Hat OpenShift Service
+  Mesh](https://docs.redhat.com/en/documentation/red_hat_openshift_service_mesh/latest),
+  for instance to configure rate-limits on ingress.
 
 For a comprehensive documentation, refer to the
 [OpenShift Networking](https://docs.redhat.com/en/documentation/openshift_container_platform/latest#Networking)

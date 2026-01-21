@@ -24,7 +24,8 @@ traffic. This alert only applies when using Loki as the flow storage backend.
 
 ### Configuration limitations
 
-Like other Network Observability operational alerts, `NetObservLokiError` cannot be configured, other than being disabled:
+Like other Network Observability operational alerts, `NetObservLokiError`
+cannot be configured, other than being disabled:
 
 - It cannot be converted to recording mode - it is always an alert
 - It does not support thresholds - it fires when Loki write errors occur
@@ -83,9 +84,11 @@ detailed flow records are being lost.
 
 ## Diagnosis
 
-Failing to store flows in Loki might be due to Loki being unavailable or wrongly configured.
+Failing to store flows in Loki might be due to Loki being unavailable or
+wrongly configured.
 
-Make sure that Loki is up and running. If you installed it with the Loki Operator, make sure that your `LokiStack` resource is ready.
+Make sure that Loki is up and running. If you installed it with the Loki
+Operator, make sure that your `LokiStack` resource is ready.
 
 Further analysis can be done by checking the logs in `flowlogs-pipeline`:
 
@@ -94,24 +97,40 @@ oc get pods -n netobserv -l app=flowlogs-pipeline
 oc logs -n netobserv <POD>
 ```
 
-Check for any existing network policies, both in `flowlogs-pipeline` namespace and in the Loki namespace, if different, that could be blocking the traffic.
+Check for any existing network policies, both in `flowlogs-pipeline`
+namespace and in the Loki namespace, if different, that could be blocking
+the traffic.
 
 ## Mitigation
 
-If the `flowslogs-pipeline` logs show connectivity issues despite Loki being up and running, make sure 
-that `FlowCollector` is configured accordingly to your Loki installation. The configuration related to Loki is defined under `spec.loki`.
+If the `flowslogs-pipeline` logs show connectivity issues despite Loki
+being up and running, make sure that `FlowCollector` is configured
+accordingly to your Loki installation. The configuration related to Loki
+is defined under `spec.loki`.
 
-If the logs show errors related to rate limiting, this is more likely an issue related to `LokiStack` sizing.
+If the logs show errors related to rate limiting, this is more likely an
+issue related to `LokiStack` sizing.
 
 Refer to the documentation on Loki configuration:
-- [Specifically for Network Observability](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/installing-network-observability-operators#network-observability-loki-installation_network_observability)
-- [Loki Operator general documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_logging/latest/html/configuring_logging/configuring-lokistack-storage) (note that this documentation is primarily intended for OpenShift Logging, but largely applies to Network Observability as well)
+- [Specifically for Network
+  Observability](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/installing-network-observability-operators#network-observability-loki-installation_network_observability)
+- [Loki Operator general
+  documentation](https://docs.redhat.com/en/documentation/red_hat_openshift_logging/latest/html/configuring_logging/configuring-lokistack-storage)
+  (note that this documentation is primarily intended for OpenShift
+  Logging, but largely applies to Network Observability as well)
 - [Troubleshooting rate-limit error](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/network_observability/installing-troubleshooting#network-observability-troubleshooting-loki-tenant-rate-limit_network-observability-troubleshooting)
 
 If you find that a network policy is blocking the traffic:
-Network policies are automatically installed when `spec.networkPolicy.enable` is `true` in `FlowCollector`. It should not block the traffic to Loki, however if you find that it is, you can either configure it with additional allowed namespaces (via `spec.networkPolicy.additionalNamespaces`), or disable it entirely and write your own policy instead. We would also kindly ask you to report the issue to the maintainers team.
+Network policies are automatically installed when
+`spec.networkPolicy.enable` is `true` in `FlowCollector`. It should not
+block the traffic to Loki, however if you find that it is, you can either
+configure it with additional allowed namespaces (via
+`spec.networkPolicy.additionalNamespaces`), or disable it entirely and
+write your own policy instead. We would also kindly ask you to report the
+issue to the maintainers team.
 
-If you have not installed Loki and don't intend to do so, you should disable it in `FlowCollector`:
+If you have not installed Loki and don't intend to do so, you should
+disable it in `FlowCollector`:
 
 ```bash
 oc edit flowcollector cluster

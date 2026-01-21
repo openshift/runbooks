@@ -162,10 +162,11 @@ the Mitigation section below.
 
 ## Mitigation
 
-When NX_DOMAIN errors are returned despite of an apparently valid Service or Pod host name,
-such as `my-svc.my-namespace.svc`, this is likely because the resolver is configured
-to query DNS for different suffixes. It can be optimized by **adding a trailing dot on
-fully-qualified domain names** which tells the resolver that the name is unambiguous.
+When NX_DOMAIN errors are returned despite of an apparently valid Service
+or Pod host name, such as `my-svc.my-namespace.svc`, this is likely
+because the resolver is configured to query DNS for different suffixes. It
+can be optimized by **adding a trailing dot on fully-qualified domain
+names** which tells the resolver that the name is unambiguous.
 
 For instance, instead of `https://my-svc.my-namespace.svc`, use:
 `https://my-svc.my-namespace.svc.cluster.local.`, with trailing dot included.
