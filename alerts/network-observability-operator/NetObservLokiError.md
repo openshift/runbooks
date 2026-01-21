@@ -44,7 +44,7 @@ metrics.
 
 ### Disable this alert entirely
 
-This alert should generally NOT be disabled as it indicates data loss.
+We do not recommend disabling this alert as it indicates data loss.
 However, if needed:
 
 ```console
