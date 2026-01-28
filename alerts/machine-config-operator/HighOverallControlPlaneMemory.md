@@ -119,5 +119,5 @@ to allow the control plane to stabilize so you
 can troubleshoot the issue.
 
 - Because etcd is crucial to how the cluster runs, Red Hat
-has documented [the recommended practices and requirements for optimal etcd performance.](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/scalability_and_performance/recommended-performance-and-scalability-practices-2#recommended-etcd-practices_recommended-etcd-practices)
+has documented [the recommended practices and requirements for optimal etcd performance.](https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html/scalability_and_performance/recommended-performance-and-scalability-practices-2#recommended-etcd-practices_recommended-etcd-practices)
 
