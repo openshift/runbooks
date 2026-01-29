@@ -25,13 +25,13 @@ The first step is to identify why the compactor has halted by inspecting its log
 Confirm the alert is firing by querying the `acm_thanos_compact_halted` metric in the OpenShift console (Observe -> Metrics) or Grafana. The result should be 1.
 
 ```console
-$ acm_thanos_compact_halted{job="observability-thanos-compact"}
+acm_thanos_compact_halted{job="observability-thanos-compact"}
 ```
 
 Inspect the logs of the `observability-thanos-compact-0` pod to find the fatal error. This pod is in the `open-cluster-management-observability` namespace.
 
 ```console
-$ oc logs -n open-cluster-management-observability observability-thanos-compact-0
+oc logs -n open-cluster-management-observability observability-thanos-compact-0
 ```
 
 Look for one of the following common failure patterns in the logs:
@@ -57,7 +57,7 @@ This error will appear in the logs while the pod is `Running`. This indicates th
 Get the `thanos-object-storage` secret and decode it to verify its contents:
 
 ```console
-$ oc get secret thanos-object-storage -n open-cluster-management-observability -o jsonpath='{.data.thanos\.yaml}' | base64 --decode
+oc get secret thanos-object-storage -n open-cluster-management-observability -o jsonpath='{.data.thanos\.yaml}' | base64 --decode
 ```
 
 Check the `endpoint`, `access_key`, and `secret_key` values in the output to ensure they are correct.
@@ -67,8 +67,8 @@ Check the `endpoint`, `access_key`, and `secret_key` values in the output to ens
 If you suspect S3 connection issues, verify the OBC is healthy:
 
 ```console
-$ oc get obc -n open-cluster-management-observability
-$ oc get configmap <OBC-NAME> -n open-cluster-management-observability -o yaml
+oc get obc -n open-cluster-management-observability
+oc get configmap <OBC-NAME> -n open-cluster-management-observability -o yaml
 ```
 
 Check that the ConfigMap contains valid endpoint and bucket information.
@@ -82,18 +82,21 @@ Resolution depends on the fatal error found during the Diagnosis.
 The pod's persistent volume is full.
 
 * Identify the `StorageClass` used by the `PVC`:
+
     ```console
-    $ oc get pvc data-observability-thanos-compact-0 -n open-cluster-management-observability -o jsonpath='{.spec.storageClassName}'
+    oc get pvc data-observability-thanos-compact-0 -n open-cluster-management-observability -o jsonpath='{.spec.storageClassName}'
     ```
 
 * Verify the `StorageClass` has `allowVolumeExpansion: true`:
+
     ```console
-    $ oc get sc <YOUR_STORAGE_CLASS> -o yaml | grep allowVolumeExpansion
+    oc get sc <YOUR_STORAGE_CLASS> -o yaml | grep allowVolumeExpansion
     ```
 
 * If expansion is allowed, edit the `PVC` to request more storage. This can be done while the pod is crashing.
+
     ```console
-    $ oc edit pvc data-observability-thanos-compact-0 -n open-cluster-management-observability
+    oc edit pvc data-observability-thanos-compact-0 -n open-cluster-management-observability
     ```
 
 * Change `spec.resources.requests.storage` from its current value to a larger one (e.g., 98G to 120G).
@@ -109,13 +112,15 @@ A data block in the S3 object store is malformed.
 * Launch a debug pod with the `aws-cli` and the S3 credentials.
 
 * From the debug pod, delete the entire corrupted block directory from the S3 bucket:
+
     ```console
-    $ aws --endpoint-url <S3_ENDPOINT> --no-verify-ssl s3 rm s3://<BUCKET_NAME>/<CORRUPTED_BLOCK_ID>/ --recursive
+    aws --endpoint-url <S3_ENDPOINT> --no-verify-ssl s3 rm s3://<BUCKET_NAME>/<CORRUPTED_BLOCK_ID>/ --recursive
     ```
 
 * Restart the `observability-thanos-compact-0` pod to clear the halted state:
+
     ```console
-    $ oc delete pod -n open-cluster-management-observability observability-thanos-compact-0
+    oc delete pod -n open-cluster-management-observability observability-thanos-compact-0
     ```
 
 ### 3. Halted due to S3 Connection Failure
@@ -127,6 +132,7 @@ The `thanos-object-storage` secret in the `open-cluster-management-observability
 * Create a correct `thanos.yaml` file on your local machine.
 
 * Update the `thanos-object-storage` secret with the correct configuration:
+
     ```console
     $ oc create secret generic thanos-object-storage \
       -n open-cluster-management-observability \
@@ -135,8 +141,9 @@ The `thanos-object-storage` secret in the `open-cluster-management-observability
     ```
 
 * Restart the `observability-thanos-compact-0` pod to apply the new secret:
+
     ```console
-    $ oc delete pod -n open-cluster-management-observability observability-thanos-compact-0
+    oc delete pod -n open-cluster-management-observability observability-thanos-compact-0
     ```
 
 ### 4. Verify Resolution
@@ -144,13 +151,15 @@ The `thanos-object-storage` secret in the `open-cluster-management-observability
 After applying any mitigation, verify the compactor has recovered:
 
 * Check the halted metric has returned to 0:
+
     ```console
-    $ oc exec -n open-cluster-management-observability observability-thanos-compact-0 -- wget -qO- http://localhost:10902/metrics | grep acm_thanos_compact_halted
+    oc exec -n open-cluster-management-observability observability-thanos-compact-0 -- wget -qO- http://localhost:10902/metrics | grep acm_thanos_compact_halted
     ```
 
 * Monitor the pod logs for successful compaction activity:
+
     ```console
-    $ oc logs -n open-cluster-management-observability observability-thanos-compact-0 --tail=50 -f
+    oc logs -n open-cluster-management-observability observability-thanos-compact-0 --tail=50 -f
     ```
 
 * The alert should clear within 5-10 minutes of successful compaction.

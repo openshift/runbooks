@@ -15,6 +15,7 @@ User-defined workload metrics (e.g., custom application metrics) from the Hub cl
 **Data loss risk**: The UWL metrics collector has an internal buffer. If this issue is not resolved quickly (typically within 1-2 hours), metrics may be dropped to prevent memory exhaustion, resulting in permanent gaps in your application monitoring data.
 
 **Symptoms visible to users:**
+
 * Custom application dashboards show "No Data" or gaps
 * ServiceMonitor metrics missing from Grafana
 * Custom application alerts not firing due to missing data
@@ -30,16 +31,16 @@ The primary goal is to determine why the `uwl-metrics-collector-deployment` pod 
 This is the most important step. The logs will show the exact error.
 
 ```console
-$ oc logs -f deployment/uwl-metrics-collector-deployment -n open-cluster-management-observability
+oc logs -f deployment/uwl-metrics-collector-deployment -n open-cluster-management-observability
 ```
 
 ### 2. Analyze the log error
 
-* **If you see `err="... EOF"` or `err="... i/o timeout"`**: 
+* **If you see `err="... EOF"` or `err="... i/o timeout"`**:
 
     This is a network-level error, not an HTTP error, and will not typically trigger this alert. This error means the collector cannot reach the `observability-observatorium-api` service at all. Check that the `observability-observatorium-api` pods are running.
 
-* **If you see `err="... 401 Unauthorized"` or `err="... 403 Forbidden"`**: 
+* **If you see `err="... 401 Unauthorized"` or `err="... 403 Forbidden"`**:
 
     This is an authentication/authorization error. This is the most likely cause of the alert. It means the `observability-observatorium-api` is rejecting the collector's connection.
 
@@ -48,8 +49,9 @@ $ oc logs -f deployment/uwl-metrics-collector-deployment -n open-cluster-managem
 The `uwl-metrics-collector-deployment` authenticates using an mTLS client certificate. This error means the certificate is likely missing, invalid, or has been rejected.
 
 * Find the secret name for the pod's mTLS certificate:
+
     ```console
-    $ oc get deployment uwl-metrics-collector-deployment -n open-cluster-management-observability -o yaml | grep secretName
+    oc get deployment uwl-metrics-collector-deployment -n open-cluster-management-observability -o yaml | grep secretName
     ```
 
 * Look for a secret name related to client certs (e.g., `observability-controller-open-cluster-management.io-observability-signer-client-cert` or a `uwl-` specific version).
@@ -59,7 +61,7 @@ The `uwl-metrics-collector-deployment` authenticates using an mTLS client certif
 Verify the API service is healthy on the Hub and has valid endpoints:
 
 ```console
-$ oc get endpoints observability-observatorium-api -n open-cluster-management-observability
+oc get endpoints observability-observatorium-api -n open-cluster-management-observability
 ```
 
 The output should show IP addresses. If empty, the observability-observatorium-api pods may be failing their readiness probes.
@@ -73,14 +75,16 @@ This alert is almost always caused by a problem with the client certificate used
 The fastest and safest way to resolve this is to force the `multicluster-observability-operator` to reconcile its certificates. Restarting the operator will cause it to check all its managed components and reissue any missing or invalid certificates.
 
 * Restart the `multicluster-observability-operator` pod:
+
     ```console
-    $ oc delete pod -n open-cluster-management -l name=multicluster-observability-operator
+    oc delete pod -n open-cluster-management -l name=multicluster-observability-operator
     ```
 
 * After the operator restarts, it will fix the secret. You must then restart the `uwl-metrics-collector-deployment` pod to pick up the new, valid secret.
+
     ```console
-    $ oc scale deployment uwl-metrics-collector-deployment -n open-cluster-management-observability --replicas=0
-    $ oc scale deployment uwl-metrics-collector-deployment -n open-cluster-management-observability --replicas=1
+    oc scale deployment uwl-metrics-collector-deployment -n open-cluster-management-observability --replicas=0
+    oc scale deployment uwl-metrics-collector-deployment -n open-cluster-management-observability --replicas=1
     ```
 
 ### 2. If the diagnosis shows EOF or i/o timeout (Network Failure)
@@ -88,11 +92,13 @@ The fastest and safest way to resolve this is to force the `multicluster-observa
 This means the `observability-observatorium-api` service is down.
 
 * Check the status of the `observability-observatorium-api` deployment and scale it up if needed:
+
     ```console
-    $ oc get deployment observability-observatorium-api -n open-cluster-management-observability
+    oc get deployment observability-observatorium-api -n open-cluster-management-observability
     ```
 
 * Scale the deployment if needed:
+
     ```console
-    $ oc scale deployment observability-observatorium-api -n open-cluster-management-observability --replicas=2
+    oc scale deployment observability-observatorium-api -n open-cluster-management-observability --replicas=2
     ```

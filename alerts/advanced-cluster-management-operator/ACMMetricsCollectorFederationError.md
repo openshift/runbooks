@@ -17,7 +17,7 @@ When this alert is firing, metrics from the cluster itself cannot be collected b
 The `metrics-collector-deployment` pod in the `open-cluster-management-observability` namespace is responsible for this scrape. Inspect its logs for specific errors:
 
 ```console
-$ oc logs -f deployment/metrics-collector-deployment -n open-cluster-management-observability
+oc logs -f deployment/metrics-collector-deployment -n open-cluster-management-observability
 ```
 
 Look for repeated HTTP 401/403 (Authorization) or 5xx (Server) errors.
@@ -33,12 +33,14 @@ Look for repeated HTTP 401/403 (Authorization) or 5xx (Server) errors.
 The `metrics-collector-deployment` pod uses a `ServiceAccount` that requires permission to get metrics from the `openshift-monitoring` namespace. Verify this binding is correct.
 
 * Find the `ServiceAccount`:
+
     ```console
     $ oc get deployment metrics-collector-deployment -n open-cluster-management-observability -o jsonpath='{.spec.template.spec.serviceAccountName}'
     endpoint-observability-operator-sa
     ```
 
 * Find its `ClusterRoleBinding`:
+
     ```console
     $ oc get clusterrolebinding metrics-collector-view
     NAME                     ROLE                            AGE
@@ -46,8 +48,9 @@ The `metrics-collector-deployment` pod uses a `ServiceAccount` that requires per
     ```
 
 * Inspect the `ClusterRoleBinding`:
+
     ```console
-    $ oc get clusterrolebinding metrics-collector-view -o yaml
+    oc get clusterrolebinding metrics-collector-view -o yaml
     ```
 
 * Ensure the `roleRef.name` is `cluster-monitoring-view` and the `subjects` section correctly lists the `endpoint-observability-operator-sa` `ServiceAccount` from the `open-cluster-management-observability` namespace.
@@ -57,12 +60,11 @@ The `metrics-collector-deployment` pod uses a `ServiceAccount` that requires per
 If you see `i/o timeout` or connection refused errors, check for NetworkPolicies that might be blocking traffic:
 
 ```console
-$ oc get networkpolicy -n open-cluster-management-observability
-$ oc get networkpolicy -n openshift-monitoring
+oc get networkpolicy -n open-cluster-management-observability
+oc get networkpolicy -n openshift-monitoring
 ```
 
 Look for policies that might restrict egress from the metrics-collector pod or ingress to the prometheus-k8s service.
-
 
 ## Mitigation
 
@@ -89,13 +91,15 @@ If a custom `NetworkPolicy` was recently applied, it may be blocking the `metric
 If the collector logs show 5xx errors, the problem may be with Prometheus itself.
 
 * Check the health of the `prometheus-k8s` pods in the `openshift-monitoring` namespace:
+
     ```console
-    $ oc get pods -n openshift-monitoring -l app.kubernetes.io/name=prometheus
+    oc get pods -n openshift-monitoring -l app.kubernetes.io/name=prometheus
     ```
 
 * Check the logs of the `kube-rbac-proxy` container within the `prometheus-k8s` pods, as it may be failing its own authentication checks against the Kube API server:
+
     ```console
-    $ oc logs -n openshift-monitoring prometheus-k8s-0 -c kube-rbac-proxy
+    oc logs -n openshift-monitoring prometheus-k8s-0 -c kube-rbac-proxy
     ```
 
 You should see successful scrape operations with no 403 errors. The alert will clear after 10+ minutes of successful federation.
@@ -105,10 +109,12 @@ You should see successful scrape operations with no 403 errors. The alert will c
 If the collector is trying to federate too many metrics in a single request you can increase the number of workers used. This will make the metric-collector split up federate requests between multiple workers.
 
 * To increase the metrics collection workers on all clusters, edit the workers parameter in the multicluster-observability-operator resource on the Hub:
+
     ```console
     spec:
         observabilityAddonSpec:
             enableMetrics: true
             workers: 4
     ```
+
 **Expected resolution time**: Alert should clear within 10-15 minutes after RBAC permissions are restored and successful scraping resumes.

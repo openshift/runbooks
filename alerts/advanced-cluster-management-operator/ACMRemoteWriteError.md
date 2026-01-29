@@ -11,10 +11,12 @@ The alert query `sum by (name) (rate(acm_remote_write_requests_total{code!~"2.*"
 When this alert is firing, metrics from the ACM observability stack are not being successfully forwarded to the configured external monitoring system (e.g., a central Grafana, another Thanos instance, corporate monitoring platform, etc.).
 
 **What is affected:**
+
 * Metrics are not reaching the external system for centralized monitoring, alerting, or compliance reporting.
 * Any dashboards, alerts, or SLI/SLO calculations in the external system that depend on ACM metrics will be incomplete or showing stale data.
 
 **What is NOT affected:**
+
 * Local ACM observability remains functional - you can still view metrics in the Hub cluster's Grafana.
 * Metric collection from managed clusters continues normally.
 * Data is still being stored in the local Thanos storage.
@@ -30,7 +32,7 @@ The primary goal is to determine why the `observability-observatorium-api` pod i
 This is the most important step. The logs will show the exact error code and the failing URL.
 
 ```console
-$ oc logs -f deployment/observability-observatorium-api -n open-cluster-management-observability
+oc logs -f deployment/observability-observatorium-api -n open-cluster-management-observability
 ```
 
 Look for error messages like `level=error ... msg="failed to forward metrics" returncode="503 Service Temporarily Unavailable"`.
@@ -40,7 +42,7 @@ Look for error messages like `level=error ... msg="failed to forward metrics" re
 Check the `writeStorage` block to identify which secret is being used for the remote-write configuration.
 
 ```console
-$ oc get mco observability -n open-cluster-management-observability -o yaml
+oc get mco observability -n open-cluster-management-observability -o yaml
 ```
 
 Look for the `spec.storageConfig.writeStorage` section and the `name:` of the secret being used (e.g., `name: broken-remote-write`).
@@ -50,7 +52,7 @@ Look for the `spec.storageConfig.writeStorage` section and the `name:` of the se
 Check the `ep.yaml` data within the secret to find the exact URL and credentials being used.
 
 ```console
-$ oc get secret <YOUR_SECRET_NAME> -n open-cluster-management-observability -o jsonpath='{.data.ep\.yaml}' | base64 --decode
+oc get secret <YOUR_SECRET_NAME> -n open-cluster-management-observability -o jsonpath='{.data.ep\.yaml}' | base64 --decode
 ```
 
 Example:
@@ -85,7 +87,7 @@ The mitigation depends on the errors found in the diagnosis.
 Edit the secret and correct the `url:` to point to a valid remote-write endpoint.
 
 ```console
-$ oc edit secret <YOUR_SECRET_NAME> -n open-cluster-management-observability
+oc edit secret <YOUR_SECRET_NAME> -n open-cluster-management-observability
 ```
 
 ### 2. If the endpoint is returning 401/403 (Authentication Errors)
@@ -93,7 +95,7 @@ $ oc edit secret <YOUR_SECRET_NAME> -n open-cluster-management-observability
 Edit the secret and correct the `http_client_config.basic_auth` (or other) credentials to match what the external service expects.
 
 ```console
-$ oc edit secret <YOUR_SECRET_NAME> -n open-cluster-management-observability
+oc edit secret <YOUR_SECRET_NAME> -n open-cluster-management-observability
 ```
 
 ### 3. If the endpoint is returning 5xx errors
@@ -103,7 +105,7 @@ This indicates the external remote-write service itself is unhealthy or unavaila
 Check the external service's status and logs. In the meantime, you can monitor the ACM side to see when the service recovers:
 
 ```console
-$ oc logs -f deployment/observability-observatorium-api -n open-cluster-management-observability
+oc logs -f deployment/observability-observatorium-api -n open-cluster-management-observability
 ```
 
 The alert will automatically clear once the external service becomes healthy and starts accepting requests again.
@@ -113,13 +115,15 @@ The alert will automatically clear once the external service becomes healthy and
 To stop the errors and clear the alert, you can disable the remote-write feature.
 
 * Back up the MCO:
+
     ```console
-    $ oc get mco observability -n open-cluster-management-observability -o yaml > mco-backup.yaml
+    oc get mco observability -n open-cluster-management-observability -o yaml > mco-backup.yaml
     ```
 
 * Edit the MCO:
+
     ```console
-    $ oc edit mco observability -n open-cluster-management-observability
+    oc edit mco observability -n open-cluster-management-observability
     ```
 
 * Remove the entire `writeStorage:` block from the `spec:` section.
