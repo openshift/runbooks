@@ -2,17 +2,32 @@
 
 ## Meaning
 
-This alert fires when the ACM User Workload (UWL) Metrics Collector receives a high rate of non-2xx (e.g., 403 Forbidden, 503 Service Unavailable) responses while trying to "remote write" (forward) its scraped metrics to the central Observability API (`observability-observatorium-api`).
+This alert fires when the ACM User Workload (UWL) Metrics Collector receives a
+high rate of non-2xx (e.g., 403 Forbidden, 503 Service Unavailable) responses
+while trying to "remote write" (forward) its scraped metrics to the central
+Observability API (`observability-observatorium-api`).
 
-The alert's query is `(sum(rate(acm_uwl_metrics_collector_forward_write_requests_total{status_code!~"2.*"}[10m]))) / (sum(rate(acm_uwl_metrics_collector_forward_write_requests_total[10m]))) > 0.2`. This means the alert will fire if the percentage of failed remote-write requests (with a valid HTTP error code) is more than 20% for a continuous 10-minute period.
+The alert's query is
+`(sum(rate(acm_uwl_metrics_collector_forward_write_requests_total{status_code!~"2.*"}[10m])))
+/ (sum(rate(acm_uwl_metrics_collector_forward_write_requests_total[10m]))) >
+0.2`. This means the alert will fire if the percentage of failed remote-write
+requests (with a valid HTTP error code) is more than 20% for a continuous
+10-minute period.
 
-This component (`uwl-metrics-collector-deployment`) is separate from the platform collector and is responsible only for metrics from your own applications (in `openshift-user-workload-monitoring`).
+This component (`uwl-metrics-collector-deployment`) is separate from the
+platform collector and is responsible only for metrics from your own
+applications (in `openshift-user-workload-monitoring`).
 
 ## Impact
 
-User-defined workload metrics (e.g., custom application metrics) from the Hub cluster are not being successfully stored in the ACM Observability stack. This will cause custom Grafana dashboards to be empty or show "No Data".
+User-defined workload metrics (e.g., custom application metrics) from the Hub
+cluster are not being successfully stored in the ACM Observability stack. This
+will cause custom Grafana dashboards to be empty or show "No Data".
 
-**Data loss risk**: The UWL metrics collector has an internal buffer. If this issue is not resolved quickly (typically within 1-2 hours), metrics may be dropped to prevent memory exhaustion, resulting in permanent gaps in your application monitoring data.
+**Data loss risk**: The UWL metrics collector has an internal buffer. If this
+issue is not resolved quickly (typically within 1-2 hours), metrics may be
+dropped to prevent memory exhaustion, resulting in permanent gaps in your
+application monitoring data.
 
 **Symptoms visible to users:**
 
@@ -20,11 +35,14 @@ User-defined workload metrics (e.g., custom application metrics) from the Hub cl
 * ServiceMonitor metrics missing from Grafana
 * Custom application alerts not firing due to missing data
 
-This alert does not affect the collection of OpenShift platform metrics (cluster CPU, memory, etc.), which are handled by the separate `metrics-collector-deployment`.
+This alert does not affect the collection of OpenShift platform metrics
+(cluster CPU, memory, etc.), which are handled by the separate
+`metrics-collector-deployment`.
 
 ## Diagnosis
 
-The primary goal is to determine why the `uwl-metrics-collector-deployment` pod is failing to send data to the `observability-observatorium-api`.
+The primary goal is to determine why the `uwl-metrics-collector-deployment` pod
+is failing to send data to the `observability-observatorium-api`.
 
 ### 1. Check the logs of the uwl-metrics-collector-deployment pod
 
@@ -38,15 +56,22 @@ oc logs -f deployment/uwl-metrics-collector-deployment -n open-cluster-managemen
 
 * **If you see `err="... EOF"` or `err="... i/o timeout"`**:
 
-    This is a network-level error, not an HTTP error, and will not typically trigger this alert. This error means the collector cannot reach the `observability-observatorium-api` service at all. Check that the `observability-observatorium-api` pods are running.
+    This is a network-level error, not an HTTP error, and will not typically
+    trigger this alert. This error means the collector cannot reach the
+    `observability-observatorium-api` service at all. Check that the
+    `observability-observatorium-api` pods are running.
 
 * **If you see `err="... 401 Unauthorized"` or `err="... 403 Forbidden"`**:
 
-    This is an authentication/authorization error. This is the most likely cause of the alert. It means the `observability-observatorium-api` is rejecting the collector's connection.
+    This is an authentication/authorization error. This is the most likely
+    cause of the alert. It means the `observability-observatorium-api` is
+    rejecting the collector's connection.
 
 ### 3. If you see 401/403 errors, investigate the collector's mTLS certificate
 
-The `uwl-metrics-collector-deployment` authenticates using an mTLS client certificate. This error means the certificate is likely missing, invalid, or has been rejected.
+The `uwl-metrics-collector-deployment` authenticates using an mTLS client
+certificate. This error means the certificate is likely missing, invalid, or
+has been rejected.
 
 * Find the secret name for the pod's mTLS certificate:
 
@@ -54,7 +79,9 @@ The `uwl-metrics-collector-deployment` authenticates using an mTLS client certif
     oc get deployment uwl-metrics-collector-deployment -n open-cluster-management-observability -o yaml | grep secretName
     ```
 
-* Look for a secret name related to client certs (e.g., `observability-controller-open-cluster-management.io-observability-signer-client-cert` or a `uwl-` specific version).
+* Look for a secret name related to client certs (e.g.,
+  `observability-controller-open-cluster-management.io-observability-signer-client-cert`
+  or a `uwl-` specific version).
 
 ### 4. Check the observability-observatorium-api service health
 
@@ -64,15 +91,21 @@ Verify the API service is healthy on the Hub and has valid endpoints:
 oc get endpoints observability-observatorium-api -n open-cluster-management-observability
 ```
 
-The output should show IP addresses. If empty, the observability-observatorium-api pods may be failing their readiness probes.
+The output should show IP addresses. If empty, the
+observability-observatorium-api pods may be failing their readiness probes.
 
 ## Mitigation
 
-This alert is almost always caused by a problem with the client certificate used for mTLS authentication. These certificates are managed by the `multicluster-observability-operator`.
+This alert is almost always caused by a problem with the client certificate
+used for mTLS authentication. These certificates are managed by the
+`multicluster-observability-operator`.
 
 ### 1. If the diagnosis shows 401/403 errors (Authentication Failure)
 
-The fastest and safest way to resolve this is to force the `multicluster-observability-operator` to reconcile its certificates. Restarting the operator will cause it to check all its managed components and reissue any missing or invalid certificates.
+The fastest and safest way to resolve this is to force the
+`multicluster-observability-operator` to reconcile its certificates. Restarting
+the operator will cause it to check all its managed components and reissue any
+missing or invalid certificates.
 
 * Restart the `multicluster-observability-operator` pod:
 
@@ -80,7 +113,8 @@ The fastest and safest way to resolve this is to force the `multicluster-observa
     oc delete pod -n open-cluster-management -l name=multicluster-observability-operator
     ```
 
-* After the operator restarts, it will fix the secret. You must then restart the `uwl-metrics-collector-deployment` pod to pick up the new, valid secret.
+* After the operator restarts, it will fix the secret. You must then restart
+  the `uwl-metrics-collector-deployment` pod to pick up the new, valid secret.
 
     ```console
     oc scale deployment uwl-metrics-collector-deployment -n open-cluster-management-observability --replicas=0
@@ -91,7 +125,8 @@ The fastest and safest way to resolve this is to force the `multicluster-observa
 
 This means the `observability-observatorium-api` service is down.
 
-* Check the status of the `observability-observatorium-api` deployment and scale it up if needed:
+* Check the status of the `observability-observatorium-api` deployment and
+  scale it up if needed:
 
     ```console
     oc get deployment observability-observatorium-api -n open-cluster-management-observability
