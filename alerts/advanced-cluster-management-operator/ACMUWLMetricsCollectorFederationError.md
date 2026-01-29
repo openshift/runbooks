@@ -10,7 +10,7 @@ This component is different from the platform metrics collector. This one (`uwl-
 
 ## Impact
 
-Metrics from user-defined workloads (e.g., custom application metrics) on the Hub cluster are not being collected by ACM Observability. This will cause user-created dashboards in Grafana to have no data.
+Metrics from user-defined workloads (e.g., custom application metrics) are not being collected by ACM Observability. This will cause user-created dashboards in Grafana to have no data.
 
 **What user workload monitoring includes:**
 * Custom Prometheus metrics exposed by your applications (e.g., `/metrics` endpoints)
@@ -53,7 +53,7 @@ $ oc logs -f deployment/uwl-metrics-collector-deployment -n open-cluster-managem
 
 * **If you see `err="... 403 Forbidden"` or `err="... 401 Unauthorized"`**: 
 
-    This is an authentication/authorization error. This is the cause of the alert. It means the collector is not authorized to scrape the user workload Prometheus.
+    This is an authentication/authorization error. It means the collector is not authorized to scrape the user workload Prometheus.
 
 ### 4. If you see 403/401 errors, investigate the collector's RBAC permissions
 
@@ -73,24 +73,24 @@ $ oc logs -f deployment/uwl-metrics-collector-deployment -n open-cluster-managem
 
 ## Mitigation
 
-The RBAC permissions for the `uwl-metrics-collector-deployment` are automatically managed by the `multicluster-observability-operator`. If the permissions are missing or incorrect, it means the operator's reconciliation loop has failed.
+The RBAC permissions for the `uwl-metrics-collector-deployment` are automatically managed by the `endpoint-observability-operator`. If the permissions are missing or incorrect, it might be because the operator's reconciliation loop has failed.
 
-### 1. Check the logs of the multicluster-observability-operator
+### 1. Check the logs of the `endpoint-observability-operator`
 
-Check the logs of the `multicluster-observability-operator` (in the `open-cluster-management` namespace) for errors.
+Check the logs of the `endpoint-observability-operator` (in the `open-cluster-management-observability` namespace if on a Hub or `open-cluster-management-addon-observability` if on a Managed Cluster) for errors.
 
 ```console
-$ oc logs -n open-cluster-management deployment/multicluster-observability-operator
+$ oc logs -n open-cluster-management-addon-observability deployment/endpoint-observability-operator
 ```
 
 Look for any errors related to "reconciling" or "failed to create ClusterRoleBinding".
 
-### 2. Restart the multicluster-observability-operator pod
+### 2. Restart the endpoint-observability-operator pod
 
 This is often the safest and fastest way to fix the issue. Restarting the operator will force it to re-run its reconciliation loop, and it will re-create or fix the missing/corrupted `ClusterRoleBinding` for the UWL collector.
 
 ```console
-$ oc delete pod -n open-cluster-management -l name=multicluster-observability-operator
+$ oc delete pod -n open-cluster-management-observability -l name=endpoint-observability-operator
 ```
 
 After the operator restarts, the `uwl-metrics-collector-deployment` pod's 403 errors should stop, and the alert will clear after the 10-minute window.

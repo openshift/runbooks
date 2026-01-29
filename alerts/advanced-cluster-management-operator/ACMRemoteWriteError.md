@@ -13,7 +13,6 @@ When this alert is firing, metrics from the ACM observability stack are not bein
 **What is affected:**
 * Metrics are not reaching the external system for centralized monitoring, alerting, or compliance reporting.
 * Any dashboards, alerts, or SLI/SLO calculations in the external system that depend on ACM metrics will be incomplete or showing stale data.
-* If the failure persists, the internal buffer may fill up, potentially causing memory pressure on the `observability-observatorium-api` pods.
 
 **What is NOT affected:**
 * Local ACM observability remains functional - you can still view metrics in the Hub cluster's Grafana.

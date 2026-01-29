@@ -2,13 +2,13 @@
 
 ## Meaning
 
-This alert fires when the ACM Metrics Collector, which runs on the Hub cluster, receives a high rate of non-2xx (e.g., 401 Unauthorized, 403 Forbidden, 5xx Server Error) responses while trying to federate (scrape) metrics from the Hub cluster's internal Prometheus (`prometheus-k8s` in the `openshift-monitoring` namespace).
+This alert fires when the ACM Metrics Collector, receives a high rate of non-2xx (e.g., 401 Unauthorized, 403 Forbidden, 5xx Server Error) responses while trying to federate (scrape) metrics from the cluster's internal Prometheus (`prometheus-k8s` in the `openshift-monitoring` namespace).
 
-The alert expression `(sum by (status_code, type) (rate(acm_metrics_collector_federate_requests_total{status_code!~"2.*"}[10m]))) > 10` indicates that the rate of failed requests has exceeded 10 per second for 10 minutes (600s).
+The alert expression `(sum(rate(acm_metrics_collector_federate_requests_total{status_code!~"2.*"}[10m]))) / (sum(rate(acm_metrics_collector_federate_requests_total[10m]))) > 0.2` indicates that the rate of failed requests has exceeded 20% for the past 10 minutes (600s).
 
 ## Impact
 
-When this alert is firing, metrics from the Hub cluster itself are not being collected by ACM Observability. This will cause the Hub cluster to appear "dark" or "offline" in Grafana dashboards, as its own performance and health data will be missing. This can also negatively affect SLO/SLI calculations that rely on Hub cluster metrics.
+When this alert is firing, metrics from the cluster itself cannot be collected by the metric collector and sent to the observability stack on the Hub. This will cause metrics from the cluster where this alert is firing to be missing in the ACM Observability stack, causing the cluster not to be visible in Grafana dashboards.
 
 ## Diagnosis
 
@@ -25,6 +25,8 @@ Look for repeated HTTP 401/403 (Authorization) or 5xx (Server) errors.
 * **`i/o timeout` errors** indicate a network problem, not an authorization problem.
 
 * **401 Unauthorized or 403 Forbidden errors** indicate an RBAC problem.
+
+* **`the incoming sample data is too long` errors** indicates too much metric data is being federated in a single request.
 
 ### 2. Verify the ClusterRoleBinding for the collector
 
@@ -98,4 +100,15 @@ If the collector logs show 5xx errors, the problem may be with Prometheus itself
 
 You should see successful scrape operations with no 403 errors. The alert will clear after 10+ minutes of successful federation.
 
+### 4. If the incoming metric request is too large
+
+If the collector is trying to federate too many metrics in a single request you can increase the number of workers used. This will make the metric-collector split up federate requests between multiple workers.
+
+* To increase the metrics collection workers on all clusters, edit the workers parameter in the multicluster-observability-operator resource on the Hub:
+    ```console
+    spec:
+        observabilityAddonSpec:
+            enableMetrics: true
+            workers: 4
+    ```
 **Expected resolution time**: Alert should clear within 10-15 minutes after RBAC permissions are restored and successful scraping resumes.

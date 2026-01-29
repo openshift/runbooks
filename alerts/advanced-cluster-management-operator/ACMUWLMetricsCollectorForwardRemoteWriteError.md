@@ -4,7 +4,7 @@
 
 This alert fires when the ACM User Workload (UWL) Metrics Collector receives a high rate of non-2xx (e.g., 403 Forbidden, 503 Service Unavailable) responses while trying to "remote write" (forward) its scraped metrics to the central Observability API (`observability-observatorium-api`).
 
-The alert's query is `(sum by (status_code, type) (rate(acm_uwl_metrics_collector_forward_write_requests_total{status_code!~"2.*"}[10m]))) > 10`. This means the alert will fire if the rate of failed remote-write requests (with a valid HTTP error code) is greater than 10 per second for a continuous 10-minute period.
+The alert's query is `(sum(rate(acm_uwl_metrics_collector_forward_write_requests_total{status_code!~"2.*"}[10m]))) / (sum(rate(acm_uwl_metrics_collector_forward_write_requests_total[10m]))) > 0.2`. This means the alert will fire if the percentage of failed remote-write requests (with a valid HTTP error code) is more than 20% for a continuous 10-minute period.
 
 This component (`uwl-metrics-collector-deployment`) is separate from the platform collector and is responsible only for metrics from your own applications (in `openshift-user-workload-monitoring`).
 
@@ -56,7 +56,7 @@ The `uwl-metrics-collector-deployment` authenticates using an mTLS client certif
 
 ### 4. Check the observability-observatorium-api service health
 
-Verify the API service is healthy and has valid endpoints:
+Verify the API service is healthy on the Hub and has valid endpoints:
 
 ```console
 $ oc get endpoints observability-observatorium-api -n open-cluster-management-observability

@@ -2,20 +2,19 @@
 
 ## Meaning
 
-This alert fires when the ACM Metrics Collector (running on the Hub cluster) fails to "remote write" its metrics to the central Thanos Hub (`observability-observatorium-api`) service.
+This alert fires when the ACM Metrics Collector fails to "remote write" its metrics to the central Thanos Hub (`observability-observatorium-api`) service.
 
-The alert query `(sum by (status_code, type) (rate(acm_metrics_collector_forward_write_requests_total{status_code!~"2.*"}[10m]))) > 10` means the alert triggers only when the collector receives a high rate of non-2xx (e.g., 401, 403, 503) HTTP status codes for more than 10 minutes.
+The alert query `(sum(rate(acm_metrics_collector_forward_write_requests_total{status_code!~"2.*"}[10m]))) / (sum(rate(acm_metrics_collector_forward_write_requests_total[10m]))) > 0.2` means the alert triggers only when the collector receives a high rate of non-2xx (e.g., 401, 403, 503) HTTP status codes for more than 10 minutes.
 
 This alert will not fire for network-level failures like `i/o timeout` or `EOF` (connection dropped), as these do not produce an HTTP status code.
 
 ## Impact
 
-When this alert is firing, metrics from the Hub cluster itself are successfully collected but cannot be sent to the central Thanos storage. This will cause the Hub cluster to appear "dark" or "offline" in Grafana, and its health and performance metrics will be missing.
+When this alert is firing, metrics from the cluster itself are successfully collected but cannot be sent to the central Thanos storage. This will cause the Hub cluster to appear "dark" or "offline" in Grafana, and its health and performance metrics will be missing.
 
-**Time sensitivity**: The metrics collector has a limited in-memory buffer. If this issue persists for an extended period (typically >1-2 hours), older metrics may be dropped to make room for new ones, resulting in permanent data gaps.
+**Time sensitivity**: This issue will cause metrics will be dropped, resulting in permanent data gaps.
 
 This can also negatively affect SLO/SLI calculations that rely on Hub cluster metrics.
-
 
 ## Diagnosis
 

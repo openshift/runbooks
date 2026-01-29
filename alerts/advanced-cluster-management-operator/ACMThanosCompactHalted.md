@@ -14,12 +14,9 @@ If the Thanos Compactor is halted, the metric data in the S3 object store is no 
 
 * **Data Retention policies are not applied**: Old metric data will not be deleted, causing object storage (S3) costs to increase indefinitely.
 
-* **Data Down-sampling fails**: Metric data is not down-sampled into 5-minute and 1-hour aggregates. This will cause Grafana dashboards and queries to become progressively slower, and they may eventually time out.
+* **Data Down-sampling fails**: Metric data is not down-sampled into 5-minute and 1-hour aggregates. This will cause Grafana dashboards and queries to become progressively slower especially when querying for longer rangers.
 
-* **Increased Query Latency**: Queries for long-range time-series data will be slow and resource-intensive.
-
-* **Block Overlap**: Over time, uncompacted blocks may overlap, further degrading query performance and potentially causing duplicate data points in query results.
-
+* **Increased storage usage**: The storage use of the Compactor and Store Gateway will keep increasing.
 
 ## Diagnosis
 
@@ -41,7 +38,7 @@ Look for one of the following common failure patterns in the logs:
 
 * **Disk Full**: The pod is in a `CrashLoopBackOff` state, and logs show `no space left on device`.
 
-* **Data Corruption**: The logs show `err="compaction: ... get file ... meta.json: EOF"` or `unexpected end of JSON input`. This indicates a corrupted block in the S3 bucket.
+* **Data Corruption**: The logs show `err="compaction: ... get file ... meta.json: EOF"`, `unexpected end of JSON input` or `segment index 0 out of range`. This indicates a corrupted block in the S3 bucket.
 
 * **S3 Connection Failure**: The logs show S3 authentication or connection errors, such as `The request signature we calculated does not match...` (bad secret key) or `no such host` (bad endpoint).
 
@@ -158,7 +155,9 @@ After applying any mitigation, verify the compactor has recovered:
 
 * The alert should clear within 5-10 minutes of successful compaction.
 
-**Expected resolution time**: Alert should clear within 5-10 minutes after the compactor resumes normal operation.
+* If the compactor has not been working for a long period the `acm_thanos_compact_todo_compactions` metric is expected to be high. After restarting the compactor keep an eye on this metric to ensure that the number of todo compactions is decreasing. It might take several weeks to work through the full compaction backlog and for the todo compactions to fall down to below 10.
+
+**Expected resolution time**: Alert should clear within 5-10 minutes after the compactor resumes normal operation. The compaction backlog might take several weeks to get through depending on how long the compactor was non-functioning for.
 
 For more detailed troubleshooting steps and additional scenarios, refer to the Red Hat Knowledge Base article:
 [Thanos compactor halted](https://access.redhat.com/solutions/7080672)
