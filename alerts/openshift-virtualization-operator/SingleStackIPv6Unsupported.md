@@ -1,4 +1,7 @@
-# SingleStackIPv6Unsupported
+# SingleStackIPv6Unsupported [Deprecated]
+
+This alert is deprecated. You can safely ignore or silence it.
+
 
 ## Meaning
 
