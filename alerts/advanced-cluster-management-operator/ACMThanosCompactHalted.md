@@ -36,8 +36,8 @@ The first step is to identify why the compactor has halted by inspecting its
 logs for fatal, non-retriable errors.
 
 Confirm the alert is firing by querying the `acm_thanos_compact_halted` metric
-in the OpenShift console (Observe -> Metrics) or Grafana. The result should be
-1.
+in the OpenShift console (Observe -> Metrics). The result is `1` if that
+compactor is halted.
 
 ```console
 acm_thanos_compact_halted{job="observability-thanos-compact"}
@@ -183,10 +183,11 @@ The `thanos-object-storage` secret in the
 
 After applying any mitigation, verify the compactor has recovered:
 
-* Check the halted metric has returned to 0:
+* Confirm the the `acm_thanos_compact_halted` metric has returned to 0. You can
+query it in the OpenShift console (Observe -> Metrics).
 
     ```console
-    oc exec -n open-cluster-management-observability observability-thanos-compact-0 -- wget -qO- http://localhost:10902/metrics | grep acm_thanos_compact_halted
+    acm_thanos_compact_halted{job="observability-thanos-compact"}
     ```
 
 * Monitor the pod logs for successful compaction activity:
