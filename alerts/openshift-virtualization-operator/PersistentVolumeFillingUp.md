@@ -17,7 +17,8 @@ Service degradation, switching to read-only mode.
 
 ## Diagnosis
 
-- Check persistent volume claim (PVC) usage from within a pod that mounts the
+- Check the persistent volume claim (PVC) usage from within a pod that mounts
+the
 PVC. You can use the *exec* command to check the mounted filesystem in a pod:
 
 ```shell
@@ -33,18 +34,19 @@ For example, these might include snapshots or automatic data retention.
 
 Deleting data that you no longer need is the fastest and the cheapest solution.
 
-Request the service owner to delete specific sets of old data.
+Ask the service owner to delete specific sets of old data.
 
 ### Data export
 
 If data is not needed in the service but needs to be processed later,
-move it to a different storage resource, such as an S3 bucket.
+move it to a different storage resource, like an S3 bucket.
 
 ### Data rebalance in the cluster
 
 Some services automatically rebalance data on the cluster when a node fills up.
-Some of these make it possible to rebalance data across existing nodes, others
-may require adding new nodes. If data rebalancing is supported in your cluster,
+Some of these services make it possible to rebalance data across existing
+nodes, others
+might require adding new nodes. If your cluster supports data rebalancing,
 increase the number of replicas and wait for data migration, or trigger the
 migration manually.
 
@@ -61,12 +63,12 @@ Example services that support data rebalancing:
 **Note**: Some services may require special scaling conditions for data
 rebalancing, such as doubling the number of active nodes.
 
-### Direct Volume resizing
+### Direct volume resizing
 
 If volume resizing is available, you can increase the capacity of the volume:
 
-1. Check that volume expansion is available. To do so, use the following command
-and replace `<my-namespace>` and `<my-pvc>`:
+1. Check that volume expansion is available by running the following command,
+replacing `<my-namespace>` and `<my-pvc>` with your namespace and PVC values:
 
    ```shell
    $ oc get storageclass `oc -n <my-namespace> get pvc <my-pvc> -ojson | jq -r '.spec.storageClassName'`
@@ -82,7 +84,7 @@ and replace `<my-namespace>` and `<my-pvc>`:
    $ oc -n <my-namespace> edit pvc <my-pvc>
    ```
 
-3. Edit `.spec.resources.requests.storage` to use the required storage size.
+3. Edit the `.spec.resources.requests.storage` to use the required storage size.
 If this succeeds, the PVC status will state "Waiting for user to (re-)start a
 pod to finish file system resize of volume on node."
 
@@ -117,22 +119,24 @@ In very specific scenarios, it is better to schedule data migration in the same
 cluster, but to a new instance. This may be difficult to accomplish due to how
 certain resources are managed in OpenShift Container Platform.
 
-The general procedure is as follows:
+To migrate the data to a new instance pool in the same cluster:
+
 1. Add new nodes with greater capacity than the existing cluster.
 2. Trigger data migration.
 3. Scale the original instance pool to 0, and then delete it.
 
 ### Migrate data to a new, larger cluster
 
-This is the most common scenario for resolving filling up persistent volumes.
+This is the most common scenario to resolve persistent volumes filling up.
 However, it is significantly more expensive and may be time-consuming.
-Also, migrating to a new cluster might cause split-brain issues.
-As an example, the general procedure may have the following steps:
+Migrating to a new cluster might also cause split-brain issues.
+
+To migrate data to a new, larger cluster:
 
 1. Create a data snapshot on the existing cluster.
 2. Add a new cluster with greater capacity than the existing cluster.
 3. Start a data restore operation on the new cluster based on the snapshot.
-4. Switch the old cluster to read-only mode
+4. Switch the old cluster to read-only mode.
 5. Reconfigure networking to point to the new cluster.
 6. Trigger data migration from the old cluster to the new cluster to sync the
 differences between the snapshot and the latest writes.
@@ -141,5 +145,5 @@ differences between the snapshot and the latest writes.
 ### Support
 
 If you cannot resolve the issue, log in to the
-[Customer Portal](https://access.redhat.com) and open a support case,
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.
