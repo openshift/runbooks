@@ -23,8 +23,8 @@ alert for this specific DICT.
 
 This alert triggers when the golden image created for this DICT does not have a
 defined architecture. If this image is used as a boot image for a virtual
-machine (VM), and the VM will is scheduled on a node with a CPU architecture
-different than the image architecture, the VM fails to start.
+machine (VM), and the VM is scheduled on a node with different CPU architecture
+than the image architecture, the VM fails to start.
 
 ## Diagnosis
 
@@ -79,7 +79,8 @@ User-defined DICTs are defined in the `HyperConverged` CR, in the
   [podman manifest inspect
 documentation](https://docs.podman.io/en/latest/markdown/podman-manifest-inspect.1.html).
 
-If the image is a multi-architecture manifest ("fat manifest"), it includes the
+    If the image is a multi-architecture manifest ("fat manifest"), it includes
+the
 `manifests` field, which is a list of architectures supported by the image. If
 the image is not a multi-architecture manifest, you need to find out what
 is its architecture.
@@ -87,7 +88,7 @@ is its architecture.
 2. Edit the `HyperConverged` CR to add the missing
 `ssp.kubevirt.io/dict.architectures` annotation.
 
-  The format of the annotation is a comma-separated list of architectures,
+    The format of the annotation is a comma-separated list of architectures,
   for example: `amd64,arm64,s390x`.
 
 3. If the image does not support any of the architectures supported by the
@@ -99,5 +100,5 @@ by the cluster, or remove the DICT from the `HyperConverged` CR.
 documentation](https://docs.podman.io/en/latest/markdown/podman-manifest-create.1.html).
 
 If you cannot resolve the issue, log in to the
-[Customer Portal](https://access.redhat.com) and open a support case,
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.
