@@ -3,7 +3,7 @@
 ## Meaning
 
 When running on a heterogeneous cluster, the DataImportCronTemplate objects
-(DICTs; also known as golden images) in the hyperconverged cluster operator
+(DICTs; also known as golden images) in the Cluster Operator
 (HCO) must be annotated with the `ssp.kubevirt.io/dict.architectures`
 annotation. The value of this annotation is a list of architectures
 supported by the image, which is defined in each DICT.
@@ -23,8 +23,8 @@ the architectures listed in the DICT annotation), HCO triggers the
 ## Impact
 
 This alert triggers when the DICT is not supported by any of the nodes in the
-cluster. HCO will not populate the SSP CR with this DICT, and the golden image
-will not be available for use in the cluster.
+cluster. HCO does not populate the SSP CR with this DICT, and the golden image
+is not available for use in the cluster.
 
 ## Diagnosis
 
@@ -208,8 +208,8 @@ example: `amd64,arm64,s390x`.
 cluster, rebuild the image for one or more of the architectures supported by the
 cluster, or remove the DICT from the `HyperConverged` CR.
 
-It is also possible to disable the DICT, by adding it
-the `dataimportcrontemplate.kubevirt.io/enable` annotation, with the value
+    It is also possible to disable the DICT, by adding the `dataimportcrontemplate.kubevirt.io/enable`
+annotation, with the value
 of `false`. For example:
 
   ```yaml
@@ -232,5 +232,5 @@ For more information about building multi-architecture images, see the
 [podman documentation](https://docs.podman.io/en/latest/markdown/podman-manifest-create.1.html).
 
 If you cannot resolve the issue, log in to the
-[Customer Portal](https://access.redhat.com) and open a support case,
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.
