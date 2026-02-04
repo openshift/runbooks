@@ -4,7 +4,7 @@
 
 DataImportCron objects (DIC; also known as golden images) are used to create
 boot images for virtual machines (VMs). The images are preloaded in the cluster,
-and then they are used to create VM boot disks with a specific operating system.
+and then used to create VM boot disks with a specific operating system.
 By default, the preloaded images use the architecture of the cluster node that
 was used to create the image.
 
@@ -22,11 +22,9 @@ feature gate is disabled in the HyperConverged CR.
 
 ## Impact
 
-When running on a heterogeneous cluster, the preloaded image may use a different
-architecture than the architecture of the node that the VM is scheduled on.
-
-In this case, the VM will fail to start, as the image architecture is not
-compatible with the node architecture.
+When running on a heterogeneous cluster, if the preloaded image uses different
+architecture than the architecture of the node that the VM is scheduled on, the
+VM fails to start.
 
 ## Diagnosis
 
@@ -42,10 +40,10 @@ HCO publishes the list of the workload node architectures in the
 Read the HyperConverged CR:
 
 ```bash
-oc get hyperconverged -n openshift-cnv kubevirt-hyperconverged -o yaml
+$ oc get hyperconverged -n openshift-cnv kubevirt-hyperconverged -o yaml
 ```
 
-The result will look similar to this:
+The result looks similar to this:
 
 ```yaml
 apiVersion: hco.kubevirt.io/v1beta1
@@ -73,48 +71,50 @@ nodes with a single architecture.
 ### Enable the multi-arch boot image feature
 
 The multi-arch boot image feature is in the alpha stage, and it is not enabled
-by default. Enabling this feature will result in the creation of multiple
+by default. Enabling this feature results in the creation of multiple
 preloaded images for each DataImportCronTemplate (DICT), one for each
 architecture supported by the cluster, and by the original image. However, this
 feature is not generally available, and it is not fully supported.
 
-To enable the multi-arch boot image feature, set the
-`enableMultiArchBootImageImport` feature gate in the HyperConverged CR to `true`
+To enable the multi-arch boot image feature:
 
-If the HyperConverged CR contains the `spec.dataImportCronTemplates` field,
-and this field is not empty, then you may need to add the
+1. Set the `enableMultiArchBootImageImport` feature gate in the HyperConverged
+CR to `true`.
+
+2. If the HyperConverged CR contains the `spec.dataImportCronTemplates` field,
+and this field is not empty, then you might need to add the
 `ssp.kubevirt.io/dict.architectures` annotation to each DICT object in this
 field. See
 the
 [HCOGoldenImageWithNoArchitectureAnnotation](HCOGoldenImageWithNoArchitectureAnnotation.md)
 runbook for more details.
 
-Edit the HyperConverged CR:
+3. Edit the HyperConverged CR:
 
-```bash
-oc edit hyperconverged -n openshift-cnv kubevirt-hyperconverged -o yaml
-```
+    ```bash
+    $ oc edit hyperconverged -n openshift-cnv kubevirt-hyperconverged -o yaml
+    ```
 
-The editor will be opened with the HyperConverged CR in YAML format.
+    The editor opens with the HyperConverged CR YAML.
 
-Edit the CR to set the `enableMultiArchBootImageImport` feature gate to `true`,
+4. Edit the CR to set the `enableMultiArchBootImageImport` feature gate to `true`,
 and to add the `ssp.kubevirt.io/dict.architectures` annotation to each DICT
 object in the `spec.dataImportCronTemplates` field, if needed.
 
-```yaml
-apiVersion: hco.kubevirt.io/v1beta1
-kind: HyperConverged
-spec:
-  dataImportCronTemplates:
-    ...
-  ...
-  featureGates:
-    ...
-    enableMultiArchBootImageImport: true
-    ...
-```
+    ```yaml
+    apiVersion: hco.kubevirt.io/v1beta1
+    kind: HyperConverged
+    spec:
+      dataImportCronTemplates:
+        ...
+      ...
+      featureGates:
+        ...
+        enableMultiArchBootImageImport: true
+        ...
+    ```
 
-Save the changes and exit the editor.
+5. Save the changes and exit the editor.
 
 ### Modify the Workloads Node Placement
 
@@ -122,37 +122,37 @@ If you do not want to enable the multi arch boot image feature, you can modify
 the workloads node placement in the HyperConverged CR to include only nodes with
 a single architecture.
 
-Edit the HyperConverged CR:
-```bash
-oc edit hyperconverged -n openshift-cnv kubevirt-hyperconverged -o yaml
-```
+1. Edit the HyperConverged CR:
+    ```bash
+    $ oc edit hyperconverged -n openshift-cnv kubevirt-hyperconverged -o yaml
+    ```
 
-The editor will be opened with the HyperConverged CR in YAML format.
+    The editor opens with the HyperConverged CR YAML.
 
-Below is an example of how to modify the workloads node placement to include
+    Below is an example of how to modify the workloads node placement to include
 only nodes with the `amd64` architecture, using node affinity:
 
-```yaml
-apiVersion: hco.kubevirt.io/v1beta1
-kind: HyperConverged
-spec:
-  ...
-  workloads:
-    nodePlacement:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/arch
-                    operator: In
-                    values:
-                      - amd64
-  ...
-```
+    ```yaml
+    apiVersion: hco.kubevirt.io/v1beta1
+    kind: HyperConverged
+    spec:
+      ...
+      workloads:
+        nodePlacement:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: kubernetes.io/arch
+                        operator: In
+                        values:
+                          - amd64
+      ...
+    ```
 
-Save the changes and exit the editor.
+2. Save the changes and exit the editor.
 
 If you cannot resolve the issue, log in to the
-[Customer Portal](https://access.redhat.com) and open a support case,
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.
