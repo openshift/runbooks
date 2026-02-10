@@ -1,8 +1,8 @@
-# IngressLatencyTrend
+# IngressHTTPLatencyTrend
 
 ## Meaning
 
-The `IngressLatencyTrend` alert template is triggered when Network
+The `IngressHTTPLatencyTrend` alert template is triggered when Network
 Observability detects a significant increase in HAProxy ingress response
 latency compared to a baseline from the past. This is a trend-based alert that
 compares current latency against historical values. This template can generate
@@ -11,13 +11,13 @@ custom resource.
 
 **Possible alert variants:**
 
-- `IngressLatencyTrend_Critical` - Global cluster-wide ingress latency
+- `IngressHTTPLatencyTrend_Critical` - Global cluster-wide ingress latency
   increase exceeds critical threshold compared to baseline
-- `IngressLatencyTrend_Warning` - Global cluster-wide ingress latency increase
+- `IngressHTTPLatencyTrend_Warning` - Global cluster-wide ingress latency increase
   exceeds warning threshold compared to baseline
-- `IngressLatencyTrend_Info` - Global cluster-wide ingress latency increase
+- `IngressHTTPLatencyTrend_Info` - Global cluster-wide ingress latency increase
   exceeds info threshold compared to baseline
-- `IngressLatencyTrend_PerDstNamespace{Critical,Warning,Info}` - Ingress
+- `IngressHTTPLatencyTrend_PerDstNamespace{Critical,Warning,Info}` - Ingress
   latency increase for traffic destined to a specific namespace exceeds
   threshold
 
@@ -48,7 +48,7 @@ spec:
   processor:
     metrics:
       healthRules:
-      - template: IngressLatencyTrend
+      - template: IngressHTTPLatencyTrend
         mode: Recording
         variants:
         - groupBy: Namespace
@@ -87,7 +87,7 @@ spec:
   processor:
     metrics:
       healthRules:
-      - template: IngressLatencyTrend
+      - template: IngressHTTPLatencyTrend
         mode: Alert
         variants:
         - groupBy: Namespace
@@ -109,7 +109,7 @@ spec:
   processor:
     metrics:
       healthRules:
-      - template: IngressLatencyTrend
+      - template: IngressHTTPLatencyTrend
         mode: Alert
         variants:
         - groupBy: Namespace
@@ -122,20 +122,20 @@ spec:
 
 ### Disable this alert entirely
 
-To completely disable IngressLatencyTrend alerts:
+To completely disable IngressHTTPLatencyTrend alerts:
 
 ```bash
 oc edit flowcollector cluster
 ```
 
-Add IngressLatencyTrend to the disableAlerts list:
+Add IngressHTTPLatencyTrend to the disableAlerts list:
 
 ```yaml
 spec:
   processor:
     metrics:
       disableAlerts:
-      - IngressLatencyTrend
+      - IngressHTTPLatencyTrend
 ```
 
 For more information on configuring Network Observability alerts and
