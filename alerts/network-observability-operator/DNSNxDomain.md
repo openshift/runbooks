@@ -2,11 +2,18 @@
 
 ## Meaning
 
-The `DNSNxDomain` alert template is triggered when Network Observability
+The `DNSNxDomain` health rule template is triggered when Network Observability
 detects a high percentage of DNS NX_DOMAIN errors. NX_DOMAIN indicates that
-the queried domain name does not exist. This template can generate multiple
-alert instances depending on how it's configured in the FlowCollector custom
-resource.
+the queried domain name does not exist, potentially because of ambiguous DNS
+searches.
+
+The rule can generate multiple alert or recording instances depending on how it's
+configured in the `FlowCollector` custom resource. Both the Alert and the Recording
+modes are displayed in the Network Health view, but only the Alert mode can
+generates Prometheus alerts.
+
+**Note:** This rule requires the `DNSTracking` agent feature to be enabled
+in the `FlowCollector` configuration.
 
 **Possible alert variants:**
 
@@ -29,23 +36,15 @@ resource.
 - `DNSNxDomain_PerSrcWorkload{Critical,Warning,Info}` - NX_DOMAIN rate for
   traffic originating from a specific workload exceeds threshold
 
-NX_DOMAIN errors are tracked only in return traffic (responses from DNS
-servers).
+### Default definition
 
-**Note:** This alert requires the `DNSTracking` agent feature to be enabled
-in the FlowCollector configuration.
-
-### Switch to recording mode (alternative to alerts)
-
-If you want to monitor DNS NX_DOMAIN errors in the Network Health dashboard
-without generating Prometheus alerts, you can change the health rule to
-recording mode:
+You can override the default definition by editing the `FlowCollector` resource:
 
 ```bash
 oc edit flowcollector cluster
 ```
 
-Change the mode from `Alert` to `Recording`:
+Insert these default values, and edit them as desired:
 
 ```yaml
 spec:
@@ -55,47 +54,10 @@ spec:
       - template: DNSNxDomain
         mode: Recording
         variants:
-        - groupBy: Namespace
-          thresholds:
+        - thresholds:
             info: "10"
-            warning: "30"
-            critical: "60"
-```
-
-In recording mode:
-
-- NX_DOMAIN violations remain visible in the **Network Health** dashboard
-- No Prometheus alerts are generated
-- Metrics are still calculated and stored as recording rules
-- Useful for teams that prefer passive monitoring without alert fatigue
-
-This is particularly helpful for SRE teams who want visibility into network
-health without being overwhelmed by alerts for every threshold violation.
-
-### Adjust alert thresholds
-
-If the alert is firing too frequently due to low thresholds, you can adjust
-them:
-
-```bash
-oc edit flowcollector cluster
-```
-
-Modify the `spec.processor.metrics.healthRules` section:
-
-```yaml
-spec:
-  processor:
-    metrics:
-      healthRules:
-      - template: DNSNxDomain
-        mode: Alert
-        variants:
-        - groupBy: Namespace
-          thresholds:
-            info: "20"
-            warning: "40"
-            critical: "70"
+            warning: "80"
+          groupBy: Namespace
 ```
 
 ### Disable this alert entirely

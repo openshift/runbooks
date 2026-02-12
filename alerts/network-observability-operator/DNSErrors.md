@@ -2,11 +2,18 @@
 
 ## Meaning
 
-The `DNSErrors` alert template is triggered when Network Observability
+The `DNSErrors` health rule template is triggered when Network Observability
 detects a high percentage of DNS errors (excluding NX_DOMAIN errors, which
-have their own alert template). This template can generate multiple alert
-instances depending on how it's configured in the FlowCollector custom
-resource.
+have their own alert template). DNS errors are tracked only in return traffic
+(responses from DNS servers).
+
+The rule can generate multiple alert or recording instances depending on how it's
+configured in the `FlowCollector` custom resource. Both the Alert and the Recording
+modes are displayed in the Network Health view, but only the Alert mode can
+generates Prometheus alerts.
+
+**Note:** This rule requires the `DNSTracking` agent feature to be enabled
+in the `FlowCollector` configuration.
 
 **Possible alert variants:**
 
@@ -29,24 +36,15 @@ resource.
 - `DNSErrors_PerSrcWorkload{Critical,Warning,Info}` - DNS error rate for
   traffic originating from a specific workload exceeds threshold
 
-The alert fires when the percentage of DNS errors exceeds the configured
-threshold. DNS errors are tracked only in return traffic (responses from DNS
-servers).
+### Default definition
 
-**Note:** This alert requires the `DNSTracking` agent feature to be enabled
-in the FlowCollector configuration.
-
-### Switch to recording mode (alternative to alerts)
-
-If you want to monitor DNS errors in the Network Health dashboard without
-generating Prometheus alerts, you can change the health rule to recording
-mode:
+You can override the default definition by editing the `FlowCollector` resource:
 
 ```bash
 oc edit flowcollector cluster
 ```
 
-Change the mode from `Alert` to `Recording`:
+Insert these default values, and edit them as desired:
 
 ```yaml
 spec:
@@ -54,50 +52,22 @@ spec:
     metrics:
       healthRules:
       - template: DNSErrors
-        mode: Recording
+        mode: Alert
         variants:
-        - groupBy: Namespace
-          thresholds:
+        - thresholds:
+            warning: "5"
+        - thresholds:
             info: "5"
-            warning: "20"
-            critical: "50"
+            warning: "10"
+          groupBy: Namespace
 ```
 
-In recording mode:
+If you prefer to switch to the recording mode with `mode: Recording`:
 
 - DNS error violations remain visible in the **Network Health** dashboard
 - No Prometheus alerts are generated
 - Metrics are still calculated and stored as recording rules
 - Useful for teams that prefer passive monitoring without alert fatigue
-
-This is particularly helpful for SRE teams who want visibility into network
-health without being overwhelmed by alerts for every threshold violation.
-
-### Adjust alert thresholds
-
-If the alert is firing too frequently due to low thresholds, you can adjust
-them:
-
-```bash
-oc edit flowcollector cluster
-```
-
-Modify the `spec.processor.metrics.healthRules` section:
-
-```yaml
-spec:
-  processor:
-    metrics:
-      healthRules:
-      - template: DNSErrors
-        mode: alert
-        variants:
-        - groupBy: Namespace
-          thresholds:
-            info: "10"      # Increased from 5
-            warning: "25"   # Increased from 20
-            critical: "60"  # Increased from 50
-```
 
 ### Disable this alert entirely
 

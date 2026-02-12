@@ -2,12 +2,21 @@
 
 ## Meaning
 
-The `LatencyHighTrend` alert template is triggered when Network Observability
+The `LatencyHighTrend` health rule template is triggered when Network Observability
 detects a significant increase in TCP latency (Round-Trip Time) compared to a
 baseline from the past. This is a trend-based alert that compares current
-latency against historical values. This template can generate multiple alert
-instances depending on how it's configured in the FlowCollector custom
-resource.
+latency against historical values.
+
+By default, the baseline is calculated from metrics taken 1 day ago (configurable
+via `trendOffset`) averaged over a 1-hour window (configurable via `trendDuration`).
+
+The rule can generate multiple alert or recording instances depending on how it's
+configured in the `FlowCollector` custom resource. Both the Alert and the Recording
+modes are displayed in the Network Health view, but only the Alert mode can
+generates Prometheus alerts.
+
+**Note:** This rule requires the `FlowRTT` agent feature to be enabled in the
+FlowCollector configuration.
 
 **Possible alert variants:**
 
@@ -30,25 +39,15 @@ resource.
 - `LatencyHighTrend_PerSrcWorkload{Critical,Warning,Info}` - Latency increase
   for traffic originating from a specific workload exceeds threshold
 
-The alert fires when the current latency exceeds the baseline by the
-configured percentage threshold. By default, the baseline is calculated from
-metrics taken 1 day ago (configurable via `trendOffset`) averaged over a
-2-hour window (configurable via `trendDuration`).
+### Default definition
 
-**Note:** This alert requires the `FlowRTT` agent feature to be enabled in the
-FlowCollector configuration.
-
-### Switch to recording mode (alternative to alerts)
-
-If you want to monitor latency trends in the Network Health dashboard without
-generating Prometheus alerts, you can change the health rule to recording
-mode:
+You can override the default definition by editing the `FlowCollector` resource:
 
 ```bash
 oc edit flowcollector cluster
 ```
 
-Change the mode from `Alert` to `Recording`:
+Insert these default values, and edit them as desired:
 
 ```yaml
 spec:
@@ -58,52 +57,11 @@ spec:
       - template: LatencyHighTrend
         mode: Recording
         variants:
-        - groupBy: Namespace
-          thresholds:
-            info: "30"
-            warning: "75"
-            critical: "150"
+        - thresholds:
+            info: "100"
+          groupBy: Namespace
           trendOffset: 24h
-          trendDuration: 2h
-```
-
-In recording mode:
-
-- Latency trend violations remain visible in the **Network Health** dashboard
-- No Prometheus alerts are generated
-- Metrics are still calculated and stored as recording rules
-- Useful for teams that prefer passive monitoring without alert fatigue
-
-This is particularly helpful for SRE teams who want visibility into network
-health without being overwhelmed by alerts for every threshold violation.
-
-### Adjust alert thresholds
-
-The thresholds are expressed in percentage of increase.
-If the alert is firing too frequently due to low thresholds, you can adjust
-them:
-
-```bash
-oc edit flowcollector cluster
-```
-
-Modify the `spec.processor.metrics.healthRules` section:
-
-```yaml
-spec:
-  processor:
-    metrics:
-      healthRules:
-      - template: LatencyHighTrend
-        mode: Alert
-        variants:
-        - groupBy: Namespace
-          thresholds:
-            info: "50"
-            warning: "100"
-            critical: "200"
-          trendOffset: 24h
-          trendDuration: 2h
+          trendDuration: 1h
 ```
 
 ### Disable this alert entirely
