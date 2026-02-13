@@ -131,7 +131,7 @@ can be optimized by **adding a trailing dot on fully-qualified domain
 names** which tells the resolver that the name is unambiguous.
 
 For instance, instead of `https://my-svc.my-namespace.svc`, use:
-`https://my-svc.my-namespace.svc.cluster.local.`, with trailing dot included.
+`https://my-svc.my-namespace.svc.cluster.local.`, **with trailing dot included**.
 
 For other mitigation strategies and solutions, refer to:
 
