@@ -2,11 +2,18 @@
 
 ## Meaning
 
-The `PacketDropsByDevice` alert template is triggered when Network
+The `PacketDropsByDevice` health rule template is triggered when Network
 Observability detects a high percentage of packet drops at the device level
-based on statistics from `/proc/net/dev`. This template can generate multiple
-alert instances depending on how it's configured in the FlowCollector custom
-resource.
+based on statistics from `/proc/net/dev`. These are typically hardware-level or
+driver-level drops.
+
+The rule can generate multiple alert or recording instances depending on how it's
+configured in the `FlowCollector` custom resource. Both the Alert and the Recording
+modes are displayed in the Network Health view, but only the Alert mode can
+generates Prometheus alerts.
+
+**Note:** This rule does NOT require the `PacketDrop` agent feature. It uses
+standard Linux network interface statistics available on all nodes.
 
 **Possible alert variants:**
 
@@ -19,60 +26,15 @@ resource.
 - `PacketDropsByDevice_PerNode{Critical,Warning,Info}` - Device packet drop
   rate on a specific node exceeds threshold
 
-Unlike `PacketDropsByKernel` which tracks drops in the kernel network stack
-via eBPF, `PacketDropsByDevice` monitors drops reported by network interfaces
-themselves in `/proc/net/dev`. These are typically hardware-level or
-driver-level drops.
+### Default definition
 
-**Note:** This alert does NOT require the `PacketDrop` agent feature. It uses
-standard Linux network interface statistics available on all nodes.
-
-### Switch to recording mode (alternative to alerts)
-
-If you want to monitor device packet drops in the Network Health dashboard
-without generating Prometheus alerts, you can change the health rule to
-recording mode:
+You can override the default definition by editing the `FlowCollector` resource:
 
 ```bash
 oc edit flowcollector cluster
 ```
 
-Change the mode from `Alert` to `Recording`:
-
-```yaml
-spec:
-  processor:
-    metrics:
-      healthRules:
-      - template: PacketDropsByDevice
-        mode: Recording
-        variants:
-        - groupBy: Node
-          thresholds:
-            info: "2"
-            warning: "5"
-```
-
-In recording mode:
-
-- Packet drop violations remain visible in the **Network Health** dashboard
-- No Prometheus alerts are generated
-- Metrics are still calculated and stored as recording rules
-- Useful for teams that prefer passive monitoring without alert fatigue
-
-This is particularly helpful for SRE teams who want visibility into network
-health without being overwhelmed by alerts for every threshold violation.
-
-### Adjust alert thresholds
-
-If the alert is firing too frequently due to low thresholds, you can adjust
-them:
-
-```bash
-oc edit flowcollector cluster
-```
-
-Modify the `spec.processor.metrics.healthRules` section:
+Insert these default values, and edit them as desired:
 
 ```yaml
 spec:
@@ -82,10 +44,10 @@ spec:
       - template: PacketDropsByDevice
         mode: Alert
         variants:
-        - groupBy: Node
-          thresholds:
+        - thresholds:
             info: "5"
             warning: "10"
+          groupBy: Node
 ```
 
 ### Disable this alert entirely

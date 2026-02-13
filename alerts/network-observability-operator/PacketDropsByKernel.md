@@ -2,10 +2,18 @@
 
 ## Meaning
 
-The `PacketDropsByKernel` alert template is triggered when Network
-Observability detects a high percentage of packet drops by the Linux kernel.
-This template can generate multiple alert instances depending on how it's
-configured in the FlowCollector custom resource.
+The `PacketDropsByKernel` health rule template is triggered when Network
+Observability detects a high percentage of packet dropped by the Linux kernel,
+based on the configured threshold. These drops are detected via eBPF kfree_skb
+tracepoint which captures packets dropped in the kernel network stack.
+
+The rule can generate multiple alert or recording instances depending on how it's
+configured in the `FlowCollector` custom resource. Both the Alert and the Recording
+modes are displayed in the Network Health view, but only the Alert mode can
+generates Prometheus alerts.
+
+**Note:** This rule requires the `PacketDrop` agent feature to be enabled in
+the `FlowCollector` configuration.
 
 **Possible alert variants:**
 
@@ -31,24 +39,15 @@ configured in the FlowCollector custom resource.
   drop rate for traffic originating from a specific workload exceeds
   threshold
 
-The alert fires when the percentage of packets dropped by the kernel exceeds
-the configured threshold. These drops are detected via eBPF kfree_skb
-tracepoint which captures packets dropped in the kernel network stack.
+### Default definition
 
-**Note:** This alert requires the `PacketDrop` agent feature to be enabled in
-the FlowCollector configuration.
-
-### Switch to recording mode (alternative to alerts)
-
-If you want to monitor kernel packet drops in the Network Health dashboard
-without generating Prometheus alerts, you can change the health rule to
-recording mode:
+You can override the default definition by editing the `FlowCollector` resource:
 
 ```bash
 oc edit flowcollector cluster
 ```
 
-Change the mode from `Alert` to `Recording`:
+Insert these default values, and edit them as desired:
 
 ```yaml
 spec:
@@ -58,47 +57,15 @@ spec:
       - template: PacketDropsByKernel
         mode: Recording
         variants:
-        - groupBy: Node
-          thresholds:
-            info: "5"
-            warning: "10"
-            critical: "20"
-```
-
-In recording mode:
-
-- Packet drop violations remain visible in the **Network Health** dashboard
-- No Prometheus alerts are generated
-- Metrics are still calculated and stored as recording rules
-- Useful for teams that prefer passive monitoring without alert fatigue
-
-This is particularly helpful for SRE teams who want visibility into network
-health without being overwhelmed by alerts for every threshold violation.
-
-### Adjust alert thresholds
-
-If the alert is firing too frequently due to low thresholds, you can adjust
-them:
-
-```bash
-oc edit flowcollector cluster
-```
-
-Modify the `spec.processor.metrics.healthRules` section:
-
-```yaml
-spec:
-  processor:
-    metrics:
-      healthRules:
-      - template: PacketDropsByKernel
-        mode: Alert
-        variants:
-        - groupBy: Node
+        - lowVolumeThreshold: "5"
           thresholds:
             info: "10"
             warning: "20"
-            critical: "30"
+          groupBy: Namespace
+        - thresholds:
+            info: "5"
+            warning: "15"
+          groupBy: Node
 ```
 
 ### Disable this alert entirely

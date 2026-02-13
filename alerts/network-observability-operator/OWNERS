@@ -6,11 +6,23 @@ approvers:
   - OlivierCazade
   - luisjira
   - leandroberetta
+  - gwynnemonahan
+  - memodi
+  - Amoghrd
+  - oliver-smakal
+  - mffiedler
+  - kapjain-rh
 reviewers:
   - jotak
   - jpinsonneau
   - OlivierCazade
   - luisjira
   - leandroberetta
+  - gwynnemonahan
+  - memodi
+  - Amoghrd
+  - oliver-smakal
+  - mffiedler
+  - kapjain-rh
 
 component: "Network Observability Operator"
