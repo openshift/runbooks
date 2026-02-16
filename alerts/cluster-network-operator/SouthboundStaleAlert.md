@@ -25,7 +25,7 @@ hierarchy](./hierarchy/alerts-hierarchy.svg)
 ## Diagnosis
 
 Investigate the health of the affected northd or southbound database processes
-that run in the `northd` and `sbdb` containers repectively.
+that run in the `northd` and `sbdb` containers respectively.
 
 For OCP clusters at versions 4.13 or earlier, the containers run in
 ovnkube-master pods:

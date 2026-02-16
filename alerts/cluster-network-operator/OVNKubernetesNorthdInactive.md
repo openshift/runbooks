@@ -61,13 +61,13 @@ The result should be Status:active
 
 Mitigation will depend on what was found in the diagnosis section.
 
-As a general fix, you can try exiting the affected ovn-northd procesess with
+As a general fix, you can try exiting the affected ovn-northd processes with
 ```shell
 ovn-appctl -t ovn-northd exit
 ```
 which should cause the container running northd to restart. If this does not
-work you can try restarting the pods where the affected ovn-northd procesess are
+work you can try restarting the pods where the affected ovn-northd processes are
 running.
 
-Contact the incident response team in your organisation if fixing the issue is
+Contact the incident response team in your organization if fixing the issue is
 not apparent.
