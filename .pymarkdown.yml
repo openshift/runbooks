@@ -11,7 +11,7 @@ plugins:
   # Inconsistent Unordered List Start style
   # md004:
   ul-style:
-    enabled: false
+    enabled: true
     style: consistent
 
   # Inconsistent indentation for list items at the same level
