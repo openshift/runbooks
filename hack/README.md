@@ -14,4 +14,17 @@ Running `lint.sh`
 
 ```sh
 hack/lint.sh
+
+# lint spelling
+hack/lint_spelling.sh
+
+# lint markdown
+hack/lint_spelling.sh
+```
+
+Fix markdown errors
+
+```sh
+. venv/bin/activate
+pymarkdown fix --recurse .
 ```

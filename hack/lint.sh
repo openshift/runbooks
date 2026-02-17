@@ -57,6 +57,11 @@ fix_markdown(){
   pymarkdown fix --recurse .
 }
 
+lint(){
+  lint_spelling
+  lint_markdown
+}
+
 py_check_venv
 py_bin_checks
 
