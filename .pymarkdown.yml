@@ -22,7 +22,7 @@ plugins:
   # Unordered list indentation
   # md007:
   ul-indent:
-    enabled: false
+    enabled: true
 
   # Multiple consecutive blank lines
   # md012:
