@@ -17,7 +17,7 @@ plugins:
   # Inconsistent indentation for list items at the same level
   # md005:
   list-indent:
-    enabled: false
+    enabled: true
 
   # Unordered list indentation
   # md007:
