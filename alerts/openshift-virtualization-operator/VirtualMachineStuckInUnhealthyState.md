@@ -261,8 +261,8 @@ misconfigurations:
    - Use local image registries where possible to reduce
      latency
    - Configure DataVolume import methods appropriately:
-     * **Pod import method**: Images pulled to temporary pods (default)
-     * **Node import method**: Images pulled directly to nodes
+     - **Pod import method**: Images pulled to temporary pods (default)
+     - **Node import method**: Images pulled directly to nodes
        (requires pre-pulling)
    - Pre-pull critical containerDisk images to nodes only if
      using node import method

@@ -19,29 +19,29 @@ resulting in data loss at the configured log store.
 
 1. Examine `CollectorHigh403ForbiddenResponseRate` alert details in the OpenShift
 console:
-    - Note the key labels:
-        - `app_kubernetes_io_instance`: The name of the collector.
-        - `namespace`: Namespace of the collector.
-        - `component_id`: The ID of the specific sink in `Vector` that's failing
+   - Note the key labels:
+     - `app_kubernetes_io_instance`: The name of the collector.
+     - `namespace`: Namespace of the collector.
+     - `component_id`: The ID of the specific sink in `Vector` that's failing
         (i.e `output_lokistack_otlp_application`, `output_my_splunk`).
 2. Review the `ClusterLogForwarder` (CLF) configuration:
     1. Identify the output definition corresponding to the `component_id`
     obtained from the alert details.
-        - See naming schemas for
+       - See naming schemas for
         [non-Lokistack](./ClusterLogForwarderConfigNamingSchema.md#non-lokistack-outputs)
         and
         [Lokistack](./ClusterLogForwarderConfigNamingSchema.md#lokistack-outputs)
         outputs.
     2. Examine the secret or authentication fields defined for the affected output.
 3. Validate authentication credentials in the identified secrets:
-    - Identify the Kubernetes `Secret` object referenced by the affected CLF
-      output.
-    - Verify the following:
+   - Identify the Kubernetes `Secret` object referenced by the affected CLF
+     output.
+   - Verify the following:
         1. The `Secret` object exists in the specified namespace.
         2. The expected keys (e.g., token, password, etc.) are
         present and contain valid, non-empty values.
 4. Verify log store authorization with the provided credentials.
-    - Confirm that the credentials provided in the identified Secret possess the
+   - Confirm that the credentials provided in the identified Secret possess the
     necessary permissions (i.e write) to the target log store.
 
 ### Diagnosis for Red Hat Managed Lokistack

@@ -1,0 +1,92 @@
+system:
+  exclude_path: scratch/
+extensions:
+  markdown-tables:
+    enabled: true
+  markdown-strikethrough:
+    enabled: true
+  markdown-task-list-items:
+    enabled: true
+plugins:
+  # Inconsistent Unordered List Start style
+  # md004:
+  ul-style:
+    enabled: true
+    style: consistent
+
+  # Inconsistent indentation for list items at the same level
+  # md005:
+  list-indent:
+    enabled: true
+
+  # Unordered list indentation
+  # md007:
+  ul-indent:
+    enabled: true
+
+  # Multiple consecutive blank lines
+  # md012:
+  no-multiple-blanks:
+    enabled: false
+
+  # Line length
+  # md013:
+  line-length:
+    enabled: false
+    line_length: 100
+    code_blocks: false
+
+  # Dollar signs used before commands without showing output
+  # md014:
+  commands-show-output:
+    enabled: false
+
+  # Headings should be surrounded by blank lines
+  # md022:
+  blanks-around-headings:
+    enabled: false
+
+  # Multiple headings cannot contain the same content
+  # md024:
+  no-duplicate-heading:
+    enabled: false
+
+  # Ordered list item prefix
+  # md029:
+  ol-prefix:
+    enabled: false
+
+  # Fenced code blocks should be surrounded by blank lines
+  # md031:
+  blanks-around-fences:
+    enabled: false
+
+  # List blocks should be surrounded by blank lines
+  # md032:
+  blanks-around-lists:
+    enabled: false
+
+  # Inline HTML
+  # md033:
+  no-inline-html:
+    enabled: false
+
+  # Bare URL used
+  # md034:
+  no-bare-urls:
+    enabled: false
+
+  # Emphasis possibly used instead of a heading element
+  # md036:
+  no-emphasis-as-heading:
+    enabled: false
+
+  # First line in file should be a top-level heading
+  # md041:
+  first-line-heading:
+    enabled: false
+
+  # Each file should end with a single newline character
+  # md047:
+  single-trailing-newline:
+    enabled: false

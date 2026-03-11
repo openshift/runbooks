@@ -1,0 +1,20 @@
+matrix:
+  - name: Markdown
+    aspell:
+      lang: en
+      # ignore-case: true
+    dictionary:
+      encoding: utf-8
+      wordlists:
+        - .wordlist-md
+      output: scratch/dictionary.dic
+    pipeline:
+      - pyspelling.filters.markdown:
+      - pyspelling.filters.html:
+          comments: false
+          ignores:
+            - code
+            - pre
+    sources:
+      - '!**/INFO.md|!**/TODO.md|!venv/**|!scratch/**|**/*.md'
+    default_encoding: utf-8

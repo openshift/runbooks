@@ -87,33 +87,33 @@ sum by (node) (
 
 These are the conditions that could trigger the alert:
 
-- there is a new workload that is generating more calls to the apiserver
+* there is a new workload that is generating more calls to the apiserver
   and causing high CPU usage. In this case, increase the CPU and
   memory on your control plane nodes.
-- the alert is triggered based on the node metrics, so it could be that a
+* the alert is triggered based on the node metrics, so it could be that a
   component on the node is causing the high CPU usage.
-- apiserver/etcd is processing more requests due to client retries that is
+* apiserver/etcd is processing more requests due to client retries that is
   being caused by an underlying condition.
-- uneven distribution of requests to the apiserver instance(s) due to http2
+* uneven distribution of requests to the apiserver instance(s) due to http2
   (it multiplexes requests over a single TCP connection). The load balancers
   are not at application layer, and so does not understand http2.
 
 
 ## Mitigation
 
-- if a workload is generating load to the apiserver that is causing high CPU
+* if a workload is generating load to the apiserver that is causing high CPU
   usage, then increase the CPU and memory on your control plane nodes.
-- If the sustained high CPU usage is due to a cluster degradation:
+* If the sustained high CPU usage is due to a cluster degradation:
 
-  - find out the root cause of the degradation, and then
+  * find out the root cause of the degradation, and then
     determine the next steps accordingly.
 
 If this needs to be reported, then capture the following dataset, and file
 a new issue in BugZilla with links to the captured dataset:
 
-- must-gather
-- audit logs
-- dump of prometheus data
+* must-gather
+* audit logs
+* dump of prometheus data
 
 
 How to gather the audit logs of the cluster:

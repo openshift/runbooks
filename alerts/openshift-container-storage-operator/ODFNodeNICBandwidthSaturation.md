@@ -30,12 +30,12 @@ rate(node_network_transmit_bytes_total{...}) * 8
 ## Mitigation
 
 1. Short term: Throttle non-essential traffic on the node.
-    * Taint the OSD node to prevent scheduling of non-storage workloads.
-    * Drain existing non-essential pods from the node.
+   * Taint the OSD node to prevent scheduling of non-storage workloads.
+   * Drain existing non-essential pods from the node.
 2. Long term:
-    * Upgrade to higher-speed NICs (e.g., 25GbE → 100GbE).
-    * Use multiple bonded interfaces with LACP.
-    * Separate storage and client traffic using VLANs or dedicated NICs.
+   * Upgrade to higher-speed NICs (e.g., 25GbE → 100GbE).
+   * Use multiple bonded interfaces with LACP.
+   * Separate storage and client traffic using VLANs or dedicated NICs.
 3. Tune Ceph osd_max_backfills, osd_recovery_max_active to reduce
    recovery bandwidth.
 4. Enable NIC offload features (TSO, GRO) if disabled.

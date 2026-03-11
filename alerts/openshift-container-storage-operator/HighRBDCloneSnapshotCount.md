@@ -39,12 +39,12 @@ rbd children --pool <pool> [--namespace <namespace>] <image-name>
 rbd snap ls --pool <pool> [--namespace <namespace>] <image-name>
 ```
 6. Correlate with Kubernetes resources:
-    * Find associated PVCs: oc get pv -o jsonpath='{.spec.claimRef.name}'
-      --field-selector=spec.csi.volumeAttributes.imageName=<image-name>
-    * Check VolumeSnapshots: oc get volumesnapshot -A | grep <image-name>
+   * Find associated PVCs: oc get pv -o jsonpath='{.spec.claimRef.name}'
+     --field-selector=spec.csi.volumeAttributes.imageName=<image-name>
+   * Check VolumeSnapshots: oc get volumesnapshot -A | grep <image-name>
 7. Determine the source:
-    * Is a backup tool (e.g., Velero) creating frequent snapshots?
-    * Is a CI/CD pipeline cloning the same image repeatedly?
+   * Is a backup tool (e.g., Velero) creating frequent snapshots?
+   * Is a CI/CD pipeline cloning the same image repeatedly?
 
 ## Mitigation
 
@@ -55,8 +55,8 @@ oc delete pvc <pvc-name> -n <namespace>
 This triggers the CSI driver to clean up the underlying RBD clone.
 
 2. Implement lifecycle policies :
-    * Configure snapshot retention in backup tools (e.g., Velero TTL).
-    * Limit the number of concurrent clones in automation workflows.
+   * Configure snapshot retention in backup tools (e.g., Velero TTL).
+   * Limit the number of concurrent clones in automation workflows.
 3. Monitor growth rate to catch issues early:
 ```bash
 # triggers when an RBD image is, on average , gaining more than 10 new clones

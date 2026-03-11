@@ -28,12 +28,12 @@ the deprecated config as shown in the following example:
 
 ## Mitigation
 
-* For the `k8sPrometheusAdapter.dedicatedServiceMonitors`
+- For the `k8sPrometheusAdapter.dedicatedServiceMonitors`
 field, you can remove the block. For more information, see
 `Monitoring deprecated and removed features` under
 [Deprecated and removed features](https://docs.openshift.com/container-platform/4.16/release_notes/ocp-4-16-release-notes.html#ocp-4-16-deprecated-removed-features_release-notes).
 
-* For the other `k8sPrometheusAdapter` fields, see `Monitoring deprecated and
+- For the other `k8sPrometheusAdapter` fields, see `Monitoring deprecated and
 removed features` under [Deprecated and removed features](https://docs.openshift.com/container-platform/4.16/release_notes/ocp-4-16-release-notes.html#ocp-4-16-deprecated-removed-features_release-notes).
 You might need to migrate some of the fields under [metricsServer](https://docs.openshift.com/container-platform/latest/observability/monitoring/config-map-reference-for-the-cluster-monitoring-operator.html#metricsserverconfig).
 
