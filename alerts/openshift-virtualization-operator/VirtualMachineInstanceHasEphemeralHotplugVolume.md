@@ -23,14 +23,12 @@ suggest steps to convert ephermeral volumes to persistent ones.
 
 1. Find each VM that contains an ephemeral hotplug volume.
    This command returns a list with entries in the [vm-name, namespace] format.
-    ``` bash
-    $ oc get vmis -A -o json | jq -r '.items[].metadata | select(.annotations |
-has("kubevirt.io/ephemeral-hotplug-volumes")) | [.name , .namespace] | @tsv'
+    ```bash
+    $ oc get vmis -A -o json | jq -r '.items[].metadata | select(.annotations | has("kubevirt.io/ephemeral-hotplug-volumes")) | [.name , .namespace] | @tsv'
     ```
 2. For each VM listed, find the volumes that need to be patched.
-   ``` bash
-   $ oc get vmis <vm-name> -n <namespace> -o json | jq -r
-'.metadata.annotations."kubevirt.io/ephemeral-hotplug-volumes"'
+   ```bash
+   $ oc get vmis <vm-name> -n <namespace> -o json | jq -r '.metadata.annotations."kubevirt.io/ephemeral-hotplug-volumes"'
    ```
 
 ## Mitigation
@@ -39,7 +37,7 @@ To mitigate the impact of this alert, consider converting the ephemeral
 hotplug volumes in the VM to persistent volumes instead.
 
 To convert ephemeral volumes to persistent volumes, run the following command:
-``` bash
+```bash
 $ virtctl addvolume <vm-name> --volume-name=<volume-name> --persist
 ```
 
