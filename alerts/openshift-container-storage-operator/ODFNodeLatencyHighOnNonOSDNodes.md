@@ -1,4 +1,4 @@
-# ODFNodeLatencyHighOnNONOSDNodes
+# ODFNodeLatencyHighOnNonOSDNodes
 
 ## Meaning
 
