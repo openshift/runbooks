@@ -11,7 +11,7 @@ are only 3 monitors.
 
 This a "info" level alert, and therefore just a suggestion.
 The alert is just suggesting to increase the number of ceph monitors, to be
-more resistent to failures.
+more resistant to failures.
 It can be silenced without any impact in the cluster functionality or
 performance.
 If the number of monitors is increased to 5, the cluster will be more robust.

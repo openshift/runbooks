@@ -10,7 +10,7 @@ will fire.
 
 ## Impact
 
-If the MCD is unable to succesfully reboot the node,
+If the MCD is unable to successfully reboot the node,
 any pending MachineConfig changes that would
 require a reboot would not be propagated,
 and the MachineConfig cluster operator would degrade.
@@ -71,7 +71,7 @@ update.go:2641] failed to run reboot: exec: "systemd-run": executable file not f
 
 This error indicates that the `systemd-run` file cannot be
 found in the /usr/bin/systemd-run $PATH and so the node
-cannot reboot succesfully.
+cannot reboot successfully.
 
 The error message will change depending on what is
 preventing the reboot.

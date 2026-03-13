@@ -31,12 +31,12 @@ pod logs for the cluster.
 
 For the following command, replace the $DAEMONPOD variable
 with the name of your own machine-config-daemon-* pod name.
-That is scheduled on the node expriencing the error.
+That is scheduled on the node experiencing the error.
 
 ```console
 oc logs -f -n openshift-machine-config-operator $DAEMONPOD -c machine-config-daemon
 ```
-When a pivot is occuring the following will be logged.
+When a pivot is occurring the following will be logged.
 
 ```console
 I1126 17:15:38.991090    3069 rpm-ostree.go:243] Executing rebase to quay.io/my-registry/custom-image@blah
@@ -67,7 +67,7 @@ stated reason it gives for not being able to pivot. The following are
 common reasons a pivot can fail.
 
 - The rpm-ostree service is unable to
-pull the image from quay succesfully.
+pull the image from quay successfully.
 - There are issues with the rpm-ostree service itself such as
 being unable to start, or unable to build the OsImage folder,
 unable to pivot from the current configuration.
