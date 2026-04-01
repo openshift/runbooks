@@ -2,8 +2,8 @@
 
 ## Meaning
 
-This alert fires when one or more `virt-operator` pods are running, but none of
-these pods has been in a `Ready` state for the last 10 minutes.
+This alert fires when one or more `virt-operator` pods are running, but not
+all of them have been in a `Ready` state for the last 10 minutes.
 
 The `virt-operator` is the first Operator to start in a cluster. The
 `virt-operator` deployment has a default replica of two `virt-operator` pods.
