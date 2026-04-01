@@ -2,7 +2,7 @@
 
 ## Meaning
 
-This alert fires when all the API Server pods are down.
+No running `virt-api` pod has been detected for 10 minutes.
 
 ## Impact
 
