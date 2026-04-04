@@ -10,7 +10,7 @@ with `openshift-` or `kube-`.
 ## Impact
 
 Significant inode usage by a system component is likely to prevent the
-component from functioning normally. Signficant inode usage can also lead to a
+component from functioning normally. Significant inode usage can also lead to a
 partial or full cluster outage.
 
 ## Diagnosis
