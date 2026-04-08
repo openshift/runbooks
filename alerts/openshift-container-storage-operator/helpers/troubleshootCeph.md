@@ -6,7 +6,7 @@ Some common commands to troubleshoot a Ceph cluster:
 
 * ceph status
 * ceph osd status
-* cepd osd df
+* ceph osd df
 * ceph osd utilization
 * ceph osd pool stats
 * ceph osd tree

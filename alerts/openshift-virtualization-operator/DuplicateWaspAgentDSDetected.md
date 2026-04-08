@@ -5,7 +5,7 @@ This alert is deprecated. You can safely ignore or silence it.
 ## Meaning
 wasp-agent is a node-local agent that enables swap for burstable QoS pods.
 It mimics the behavior of kubelet swap feature.
-wasp-agent deployment consists of Daemonset, serivce account,
+wasp-agent deployment consists of Daemonset, service account,
 role binding, privileged SCC. Wasp-agent currently deployed automatically
 by the HCO operator when the memory overcommit percentage is set to a
 value higher than 100%. In the past wasp-agent was deployed manually
