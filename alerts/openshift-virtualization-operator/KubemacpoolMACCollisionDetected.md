@@ -11,25 +11,30 @@ traffic being delivered to the wrong targets.
 
 ## Diagnosis
 
-1. Set the `KMP_NAMESPACE` environment variable:
-
-   ```bash
-   $ export KMP_NAMESPACE="$(oc get pod -A --no-headers -l \
-      control-plane=mac-controller-manager | awk '{print $1}')"
-   ```
-
-2. Query the `kmp_mac_collisions` metric to see which MACs are colliding
+1. Query the `kmp_mac_collisions` metric to see which MACs are colliding
    (value > 1 means collision):
 
-   ```bash
-   $ oc exec -n $KMP_NAMESPACE deployment/kubemacpool-mac-controller-manager \
-      -c manager -- curl -s http://localhost:8080/metrics | grep kmp_mac_collisions
+
+
+   **Note:** You can use the Openshift metrics explorer available at
+'https://{OPENSHIFT_BASE_URL}/monitoring/query-browser'.
+
+   ```promql
+   $ kmp_mac_collisions > 1
    ```
 
-3. For each colliding MAC, find the VMIs involved:
+2. For each colliding MAC, find the VMIs involved:
 
    ```bash
-   $ oc get vmi -A -o jsonpath='{range .items[*]}{.metadata.namespace}{"\t"}{.metadata.name}{"\t"}{.status.interfaces[*].mac}{"\n"}{end}' | grep -i "<MAC_ADDRESS>"
+   $ export MAC=<MAC_ADDRESS>
+   $ oc get vmi -A -o jsonpath='{range .items[*]}{.metadata.namespace}{"\t"}{.metadata.name}{"\t"}{.status.interfaces[*].mac}{"\n"}{end}' | grep -i "$MAC"
+   ```
+
+4. For each colliding MAC, find Pods with Multus secondary interfaces involved:
+
+   ```bash
+   $ export MAC=<MAC_ADDRESS>
+   $ oc get pod -A -o json | jq -r --arg mac "$MAC" '.items[] | .metadata as $m | (.metadata.annotations["k8s.v1.cni.cncf.io/network-status"] // "[]" | fromjson)[] | select(.mac // "" | test($mac; "i")) | "\($m.namespace)\t\($m.name)\t\(.mac)"'
    ```
 
 ## Mitigation
