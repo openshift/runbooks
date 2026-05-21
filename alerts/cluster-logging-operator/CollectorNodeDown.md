@@ -58,10 +58,10 @@ alerts (such as `ClusterLogForwarderOutputErrorRate`, `DiskBufferUsage`, or
    If the pod is running, test if the metrics endpoint responds:
 
    ```bash
-   oc exec <POD_NAME> -n openshift-logging -- curl -s http://localhost:8686/metrics
+   oc exec <POD_NAME> -n openshift-logging -- curl -s http://localhost:24231/metrics
    ```
 
-   The collector typically exposes metrics on port 8686. If this command fails
+   The collector typically exposes metrics on port 24231. If this command fails
    or times out, the metrics server within the collector is not functioning.
 
 5. **Check network policies:**
@@ -187,7 +187,7 @@ If the pod is running but Prometheus cannot reach it:
 
 - The collector is typically deployed as a DaemonSet, so there should be one
   collector pod per node in the cluster.
-- The default metrics port for the collector is 8686.
+- The default metrics port for the collector is 24231.
 - This alert specifically monitors the `up` metric with labels
   `app_kubernetes_io_component = "collector"` and
   `app_kubernetes_io_part_of = "cluster-logging"`.
