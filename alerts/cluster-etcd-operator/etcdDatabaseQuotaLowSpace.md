@@ -2,10 +2,10 @@
 
 ## Meaning
 
-This alert fires when the total existing DB size exceeds 95% of the maximum
-DB quota. The consumed space is in Prometheus represented by the metric
-`etcd_mvcc_db_total_size_in_bytes`, and the DB quota size is defined by
-`etcd_server_quota_backend_bytes`.
+This alert fires at critical severity when the total existing DB size exceeds
+85% of the maximum DB quota. The consumed space is in Prometheus represented by
+the metric `etcd_mvcc_db_total_size_in_bytes`, and the DB quota size is defined
+by `etcd_server_quota_backend_bytes`.
 
 ## Impact
 
