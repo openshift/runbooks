@@ -14,11 +14,11 @@ be fixed as soon as possible.
 ## Diagnosis
 
 Make sure we have enough RAM provisioned for MDS Cache. Default is 4GB, but
-recomended is minimum 8GB.
+recommended is minimum 8GB.
 
 ## Mitigation
 
-It is highly recomended to distribute MDS daemons across at least two nodes in
+It is highly recommended to distribute MDS daemons across at least two nodes in
 the cluster. Otherwise, a hardware failure on a single node may result in the
 file system becoming unavailable.
 

@@ -37,7 +37,7 @@ oc patch -n openshift-storage storagecluster ocs-storagecluster \
 ```
 Above is a sample patch command, user need to see their current CPU
 configurations and increase accordingly
-PS: It is always adviced to add another MDS pod (that is to scale
+PS: It is always advised to add another MDS pod (that is to scale
 Horizontally) once we have reached the max resource limit. Please see
 [HorizontalScaling](CephMdsCPUUsageHighNeedsHorizontalScaling.md)
 documentation for more details.

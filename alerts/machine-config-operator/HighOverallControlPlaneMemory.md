@@ -11,7 +11,7 @@ threshold for 1 hour, the alert will fire.
 ## Impact
 The memory usage per instance within control
 plane nodes influences the stability
-and responsiveness of the cluster, most noticably in the etcd and
+and responsiveness of the cluster, most noticeably in the etcd and
 Kubernetes API server pods. Moreover, OOM kill can occur
 with excessive memory usage, which negatively
 influences the pod scheduling. Etcd also relies on a certain number of
