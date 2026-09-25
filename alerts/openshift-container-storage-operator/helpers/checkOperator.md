@@ -30,7 +30,7 @@ The status for each type should be False. For example:
     ]
 ```
 
-The output above shows a false status for type CatalogSourcesUnHealthly,
+The output above shows a false status for type CatalogSourcesUnHealthy,
 meaning the catalog sources are healthy.
 
 ## OCS Operator Pod Health

@@ -10,7 +10,7 @@ One threshold that can trigger this warning condition is the
 ## Impact
 
 Due the quota configured the pool will become readonly when the quota will be
-exhausted completelly
+exhausted completely
 
 ## Diagnosis
 

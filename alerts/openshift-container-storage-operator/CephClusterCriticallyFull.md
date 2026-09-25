@@ -12,7 +12,7 @@ Storage cluster will become read-only at 85%.
 
 ## Diagnosis
 
-Using the Openshift console, go to Storage-Data Fountation-Storage systems.
+Using the Openshift console, go to Storage-Data Foundation-Storage systems.
 A list of the available storage systems with basic information about raw
 capacity and used capacity will be visible.
 The command "ceph health" provides also information about cluster storage

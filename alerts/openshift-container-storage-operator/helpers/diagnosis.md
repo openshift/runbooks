@@ -82,7 +82,7 @@ Step 1: Check Node Health:
     ip-10-0-175-99.eu-west-2.compute.internal    Ready    worker         83m   v1.23.5+3afdacb   10.0.175.99    <none>        Red Hat Enterprise Linux CoreOS 410.84.202206080346-0 (Ootpa)   4.18.0-305.49.1.el8_4.x86_64   cri-o://1.23.3-3.rhaos4.10.git5fe1720.el8
 ```
 
-If any nodes are not ready/scheduable, then continue to Step 2.
+If any nodes are not ready/schedulable, then continue to Step 2.
 
 Step 2: Inspect Node Events:
 
@@ -108,7 +108,7 @@ Example:
 ```
 
 Look for any events similar to the above example which may indicate the node
-is undergoing maintainence.
+is undergoing maintenance.
 
 ## Further info
 
@@ -120,7 +120,7 @@ converged mode on OpenShift Dedicated Clusters by the OpenShift Cluster Manager
 
 Related Links
 
-* [ODF Dedicated Converged Add-on Architecure](https://docs.google.com/document/d/1ISEY16OfsvEPmlJEjEwPvDvDs0KyNzgl369A-V6-GRA/edit#heading=h.mznotzn8pklp)
+* [ODF Dedicated Converged Add-on Architecture](https://docs.google.com/document/d/1ISEY16OfsvEPmlJEjEwPvDvDs0KyNzgl369A-V6-GRA/edit#heading=h.mznotzn8pklp)
 
 * [ODF Product Architecture](https://access.redhat.com/documentation/en-us/red_hat_openshift_container_storage/4.6/html/planning_your_deployment/ocs-architecture_rhocs)
 

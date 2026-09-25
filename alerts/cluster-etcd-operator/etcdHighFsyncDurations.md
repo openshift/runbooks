@@ -39,7 +39,7 @@ You can find more performance troubleshooting tips in
 
 In the OpenShift dashboard console under Observe section, select the etcd
 dashboard. There are both leader elections as well as Disk Sync Duration
-dashboards which will assit with further issues.
+dashboards which will assist with further issues.
 
 ## Mitigation
 
