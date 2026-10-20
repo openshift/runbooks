@@ -85,8 +85,15 @@ VMs and the cluster control plane might be affected:
 2. Clean up failed Pods (relieves API/etcd and monitoring):
 
     ```bash
-    $ oc get pods -A -l kubevirt.io=virt-launcher --field-selector=status.phase=Failed -o name | xargs -r -n50 oc delete
+    oc get pods -A \
+      -l kubevirt.io=virt-launcher \
+      --field-selector=status.phase=Failed \
+      -o custom-columns='NAMESPACE:.metadata.namespace,NAME:.metadata.name' \
+      --no-headers |
+      awk '{print $2, "-n", $1}' |
+      xargs -r -n3 oc delete pod --dry-run=server
     ```
+    Remove `--dry-run=server` to actually clean up failed pods.
 
 3. Resolve root cause:
 
