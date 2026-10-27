@@ -1,23 +1,17 @@
 reviewers:
 - simonpasquier
 - jan--f
-- raptorsun
 - slashpai
-- bburt-rh
 - danielmellado
 - marioferh
-- rexagod
 - machine424
 
 approvers:
 - simonpasquier
 - jan--f
-- raptorsun
 - slashpai
-- bburt-rh
 - danielmellado
 - marioferh
-- rexagod
 - machine424
 
 emeritus_approvers:
@@ -36,3 +30,6 @@ emeritus_approvers:
 - JoaoBraveCoding
 - sthaha
 - PhilipGough
+- rexagod
+- bburt-rh
+- raptorsun
