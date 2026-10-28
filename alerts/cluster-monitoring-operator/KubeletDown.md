@@ -2,8 +2,10 @@
 
 ## Meaning
 
-The `KubeletDown` alert is triggered when the monitoring system has not been
-able to reach any of the Kubelets in a cluster for more than 15 minutes.
+The `KubeletDown` alert is triggered when the monitoring system has failed to
+scrape metrics from all Kubelets in a cluster for more than 15 minutes, either
+because the monitoring system can't connect to the Kubelets or because the
+Kubelets fail to respond in time.
 
 ## Impact
 
@@ -27,7 +29,7 @@ $ oc get events
 ```
 
 You can [access cluster node journal logs][cluster-node-journal-logs] to review
-the logs for the Kubelet.  If the Kubelet is functional, you can use:
+the logs for the Kubelet. If the Kubelet is functional, you can use:
 
 ```console
 $ oc adm node-logs --role=master -u kubelet
