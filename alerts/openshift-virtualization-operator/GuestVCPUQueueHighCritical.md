@@ -21,7 +21,7 @@ This indicates severe CPU contention.
 2. **Check host CPU usage**
    ```promql
    rate(kubevirt_vmi_cpu_usage_seconds_total{namespace="$NS",name="$VM"}[2m])
-   ``
+   ```
    If the CPU usage is more than 90%, migrate other VMs or
    mark the node as unschedulable, so that no new pods/VMs are placed on it.
 
