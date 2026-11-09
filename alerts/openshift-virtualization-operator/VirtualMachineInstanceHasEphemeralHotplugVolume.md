@@ -41,7 +41,6 @@ To convert ephemeral volumes to persistent volumes, run the following command:
 $ virtctl addvolume <vm-name> --volume-name=<volume-name> --persist
 ```
 
-If you cannot resolve the issue, log in to the [Red Hat Customer
-Portal](link:https://access.redhat.com)
-and open a support case, attaching the artifacts gathered during the diagnosis
-procedure.
+If you cannot resolve the issue, log in to the
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.

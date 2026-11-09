@@ -59,5 +59,5 @@ storage class, and
 that the default storage class supports smart cloning and ReadWriteMany.
 
 If you cannot resolve the issue, log in to the
-[Customer Portal](https://access.redhat.com) and open a support case, attaching
-the artifacts gathered during the diagnosis procedure.
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.

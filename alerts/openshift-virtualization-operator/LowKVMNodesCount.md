@@ -21,3 +21,7 @@ Virtual machines cannot be scheduled or run if no nodes have KVM resources.
 ## Mitigation
 
 Install KVM on the nodes without KVM resources.
+
+If you cannot resolve the issue, log in to the
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.

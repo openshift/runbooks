@@ -12,7 +12,8 @@ uninterruptible threads. The run‑queue length is derived from
 * Moderate CPU contention inside the guest VM. Latency might spike, but workload
 still progresses.
 
-* An early signal that the VM might need additional vCPUs or that a short‑lived
+* An early signal that the VM might need additional vCPUs or that a
+short‑lived
 process is causing bursts.
 
 ## Diagnosis

@@ -312,7 +312,8 @@ cluster, or remove the DICT from the `HyperConverged` CR.
       ```
 
 For more information about building multi-architecture images, see the
-[podman documentation](https://docs.podman.io/en/latest/markdown/podman-manifest-create.1.html).
+[podman
+documentation](https://docs.podman.io/en/latest/markdown/podman-manifest-create.1.html).
 
 If you cannot resolve the issue, log in to the
 [Red Hat Customer Portal](https://access.redhat.com) and open a support case,

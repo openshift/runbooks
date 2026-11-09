@@ -41,6 +41,7 @@ with specifications that do not match their respective workloads.
 ## Mitigation
 
 Try to identify the root cause and resolve the issue.
+
 If you cannot resolve the issue, log in to the
-[Customer Portal](https://access.redhat.com) and open a support case,
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.

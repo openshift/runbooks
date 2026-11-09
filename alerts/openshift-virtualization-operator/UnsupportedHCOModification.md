@@ -76,3 +76,7 @@ To remove a specific JSON Patch annotation from the `HyperConverged` CR:
   # Remove SSP jsonpatch
   # oc annotate hyperconverged -n "${NS}" kubevirt-hyperconverged 'ssp.kubevirt.io/jsonpatch-'
   ```
+
+If you cannot resolve the issue, log in to the
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.

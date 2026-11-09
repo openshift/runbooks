@@ -93,7 +93,8 @@ This is a `warning` alert. The impact depends on the firing condition:
           {"op":"remove","path":"/metadata/finalizers/<index>"}]'
   ```
 
-  The patch will fail if the finalizer array changed since inspection — if that
+  The patch will fail if the finalizer array changed since inspection — if
+that
   happens, re-inspect and adjust the index. Removing a live finalizer skips the
   cleanup it guards, so only do this when you understand the consequences.
 
@@ -114,5 +115,5 @@ is, once `kubevirt_autopilot_tombstone_status` is no longer negative (the
 resource is deleted or the CRD is absent, `0`, or exists again, `1`).
 
 If you cannot resolve the issue, log in to the
-[Customer Portal](https://access.redhat.com) and open a support case,
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.

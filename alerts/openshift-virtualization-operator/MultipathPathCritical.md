@@ -60,3 +60,7 @@ Prioritize devices with no usable paths. Investigate fabric, HBA, switch,
 storage session, and array controller failures. Verify path recovery and
 affected workload I/O before closing the incident. Do not remove a mapped
 device while workloads are using it.
+
+If you cannot resolve the issue, log in to the
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.

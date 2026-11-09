@@ -44,3 +44,7 @@ a suspended device can be part of an in-progress storage operation.
 Verify that the device is active, workload I/O resumes, and
 `node_dmmultipath_device_active` returns to `1`. Do not remove or recreate the
 device while workloads are using it.
+
+If you cannot resolve the issue, log in to the
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.
