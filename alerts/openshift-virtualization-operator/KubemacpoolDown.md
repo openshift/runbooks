@@ -40,5 +40,5 @@ If `KubeMacPool` is down, `VirtualMachine` objects cannot be created.
 ## Mitigation
 
 If you cannot resolve the issue, log in to the
-[Customer Portal](https://access.redhat.com) and open a support case,
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.

@@ -115,6 +115,5 @@ Ensure the failed count drops and stays below threshold and that new
 virt-launcher Pods start successfully and VMIs are healthy.
 
 If you cannot resolve the issue, log in to the
-[Red Hat Customer Portal](link:https://access.redhat.com) and open a
-support case, attaching the artifacts gathered during the diagnosis
-procedure.
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.

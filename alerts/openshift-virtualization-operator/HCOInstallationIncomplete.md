@@ -47,3 +47,7 @@ default values:
 
 - Uninstall the HCO. If the uninstallation process continues to run, you must
 resolve that issue in order to cancel the alert.
+
+If you cannot resolve the issue, log in to the
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.

@@ -59,5 +59,5 @@ Based on the information obtained during the diagnosis procedure, try to
 identify the root cause and resolve the issue.
 
 If you cannot resolve the issue, log in to the
-[Customer Portal](https://access.redhat.com) and open a support case,
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.

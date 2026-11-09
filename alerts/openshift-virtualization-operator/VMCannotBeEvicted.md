@@ -50,3 +50,7 @@ issue:
 
 Set the `evictionStrategy` of the VMI to `shutdown` or resolve the issue that
 prevents the VMI from migrating.
+
+If you cannot resolve the issue, log in to the
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.

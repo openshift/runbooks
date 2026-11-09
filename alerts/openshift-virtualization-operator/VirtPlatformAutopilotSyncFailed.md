@@ -78,9 +78,11 @@ Resolve the root cause revealed by the logs and events:
   ```
 
 - **Conflicting controller or user (edit war):** see
-  [VirtPlatformAutopilotThrashingDetected](VirtPlatformAutopilotThrashingDetected.md).
+
+[VirtPlatformAutopilotThrashingDetected](VirtPlatformAutopilotThrashingDetected.md).
 - **Missing CRD:** see
-  [VirtPlatformAutopilotDependencyMissing](VirtPlatformAutopilotDependencyMissing.md).
+
+[VirtPlatformAutopilotDependencyMissing](VirtPlatformAutopilotDependencyMissing.md).
 
 If the drift is intentional and the resource must be managed outside of
 virt-platform-autopilot, stop the automation for it:
@@ -108,5 +110,5 @@ series is removed entirely (the resource is now unmanaged or excluded from
 autopilot control).
 
 If you cannot resolve the issue, log in to the
-[Customer Portal](https://access.redhat.com) and open a support case,
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.

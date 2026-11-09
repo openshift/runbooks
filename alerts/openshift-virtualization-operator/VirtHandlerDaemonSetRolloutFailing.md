@@ -18,7 +18,7 @@ Identify worker nodes that do not have a running `virt-handler` pod:
 1. Export the `NAMESPACE` environment variable:
 
    ```bash
-   $ export NAMESPACE="$(oc get kubevirt -A -o jsonpath='{.items[].metadata.namespace}')"
+   $ export NAMESPACE="$(oc get kubevirt -A -o custom-columns="":.metadata.namespace)"
    ```
 
 2. Check the status of the `virt-handler` pods to identify pods that have not
@@ -38,3 +38,7 @@ deployed:
 
 If the `virt-handler` pods failed to deploy because of insufficient resources,
 you can delete other pods on the affected worker node.
+
+If you cannot resolve the issue, log in to the
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.

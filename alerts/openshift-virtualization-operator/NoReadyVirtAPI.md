@@ -7,13 +7,14 @@ for 10 minutes.
 
 The `virt-api` serves the OpenShift Virtualization API.
 Without a ready `virt-api`, API requests for virtual machines
-and other KubeVirt resources cannot be served.
+and other OpenShift Virtualization resources cannot be served.
 
 ## Impact
 
-KubeVirt API is effectively unavailable. Users and controllers cannot perform
+OpenShift Virtualization API is effectively unavailable. Users and controllers
+cannot perform
 API operations such as creating, updating, or deleting virtual machine
-instances (VMIs) or other KubeVirt resources.
+instances (VMIs) or other OpenShift Virtualization resources.
 
 ## Diagnosis
 
@@ -54,5 +55,5 @@ Identify the root cause (e.g. all replicas crashing, readiness probe failures,
 node or resource issues) and restore at least one ready `virt-api` pod.
 
 If you cannot resolve the issue, log in to the
-[Customer Portal](https://access.redhat.com) and open a support case,
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.

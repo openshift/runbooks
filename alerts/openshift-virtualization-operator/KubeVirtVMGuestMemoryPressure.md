@@ -82,7 +82,6 @@ to restart):
       $ virtctl start <vm-name> -n <namespace>
         ```
 
-If you cannot resolve the issue, log in to the [Red Hat Customer
-Portal](link:https://access.redhat.com)
-and open a support case, attaching the artifacts gathered during the diagnosis
-procedure.
+If you cannot resolve the issue, log in to the
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
+attaching the artifacts gathered during the diagnosis procedure.

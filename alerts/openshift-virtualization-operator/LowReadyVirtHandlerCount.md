@@ -10,7 +10,8 @@ DaemonSet). Each node typically has one `virt-handler` pod.
 
 ## Impact
 
-Some nodes may have a running but not ready `virt-handler`. VMIs running on those
+Some nodes may have a running but not ready `virt-handler`. VMIs running on
+those
 nodes might not be fully managed (e.g. domain updates, network or storage
 changes). If the condition persists, it can lead to the `NoReadyVirtHandler`
 alert for affected nodes.
@@ -64,5 +65,5 @@ probe, resource pressure, node issues) and resolve the underlying cause so
 all schedulable nodes have a ready `virt-handler`.
 
 If you cannot resolve the issue, log in to the
-[Customer Portal](https://access.redhat.com) and open a support case,
+[Red Hat Customer Portal](https://access.redhat.com) and open a support case,
 attaching the artifacts gathered during the diagnosis procedure.
