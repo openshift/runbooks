@@ -93,8 +93,22 @@ VMs and the cluster control plane might be affected:
 
 2. Clean up failed Pods (relieves API/etcd and monitoring):
 
+    This deletes Pods across every namespace, so preview the Pods that
+    match the selectors first. The listing includes the namespace of
+    each Pod, so you can confirm that only `Failed` virt-launcher Pods
+    match, and not running VM workloads:
+
     ```bash
-    $ oc get pods -A -l kubevirt.io=virt-launcher --field-selector=status.phase=Failed -o name | xargs -r -n50 oc delete
+    $ oc get pods -A -l kubevirt.io=virt-launcher \
+        --field-selector=status.phase=Failed
+    ```
+
+    Only after verifying that listing, delete the Pods with the same
+    selectors:
+
+    ```bash
+    $ oc delete pods -A -l kubevirt.io=virt-launcher \
+        --field-selector=status.phase=Failed
     ```
 
 3. Resolve root cause:
