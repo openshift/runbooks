@@ -5,7 +5,7 @@
 There are Pods in the cluster that share the same volume that supports SELinux
 mounts and the Pods have incompatible SELinux labels.
 
-In OpenShift 4.24 / 5.1, volumes that support it may be mounted with mount option
+In OpenShift 5.1, volumes that support it may be mounted with mount option
 `-o context=<SELinux label>`, which significantly reduces time to apply the
 label to the volume. On the other hand, all Pods that share the same volume
 must use the same SELinux label.
@@ -27,10 +27,10 @@ For a large number of files, it can take a significant amount of time.
 All Pods that use a volume that supports SELinux mount **must** have the same
 SELinux label and the same `spec.securityContext.seLinuxChangePolicy`.
 
-In OpenShift 4.23 / 5.0: All these Pods _may_ run. But these conflicts must be
-resolved before upgrade to 4.24 / 5.1, see below.
+In OpenShift 4.22 / 4.23 / 5.0: All these Pods _may_ run. But these conflicts
+must be resolved before upgrade to 5.1, see below.
 
-In OpenShift 4.24 / 5.1 or newer: **Pods with a different SELinux label or
+In OpenShift 5.1 or newer: **Pods with a different SELinux label or
 `seLinuxChangePolicy` will not run and may get stuck at `ContainerCreating`.**
 
 ## Diagnosis
