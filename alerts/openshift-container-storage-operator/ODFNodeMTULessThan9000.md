@@ -28,7 +28,7 @@ ip link show
 ```
 3. Alternatively, use Prometheus:
 ```promql
-node_network_mtu_bytes{device!~"^(veth|docker|flannel|cali|tun|tap).*"} < 9000
+node_network_mtu_bytes{device!~"^(veth|docker|flannel|cali|tun|tap|ovn-k8s-mp|br-|lo|ovs-system).*"} < 9000
 ```
 4. Verify MTU consistency across all nodes and all switches in the storage fabric.
 
