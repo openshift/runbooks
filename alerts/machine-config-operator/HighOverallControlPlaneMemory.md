@@ -103,13 +103,13 @@ health status with commands run directly on the etcd pods.
   ```console
   $ oc exec -n openshift-etcd <etcd-pod> -c etcd -n openshift-etcd -- etcdctl --command-timeout=160s get / --prefix --keys-only |sed '/^$/d' | cut -d/ -f3,4 | sort | uniq -c | sort -rn |head
   ```
-  You can also use the [fio tool](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/scalability_and_performance/recommended-performance-and-scalability-practices-2#etcd-verify-hardware_recommended-etcd-practices)
+  You can also use the [fio tool](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/etcd/etcd-practices#etcd-verify-hardware_etcd-practices)
   to check the disk performance for the storage disks backing etcd.
 
 ## Mitigation
 - Ensure your control plane nodes
 are appropriately sized for your environment. Red Hat
-offers [sizing and scaling guidelines](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/scalability_and_performance/recommended-performance-and-scalability-practices-2)
+offers [sizing and scaling guidelines](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/scalability_and_performance/recommended-performance-and-scalability-practices#master-node-sizing_recommended-control-plane-practices)
 for clusters of various sizes.
 
 - In the event this alert is firing
@@ -119,5 +119,5 @@ to allow the control plane to stabilize so you
 can troubleshoot the issue.
 
 - Because etcd is crucial to how the cluster runs, Red Hat
-has documented [the recommended practices and requirements for optimal etcd performance.](https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/scalability_and_performance/recommended-performance-and-scalability-practices-2#recommended-etcd-practices_recommended-etcd-practices)
+has documented [the recommended practices and requirements for optimal etcd performance.](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/etcd/etcd-practices)
 
