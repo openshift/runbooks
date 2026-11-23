@@ -23,7 +23,7 @@ Verify ODF Provider reachability from ODF Client by following
 
 ## Mitigation
 
-### Intermittent nework connectivity
+### Intermittent network connectivity
 
 1. From diagnosis if you find endpoint is reachable, wait for at most 5 minutes
 to have connection reestablished which should stop firing alert.

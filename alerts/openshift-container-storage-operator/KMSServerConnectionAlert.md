@@ -17,7 +17,7 @@ Connection with external key management service is not working.
 
 ## Mitigation
 
-Review configuration values in the ´ocs-kms-connection-details´ confimap.
+Review configuration values in the ´ocs-kms-connection-details´ configmap.
 
 Verify the connectivity with the external KMS, verifying
 [network connectivity](helpers/networkConnectivity.md)

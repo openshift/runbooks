@@ -21,7 +21,7 @@ the cache limit set in `mds_cache_memory_limit`.
 The MDS tries to stay under a reservation of the `mds_cache_memory_limit` by
 trimming unused metadata in its cache and recalling cached items in the client
 caches. It is possible for the MDS to exceed this limit due to slow recall from
-clients as result of multiple clients accesing the files.
+clients as result of multiple clients accessing the files.
 
 Read more about ceph MDS cache configuration [here](https://docs.ceph.com/en/latest/cephfs/cache-configuration/?highlight=mds%20cache%20configuration#mds-cache-configuration)
 

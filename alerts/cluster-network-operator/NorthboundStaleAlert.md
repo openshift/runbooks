@@ -26,7 +26,7 @@ hierarchy](./hierarchy/alerts-hierarchy.svg)
 
 Investigate the health of the affected ovnkube-controller or northbound database
 processes that run in the `ovnkube-controller` and `nbdb` containers
-repectively.
+respectively.
 
 For OCP clusters at versions 4.13 or earlier, the containers run in
 ovnkube-master pods:

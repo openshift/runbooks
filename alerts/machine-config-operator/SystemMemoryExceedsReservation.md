@@ -19,7 +19,7 @@ The system daemons needs this memory in order to
 run and satisfy system processes. If other workloads
 start to use this memory then system daemons
 can be impacted. This alert
-firing does not nessarily mean the node is
+firing does not necessarily mean the node is
 resource exhausted at the moment.
 
 ## Diagnosis
@@ -53,7 +53,7 @@ to get the 95th percentile.
 portion of the system's memory occupied by
 a process that is held in the main memory)
 
-  If this value is greather then the 95th
+  If this value is greater then the 95th
   percentile of the allocatable memory for
   the node then the alert will go into pending.
   After 15 minutes in this state the alert
@@ -120,7 +120,7 @@ useful for troubleshooting:
 
 - You can use the `top` command on
 the host to get a dynamic update of
-the largest memory consuming proccesses.
+the largest memory consuming processes.
 For instance, to get the top 100 memory
 consuming processes on a node.
 
@@ -137,7 +137,7 @@ statistics of the node.
 - Each node also contains a file called
 `/proc/meminfo`. This file provides a usage
 report about memory on the system. You can
-learn how to interperet the fields [here](https://access.redhat.com/solutions/406773).
+learn how to interpret the fields [here](https://access.redhat.com/solutions/406773).
 
 - For kubelet-level commands you can get
 the memory usage of individual pods by

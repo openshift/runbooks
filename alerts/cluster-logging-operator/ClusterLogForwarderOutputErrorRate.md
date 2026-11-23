@@ -63,7 +63,7 @@ credentials.
 
 ### TLS Certificate Update
 
-If the issue stems from incorrect or expired certicates, update the associated
+If the issue stems from incorrect or expired certificates, update the associated
 OpenShift `Secret` or `ConfigMap` with the correct and valid certificates.
 
 ## Notes
