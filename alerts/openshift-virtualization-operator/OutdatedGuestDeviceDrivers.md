@@ -6,15 +6,18 @@ This alert fires when outdated VirtIO drivers are detected in a Windows virtual
 machine (VM) for more than 1 hour.
 
 The QEMU guest agent reports the name and version of the driver of each VirtIO
-device in the guest. A driver is outdated when its version is not the latest
-version provided by the cluster for that device and Windows version.
+device in the guest. A driver is outdated when its build number, the last
+component of its version, is lower than the minimum build configured for the
+cluster for that device and Windows version. Equal and newer builds do not
+alert.
 
 The alert fires once per VM and device.
 
 ## Impact
 
 The VM continues to run, but its drivers might lack performance, stability and
-security fixes that are included in the latest drivers provided by the cluster.
+security fixes that are included in the minimum driver version configured for
+the cluster.
 
 The cluster and other VMs are not affected.
 
@@ -29,24 +32,25 @@ the alert labels.
 1. List all outdated drivers of the VM:
 
    ```promql
-   vmi:kubevirt_vmi_guest_device_driver_timestamp_seconds:max{namespace="<namespace>", name="<name>"}
+   vmi:kubevirt_vmi_guest_device_driver_build_number:max{namespace="<namespace>", name="<name>"}
    ```
 
    Each result is one outdated driver. The `driver_name` and `driver_version`
-   labels show the installed driver.
+   labels show the installed driver, and the value is its build number.
 
-2. Obtain the latest driver versions provided by the cluster for a device and
-   Windows version:
+2. Obtain the minimum driver version configured for the cluster for a device
+   and Windows version:
 
    ```promql
-   kubevirt_guest_device_driver_latest_version_info{device_id="<device_id>", guest_os_version_id="<guest_os_version_id>"}
+   kubevirt_guest_device_driver_minimum_build_number{device_id="<device_id>", guest_os_version_id="<guest_os_version_id>"}
    ```
 
-   The `driver_version` label of each result is a latest version.
+   The `driver_version` label shows the minimum version, and the value is its
+   build number.
 
-If the alert fires for many VMs at the same time, the latest driver versions
-provided by the cluster have most likely changed, for example after a cluster
-upgrade. In this case, all affected VMs need a driver update.
+If the alert fires for many VMs at the same time, the minimum driver versions
+configured for the cluster have most likely been raised, for example after a
+cluster upgrade. In this case, all affected VMs need a driver update.
 
 ## Mitigation
 
